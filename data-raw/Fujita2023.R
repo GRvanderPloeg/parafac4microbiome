@@ -60,5 +60,26 @@ df = rbind(WA %>% select(levels(Taxa_list$ID)),
            SC %>% select(levels(Taxa_list$ID))
 ) %>% as_tibble()
 
+# Temporary addition(?): process down to input data for PARAFAC
+sampleSelection = (sampleInfo$treat2 == "WC")
+sampleSelection[is.na(sampleSelection)] = FALSE
+sampleInfo_filtered = sampleInfo[sampleSelection,]
+
+## Filter based on sparsity per group
+threshold = 0.99
+sparsity = colSums(df[sampleSelection,] == 0) / nrow(df)
+featureSelection = (sparsity < threshold)
+taxonomy_filtered = Taxa_list[featureSelection,]
+
+## Filter df
+df_filtered = df[sampleSelection,featureSelection]
+
+## CLR with pseudocount 1
+df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
+
+# Fold data cube
+X = array(df_clr, dim=c(8,565,110))
+
+# Export
 Fujita2023 = list("sampleMetadata"=sampleInfo, "taxonomy"=Taxa_list, "counts"=df)
 usethis::use_data(Fujita2023, overwrite = TRUE)
