@@ -16,7 +16,7 @@ rawDataToCube(Xlong, subjectMeta, conditionMeta, keepIndividuals)
 \item{keepIndividuals}{Boolean}
 }
 \value{
-list object with the cube and associated sample and condition metadata.
+1
 }
 \description{
 Convert long formatted data tables (two-way) into data cubes (three-way)

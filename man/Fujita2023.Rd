@@ -9,9 +9,9 @@
 
 A list object with three elements:
 \describe{
-\item{sampleMetadata}{Dataframe with all the sample metadata}
-\item{taxonomy}{taxonomic classification}
-\item{counts}{raw count data}
+\item{sampleMetadata}{Dataframe with all the sample metadata, ordered the same as the rows in the data cube.}
+\item{taxonomy}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
+\item{data}{Array object of the data cube}
 ...
 }
 }
@@ -24,5 +24,13 @@ Fujita2023
 }
 \description{
 A processed version of the Fujita2023 longitudinal microbiome dataset
+The following actions have been taken to process this data:
+\itemize{
+\item Sparsity selection: features were kept if they were <= 99\% sparse
+\item CLR transform
+\item Folding into data cube
+\item Centering across the subject mode
+\item Scaling within the feature mode
+}
 }
 \keyword{datasets}

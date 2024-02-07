@@ -60,26 +60,54 @@ df = rbind(WA %>% select(levels(Taxa_list$ID)),
            SC %>% select(levels(Taxa_list$ID))
 ) %>% as_tibble()
 
-# Temporary addition(?): process down to input data for PARAFAC
-sampleSelection = (sampleInfo$treat2 == "WC")
-sampleSelection[is.na(sampleSelection)] = FALSE
-sampleInfo_filtered = sampleInfo[sampleSelection,]
+# Temporary addition: process down to input data for PARAFAC
+
+# Select only WC samples
+sampleInfo_filtered = sampleInfo %>% filter(treat2 == "WC")
 
 ## Filter based on sparsity per group
 threshold = 0.99
-sparsity = colSums(df[sampleSelection,] == 0) / nrow(df)
-featureSelection = (sparsity < threshold)
-taxonomy_filtered = Taxa_list[featureSelection,]
 
-## Filter df
-df_filtered = df[sampleSelection,featureSelection]
+temp = cbind(df, sampleInfo) %>% as_tibble() %>% filter(treat2 == "WC") %>% select(-all_of(colnames(sampleInfo)))
+sparsity = colSums(temp == 0) / nrow(temp)
+featureSelection = names(sparsity[sparsity < threshold])
+taxonomy_filtered = Taxa_list %>% filter(ID %in% featureSelection)
 
-## CLR with pseudocount 1
+# Filter df
+df_filtered = cbind(df, sampleInfo) %>% as_tibble() %>% filter(treat2 == "WC") %>% select(all_of(featureSelection))
+
+# CLR with pseudocount 1
 df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
 
 # Fold data cube
-X = array(df_clr, dim=c(8,565,110))
+I = 8
+J = 23
+K = 110
+cube = array(0L, dim=c(I,J,K))
+
+for(k in 1:K){
+  temp = cbind(df_clr, sampleInfo_filtered) %>% as_tibble()
+  cube[,,k] = temp %>%
+    filter(time == k) %>%
+    arrange(sampleID) %>%
+    select(-all_of(colnames(sampleInfo_filtered))) %>%
+    as.matrix()
+}
+
+# Center
+cube_cnt = array(0L, dim=c(I,J,K))
+for(j in 1:J){
+  for(k in 1:K){
+    cube_cnt[,j,k] = cube[,j,k] - mean(cube[,j,k])
+  }
+}
+
+# Scale
+cube_cnt_scl = array(0L, dim=c(I,J,K))
+for(j in 1:J){
+  cube_cnt_scl[,j,] = cube_cnt[,j,] / sd(cube_cnt[,j,])
+}
 
 # Export
-Fujita2023 = list("sampleMetadata"=sampleInfo, "taxonomy"=Taxa_list, "counts"=df)
+Fujita2023 = list("sampleMetadata"=sampleInfo_filtered, "taxonomy"=taxonomy_filtered, "data"=cube_cnt_scl)
 usethis::use_data(Fujita2023, overwrite = TRUE)

@@ -36,13 +36,90 @@ age_gender[age_gender$subject == "26QQR0", 1] = "26QQrO"
 
 age_gender = age_gender %>% arrange(subject)
 
-# Prep subject metadata
-subjectMetadata = rf %>% left_join(age_gender)
-
 # Raw data import
-microbiome.raw = read.csv("./data-raw/vanderPloeg2024_counts.tsv", sep="\t")
+microbiome.raw = read.csv("./data-raw/vanderPloeg2024_counts.tsv", sep="\t") %>% as_tibble()
+microbiome.meta = microbiome.raw[,1:5] %>% as_tibble()
+microbiome.numeric = microbiome.raw[,6:ncol(microbiome.raw)] %>% as_tibble()
 taxa = read.csv("./data-raw/vanderPloeg2024_speciesMetadata.tsv", sep="\t")
 
-vanderPloeg2024 = list("subjectMetadata"=subjectMetadata, "taxonomy"=taxa, "counts"=microbiome.raw)
+# Prep subject metadata
+sampleInfo = microbiome.meta %>% left_join(rf) %>% left_join(age_gender)
 
+# Temporary addition: process down to input data for PARAFAC
+
+# Keep only upper jaw lingual samples and control individuals
+sampleInfo_filtered = sampleInfo %>%
+  filter(group == "control", niche == "upper jaw, lingual")
+
+## Filter based on sparsity per group
+threshold = 0.50
+
+df_low = cbind(microbiome.numeric, sampleInfo) %>%
+  as_tibble() %>%
+  filter(RFgroup == 0) %>%
+  select(-all_of(colnames(sampleInfo)))
+
+df_mid = cbind(microbiome.numeric, sampleInfo) %>%
+  as_tibble() %>%
+  filter(RFgroup == 1) %>%
+  select(-all_of(colnames(sampleInfo)))
+
+df_high = cbind(microbiome.numeric, sampleInfo) %>%
+  as_tibble() %>%
+  filter(RFgroup == 2) %>%
+  select(-all_of(colnames(sampleInfo)))
+
+lowSparsity = colSums(df_low==0) / nrow(df_low)
+midSparsity = colSums(df_mid==0) / nrow(df_mid)
+highSparsity = colSums(df_high==0) / nrow(df_high)
+
+lowSelection = lowSparsity <= threshold
+midSelection = midSparsity <= threshold
+highSelection = highSparsity <= threshold
+
+featureSelection = colnames(microbiome.numeric)[lowSelection | midSelection | highSelection]
+
+taxonomy_filtered = taxa %>% filter(asv %in% featureSelection)
+
+# Filter df
+df_filtered = cbind(microbiome.numeric, sampleInfo) %>%
+  as_tibble() %>%
+  filter(group == "control", niche == "upper jaw, lingual") %>%
+  select(all_of(featureSelection))
+
+# CLR with pseudocount 1
+df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
+
+# Fold data cube - take missing samples into account
+I = 41
+J = 69
+K = 7
+cube = array(0L, dim=c(I,J,K))
+
+for(k in 1:K){
+  temp = cbind(df_clr, sampleInfo_filtered) %>% as_tibble()
+  cube[,,k] = temp %>%
+    filter(visit == k) %>%
+    right_join(sampleInfo_filtered %>% select(subject) %>% unique()) %>%
+    arrange(subject) %>%
+    select(-all_of(colnames(sampleInfo_filtered))) %>%
+    as.matrix()
+}
+
+# Center
+cube_cnt = array(0L, dim=c(I,J,K))
+for(j in 1:J){
+  for(k in 1:K){
+    cube_cnt[,j,k] = cube[,j,k] - mean(cube[,j,k], na.rm=TRUE)
+  }
+}
+
+# Scale
+cube_cnt_scl = array(0L, dim=c(I,J,K))
+for(j in 1:J){
+  cube_cnt_scl[,j,] = cube_cnt[,j,] / sd(cube_cnt[,j,], na.rm=TRUE)
+}
+
+# Export
+vanderPloeg2024 = list("subjectMetadata"=sampleInfo_filtered, "taxonomy"=taxonomy_filtered, "data"=cube_cnt_scl)
 usethis::use_data(vanderPloeg2024, overwrite = TRUE)
