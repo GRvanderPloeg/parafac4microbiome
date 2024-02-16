@@ -157,7 +157,7 @@ plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=N
         plot = plot + ggplot2::geom_line()
       }
       else{
-        plot = plot + ggplot2::geom_bar(stat="identity",col="black")
+        plot = plot + ggplot2::geom_bar(stat="identity") # col="black" was here
       }
 
       if(m==1){
@@ -185,29 +185,15 @@ plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=N
     }
   }
 
-  if (colourCols[1] != "" & colourCol %in% colnames(model[[m]])){
-    plotList[[plotIterator]] = legends[[1]]
+  for(m in 1:numModes){
+    if (colourCols[m] != "" & colourCols[m] %in% colnames(model[[m]])){
+      plotList[[plotIterator]] = legends[[m]]
+    }
+    else{
+      plotList[[plotIterator]] = empty
+    }
+    plotIterator = plotIterator + 1
   }
-  else{
-    plotList[[plotIterator]] = empty
-  }
-  plotIterator = plotIterator + 1
-
-  if (colourCols[2] != "" & colourCol %in% colnames(model[[m]])){
-    plotList[[plotIterator]] = legends[[2]]
-  }
-  else{
-    plotList[[plotIterator]] = empty
-  }
-  plotIterator = plotIterator + 1
-
-  if (colourCols[3] != "" & colourCol %in% colnames(model[[m]])){
-    plotList[[plotIterator]] = legends[[3]]
-  }
-  else{
-    plotList[[plotIterator]] = empty
-  }
-  plotIterator = plotIterator + 1
 
   outputPlot = ggpubr::ggarrange(plotlist = plotList, ncol=3, nrow=numComponents+1)
   ggpubr::annotate_figure(outputPlot, top=ggpubr::text_grob(overallTitle))

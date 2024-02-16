@@ -13,6 +13,23 @@ taxa = taxa %>%
   mutate(OTU = paste0("OTU", 1:nrow(.)), consensus_taxonomy = X.consensus_taxonomy) %>%
   select(OTU, consensus_taxonomy)
 
+# Fix taxonomic levels
+taxonomy = read.csv("./data-raw/db_mOTU_taxonomy_ref-mOTUs.tsv", sep="\t") %>% as_tibble()
+taxonomy$kingdom = str_split_fixed(taxonomy$kingdom, " ", 2)[,2]
+taxonomy$phylum = str_split_fixed(taxonomy$phylum, " ", 2)[,2]
+taxonomy$class = str_split_fixed(taxonomy$class, " ", 2)[,2]
+taxonomy$order = str_split_fixed(taxonomy$order, " ", 2)[,2]
+taxonomy$family = str_split_fixed(taxonomy$family, " ", 2)[,2]
+taxonomy$genus = str_split_fixed(taxonomy$genus, " ", 2)[,2]
+
+fixedIDs = str_sub(taxa$consensus_taxonomy, -20, -2)
+fixedIDs = gsub("\\[", "", fixedIDs)
+
+taxa = taxa %>%
+  mutate(fixedIDs = fixedIDs) %>%
+  left_join(taxonomy, by=c("fixedIDs"="ref.mOTU_v2_ID")) %>%
+  select(-consensus_taxonomy,-fixedIDs,-specI_cluster)
+
 # Import count data and process
 df = read.csv("./data-raw/Shao2019_counts.csv") %>% as_tibble()
 colnames(df) = str_split_fixed(colnames(df),"_",3)[,1]

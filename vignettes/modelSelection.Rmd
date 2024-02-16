@@ -1,0 +1,28 @@
+---
+title: "modelSelection"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{modelSelection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(parafac4microbiome)
+```
+
+```{r test model metrics}
+X = Fujita2023$data
+assessment = assessNumComponents(X, minNumComponents = 1, maxNumComponents = 5, numRepetitions = 100)
+plotModelMetric(assessment$metrics, "numIterations")
+plotModelMetric(assessment$metrics, "SSE")
+plotModelMetric(assessment$metrics, "CORCONDIA")
+plotModelMetric(assessment$metrics, "varExp")
+```

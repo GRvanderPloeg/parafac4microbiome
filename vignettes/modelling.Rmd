@@ -1,0 +1,129 @@
+---
+title: "modelling"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{modelling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 12,
+  fig.height = 6
+)
+```
+
+```{r setup}
+library(parafac4microbiome)
+library(multiway)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r fujita2023 modelling}
+set.seed(0)
+
+# Make PARAFAC model
+model = parafac(Fujita2023$data, nfac=3, nstart=10, verbose=FALSE)
+model = resign(model, mode="A", absorb="C")
+model = resign(model, mode="B", absorb="C")
+
+# Convert model output to plottable data
+subjectMetadata = Fujita2023$sampleMetadata %>%
+filter(treat2=="WC") %>%
+select(replicate.id) %>%
+unique()
+
+featureMetadata = Fujita2023$taxonomy
+
+conditionMetadata = Fujita2023$sampleMetadata %>%
+select(time) %>%
+unique()
+
+metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+convertedModel = convertModelFormat(model, metadataPerMode)
+
+# Prepare plot parameters
+colourCols = c("", "Genus", "")
+legendTitles = c("", "Genus", "")
+xLabels = c("Replicate", "Feature index", "Time point")
+legendColNums = c(0,5,0)
+arrangeModes = c(FALSE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
+overallTitle = ""
+
+# Make plot
+plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+```
+
+```{r shao2019 modelling}
+set.seed(0)
+
+# Make PARAFAC model
+model = parafac(Shao2019$data, nfac=3, nstart=10, verbose=FALSE)
+model = resign(model, mode="B", absorb="A")
+
+# Convert model output to plottable data
+subjectMetadata = Shao2019$sampleMetadata %>% 
+  select(Individual, Delivery_mode) %>%
+  arrange(Individual) %>%
+  unique()
+
+featureMetadata = Shao2019$taxonomy
+
+conditionMetadata = Shao2019$sampleMetadata %>% select(Time_point) %>% unique()
+
+metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+convertedModel = convertModelFormat(model, metadataPerMode)
+
+# Prepare plot parameters
+colourCols = c("Delivery_mode", "phylum", "")
+legendTitles = c("Delivery mode", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(3,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
+overallTitle = "Shao 2019"
+
+# Make plot
+plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+```
+
+
+```{r vanderPloeg2024 modelling}
+set.seed(0)
+
+# Make PARAFAC model
+model = parafac(vanderPloeg2024$data, nfac=2, nstart=10, verbose=FALSE)
+
+# Convert model output to plottable data
+subjectMetadata = vanderPloeg2024$subjectMetadata %>% 
+  select(subject, RFgroup) %>% 
+  arrange(subject) %>%
+  unique()
+
+featureMetadata = vanderPloeg2024$taxonomy
+
+conditionMetadata = vanderPloeg2024$subjectMetadata %>%
+  select(visit) %>%
+  arrange(visit) %>%
+  unique()
+
+metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+convertedModel = convertModelFormat(model, metadataPerMode)
+
+# Prepare plot parameters
+colourCols = c("RFgroup", "Phylum", "")
+legendTitles = c("RF group", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(2,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
+overallTitle = "vanderPloeg 2024"
+
+# Make plot
+plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+```
