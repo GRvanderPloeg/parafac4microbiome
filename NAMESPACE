@@ -2,6 +2,8 @@
 
 export(assessNumComponents)
 export(convertModelFormat)
+export(modelStabilityCheck)
 export(plotModelMetric)
+export(plotModelStability)
 export(plotPARAFACmodel)
 export(rawDataToCube)

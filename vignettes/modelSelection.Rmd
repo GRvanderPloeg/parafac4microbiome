@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(parafac4microbiome)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
 ```
 
 ```{r test model metrics}
@@ -25,4 +28,9 @@ plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
 plotModelMetric(assessment$metrics, "CORCONDIA")
 plotModelMetric(assessment$metrics, "varExp")
+```
+
+```{r LOOCV}
+output = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3, numRepetitions=10)
+plotModelStability(output)
 ```
