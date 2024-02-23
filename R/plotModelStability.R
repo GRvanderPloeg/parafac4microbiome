@@ -6,6 +6,9 @@
 #' @export
 #'
 #' @examples
+#' library(dplyr)
+#' library(ggplot2)
+#' library(ggpubr)
 #' modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
 #' plotModelStability(modelStability)
 plotModelStability = function(modelStabilityOutput){
@@ -17,18 +20,24 @@ plotModelStability = function(modelStabilityOutput){
   for(f in 1:numComponents){
     for(m in 1:numModes){
       df = modelStabilityOutput[[m]][[f]]
-      df = cbind(apply(df, 1, mean, na.rm=TRUE), apply(df, 1, sd, na.rm=TRUE))
+      df = cbind(apply(df, 1, mean, na.rm=TRUE), apply(df, 1, stats::sd, na.rm=TRUE))
       colnames(df) = c("m", "s")
+
       plotlist[[plotIterator]] = df %>%
-        as_tibble() %>%
-        mutate(index=1:nrow(.)) %>%
-        ggplot(aes(x=index,y=m)) +
-        geom_bar(stat="identity") +
-        geom_errorbar(aes(ymin=m-s,ymax=m+s))
+        dplyr::as_tibble() %>%
+        dplyr::mutate(index=1:nrow(df)) %>%
+        ggplot2::ggplot(ggplot2::aes(x=index,y=m)) +
+        ggplot2::geom_bar(stat="identity") +
+        ggplot2::geom_errorbar(ggplot2::aes(ymin=m-s,ymax=m+s))
       plotIterator = plotIterator + 1
     }
   }
 
-  plot = ggarrange(plotlist=plotlist)
+  plot = ggpubr::ggarrange(plotlist=plotlist)
   return(plot)
 }
+
+# Ugly solution for dplyr namespace issues
+index <- NULL
+m <- NULL
+s <- NULL

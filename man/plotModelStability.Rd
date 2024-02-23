@@ -16,6 +16,9 @@ Plot
 Plot model stability check output.
 }
 \examples{
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
 modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
 plotModelStability(modelStability)
 }

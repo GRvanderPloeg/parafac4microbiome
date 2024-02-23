@@ -4,13 +4,15 @@
 #' @param sampleMetadata Input sample metadata
 #' @param numComponents Number of components of the desired PARAFAC model
 #' @param numRepetitions Number of jack-knifed samples to create
+#' @param ctol Change in SSQ needed for model to be converged (default 1e-6).
+#' @param maxit Maximum number of iterations (default 2500).
 #'
 #' @return List of all As, Bs, Cs of the PARAFAC models.
 #' @export
 #'
 #' @examples
 #' modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
-modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetitions=nrow(X)){
+modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetitions=nrow(X), ctol=1e-6, maxit=2500){
 
   numSamples = nrow(X)
   numModes = length(dim(X))
@@ -18,7 +20,7 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetition
   models = list()
   for(i in 1:numRepetitions){
     df = X[-i,,]
-    model = multiway::parafac(df, nfac=numComponents, nstart=1, verbose=FALSE)
+    model = multiway::parafac(df, nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
 
     # Modify subject loadings to reflect a missing sample
     mask = 1:nrow(X) == i

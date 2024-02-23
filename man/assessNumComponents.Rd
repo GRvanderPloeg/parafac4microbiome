@@ -8,7 +8,9 @@ assessNumComponents(
   X,
   minNumComponents = 1,
   maxNumComponents = 5,
-  numRepetitions = 100
+  numRepetitions = 100,
+  ctol = 1e-06,
+  maxit = 2500
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ assessNumComponents(
 \item{maxNumComponents}{Maximum number of components (default 5).}
 
 \item{numRepetitions}{Number of randomly initialized models to create (default 100).}
+
+\item{ctol}{Change in SSQ needed for model to be converged (default 1e-6).}
+
+\item{maxit}{Maximum number of iterations (default 2500).}
 }
 \value{
 List object of the following:
@@ -32,5 +38,5 @@ Create randomly initialized models for component selection
 }
 \examples{
 X = Fujita2023$data
-output = assessNumComponents(X)
+output = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=10)
 }

@@ -27,7 +27,7 @@ library(ggplot2)
 set.seed(0)
 
 # Make PARAFAC model
-model = parafac(Fujita2023$data, nfac=3, nstart=10, verbose=FALSE)
+model = parafac(Fujita2023$data, nfac=3, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
 model = resign(model, mode="A", absorb="C")
 model = resign(model, mode="B", absorb="C")
 
@@ -46,24 +46,21 @@ unique()
 metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
 convertedModel = convertModelFormat(model, metadataPerMode)
 
-# Prepare plot parameters
-colourCols = c("", "Genus", "")
-legendTitles = c("", "Genus", "")
-xLabels = c("Replicate", "Feature index", "Time point")
-legendColNums = c(0,5,0)
-arrangeModes = c(FALSE, TRUE, FALSE)
-continuousModes = c(FALSE,FALSE,TRUE)
-overallTitle = ""
-
-# Make plot
-plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+plotPARAFACmodel(convertedModel,
+  colourCols = c("", "Genus", ""),
+  legendTitles = c("", "Genus", ""),
+  xLabels = c("Replicate", "Feature index", "Time point"),
+  legendColNums = c(0,5,0),
+  arrangeModes = c(FALSE, TRUE, FALSE),
+  continuousModes = c(FALSE,FALSE,TRUE),
+  overallTitle = "Fujita PARAFAC model")
 ```
 
 ```{r shao2019 modelling}
 set.seed(0)
 
 # Make PARAFAC model
-model = parafac(Shao2019$data, nfac=3, nstart=10, verbose=FALSE)
+model = parafac(Shao2019$data, nfac=3, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
 model = resign(model, mode="B", absorb="A")
 
 # Convert model output to plottable data
@@ -97,7 +94,7 @@ plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNum
 set.seed(0)
 
 # Make PARAFAC model
-model = parafac(vanderPloeg2024$data, nfac=2, nstart=10, verbose=FALSE)
+model = parafac(vanderPloeg2024$data, nfac=2, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
 
 # Convert model output to plottable data
 subjectMetadata = vanderPloeg2024$subjectMetadata %>% 

@@ -8,7 +8,9 @@ modelStabilityCheck(
   X,
   sampleMetadata,
   numComponents = 1,
-  numRepetitions = nrow(X)
+  numRepetitions = nrow(X),
+  ctol = 1e-06,
+  maxit = 2500
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ modelStabilityCheck(
 \item{numComponents}{Number of components of the desired PARAFAC model}
 
 \item{numRepetitions}{Number of jack-knifed samples to create}
+
+\item{ctol}{Change in SSQ needed for model to be converged (default 1e-6).}
+
+\item{maxit}{Maximum number of iterations (default 2500).}
 }
 \value{
 List of all As, Bs, Cs of the PARAFAC models.

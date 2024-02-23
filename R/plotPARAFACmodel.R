@@ -38,17 +38,16 @@
 #' metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
 #' convertedModel = convertModelFormat(model, metadataPerMode)
 #'
-#' # Prepare plot parameters
-#' colourCols = c("", "Genus", "")
-#' legendTitles = c("", "Genus", "")
-#' xLabels = c("Replicate", "Feature index", "Time point")
-#' legendColNums = c(0,5,0)
-#' arrangeModes = c(FALSE, TRUE, FALSE)
-#' continuousModes = c(FALSE,FALSE,TRUE)
-#' overallTitle = ""
-#'
 #' # Make plot
-#' plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+#' plotPARAFACmodel(convertedModel,
+#'   colourCols = c("", "Genus", ""),
+#'   legendTitles = c("", "Genus", ""),
+#'   xLabels = c("Replicate", "Feature index", "Time point"),
+#'   legendColNums = c(0,5,0),
+#'   arrangeModes = c(FALSE, TRUE, FALSE),
+#'   continuousModes = c(FALSE,FALSE,TRUE),
+#'   overallTitle = "Fujita PARAFAC model")
+#'
 plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
   stopifnot(class(model) == "list")
 
@@ -101,27 +100,27 @@ plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=N
   }
 
   # Check if every vector is of the right type
-  if(class(colourCols) != "character"){
+  if(!methods::is(colourCols, "character")){
     warning("colourCols type is incorrect. Default setting will be used.")
     colourCols = rep("", numModes)
   }
-  if(class(legendTitles) != "character"){
+  if(!methods::is(legendTitles, "character")){
     warning("legendTitles type is incorrect. Default setting will be used.")
     legendTitles = rep("", numModes)
   }
-  if(class(xLabels) != "character"){
+  if(!methods::is(xLabels, "character")){
     warning("xLabels type is incorrect. Default setting will be used.")
     xLabels = rep("", numModes)
   }
-  if(class(legendColNums) != "numeric"){
+  if(!methods::is(legendColNums, "numeric")){
     warning("legendColNums type is incorrect. Default setting will be used.")
     legendColNums = rep(0, numModes)
   }
-  if(class(arrangeModes) != "logical"){
+  if(!methods::is(arrangeModes, "logical")){
     warning("arrangeModes type is incorrect. Default setting will be used.")
     arrangeModes = rep(FALSE, numModes)
   }
-  if(class(continuousModes) != "logical"){
+  if(!methods::is(continuousModes, "logical")){
     warning("continuousModes type is incorrect. Default setting will be used.")
     continuousModes = rep(FALSE, numModes)
   }
@@ -144,13 +143,15 @@ plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=N
       if(colourCol != "" & colourCol %in% colnames(model[[m]])){
         plot = model[[m]] %>%
           dplyr::select(dplyr::all_of(c(componentCol, colourCol))) %>%
-          dplyr::arrange(!!sym(colourCol)) %>%
-          ggplot2::ggplot(ggplot2::aes(x=1:nrow(.),y=!!sym(componentCol),fill=as.factor(!!sym(colourCol))))
+          dplyr::arrange(!!dplyr::sym(colourCol)) %>%
+          dplyr::mutate(index=dplyr::row_number()) %>%
+          ggplot2::ggplot(ggplot2::aes(x=index,y=!!dplyr::sym(componentCol),fill=as.factor(!!dplyr::sym(colourCol))))
       }
       else{
         plot = model[[m]] %>%
           dplyr::select(dplyr::all_of(componentCol)) %>%
-          ggplot2::ggplot(ggplot2::aes(x=1:nrow(.),y=!!sym(componentCol)))
+          dplyr::mutate(index=dplyr::row_number()) %>%
+          ggplot2::ggplot(ggplot2::aes(x=index,y=!!dplyr::sym(componentCol)))
       }
 
       if(continuousMode == TRUE){

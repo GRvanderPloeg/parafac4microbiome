@@ -24,6 +24,8 @@ Plot object
 Title
 }
 \examples{
+library(dplyr)
+library(ggplot2)
 X = Fujita2023$data
 assessment = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=10)
 plotModelMetric(assessment$metrics, "numIterations")

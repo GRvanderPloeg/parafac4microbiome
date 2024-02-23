@@ -64,15 +64,14 @@ unique()
 metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
 convertedModel = convertModelFormat(model, metadataPerMode)
 
-# Prepare plot parameters
-colourCols = c("", "Genus", "")
-legendTitles = c("", "Genus", "")
-xLabels = c("Replicate", "Feature index", "Time point")
-legendColNums = c(0,5,0)
-arrangeModes = c(FALSE, TRUE, FALSE)
-continuousModes = c(FALSE,FALSE,TRUE)
-overallTitle = ""
-
 # Make plot
-plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+plotPARAFACmodel(convertedModel,
+  colourCols = c("", "Genus", ""),
+  legendTitles = c("", "Genus", ""),
+  xLabels = c("Replicate", "Feature index", "Time point"),
+  legendColNums = c(0,5,0),
+  arrangeModes = c(FALSE, TRUE, FALSE),
+  continuousModes = c(FALSE,FALSE,TRUE),
+  overallTitle = "Fujita PARAFAC model")
+
 }
