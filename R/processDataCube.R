@@ -11,7 +11,12 @@
 #'
 #' @examples
 #' processedCube = processDataCube(Fujita2023$data)
-processDataCube = function(cube, sparsityThreshold=1, sparsityPerGroupFilter=FALSE, centerMode=0, scaleMode=0){
+processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=FALSE, centerMode=0, scaleMode=0){
+
+  cube = dataset$data
+  mode1 = dataset$mode1
+  mode2 = dataset$mode2
+  mode3 = dataset$mode3
 
   # Select features based on sparsity
   sparsity = calculateSparsity(cube)
@@ -22,6 +27,7 @@ processDataCube = function(cube, sparsityThreshold=1, sparsityPerGroupFilter=FAL
 
   # Feature selection
   cube_filtered = cube_clr[,featureMask,]
+  mode2_filtered = mode2[featureMask,]
 
   # Center
   cube_cnt = multiway::ncenter(cube_filtered, mode=centerMode)
@@ -29,5 +35,5 @@ processDataCube = function(cube, sparsityThreshold=1, sparsityPerGroupFilter=FAL
   # Scale - NOTE: THIS DOES NOT SCALE TO EXACTLY SD=1
   cube_cnt_scl = multiway::nscale(cube_cnt, mode=scaleMode)
 
-  return(cube_cnt_scl)
+  return(list("data"=cube_cnt_scl, "mode1"=mode1, "mode2"=mode2_filtered, "mode3"=mode3))
 }
