@@ -26,24 +26,16 @@ library(ggplot2)
 ```{r fujita2023 modelling}
 set.seed(0)
 
+# Process count data
+cube_cnt_scl = processDataCube(Fujita2023$data, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+
 # Make PARAFAC model
-model = parafac(Fujita2023$data, nfac=3, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
+model = parafac(cube_cnt_scl, nfac=3, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
 model = resign(model, mode="A", absorb="C")
 model = resign(model, mode="B", absorb="C")
 
 # Convert model output to plottable data
-subjectMetadata = Fujita2023$sampleMetadata %>%
-filter(treat2=="WC") %>%
-select(replicate.id) %>%
-unique()
-
-featureMetadata = Fujita2023$taxonomy
-
-conditionMetadata = Fujita2023$sampleMetadata %>%
-select(time) %>%
-unique()
-
-metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+metadataPerMode = list(Fujita2023$mode1, Fujita2023$mode2, Fujita2023$mode3)
 convertedModel = convertModelFormat(model, metadataPerMode)
 
 plotPARAFACmodel(convertedModel,
