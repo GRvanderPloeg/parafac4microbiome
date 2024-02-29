@@ -20,7 +20,7 @@ plotModelStability = function(modelStabilityOutput){
   for(f in 1:numComponents){
     for(m in 1:numModes){
       df = modelStabilityOutput[[m]][[f]]
-      df = cbind(apply(df, 1, mean, na.rm=TRUE), apply(df, 1, stats::sd, na.rm=TRUE))
+      df = cbind(apply(df, 1, stats::median, na.rm=TRUE), apply(df, 1, stats::sd, na.rm=TRUE))
       colnames(df) = c("m", "s")
 
       plotlist[[plotIterator]] = df %>%

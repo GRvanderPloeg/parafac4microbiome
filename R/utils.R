@@ -69,3 +69,48 @@ convertModelFormat = function(model, metadataPerMode=list()){
 
   return(result)
 }
+
+checkForFlippedLoadings = function(loadingMatrix){
+
+  numRepetitions = ncol(loadingMatrix)
+  medianLoadings = apply(loadingMatrix, 1, function(x){stats::median(x, na.rm=TRUE)})
+  evidence = rep(FALSE, numRepetitions)
+
+  for(j in 1:numRepetitions){
+    loading = loadingMatrix[,j]
+    option1 = sum((loading - medianLoadings)^2, na.rm=TRUE) # not flipped
+    option2 = sum((-1*loading - medianLoadings)^2, na.rm=TRUE) # flipped sign
+
+    if(option2 < option1){
+      evidence[j] = TRUE
+    }
+  }
+  return(evidence)
+}
+
+repairLoadings = function(A, B, C, evidenceMatrix){
+
+  loadingsList = list(A, B, C)
+  numRepetitions = ncol(A)
+  numModes = length(loadingsList)
+
+  repairedA = array(0L, dim=dim(A))
+  repairedB = array(0L, dim=dim(B))
+  repairedC = array(0L, dim=dim(C))
+  repairedLoadingsList = list(repairedA, repairedB, repairedC)
+
+  flipped = which(colSums(evidenceMatrix) == 2) # exactly 2 modes need to be flipped to cancel out
+
+  for(i in 1:numRepetitions){
+    for(j in 1:numModes){
+      if(i %in% flipped & evidenceMatrix[j,i]){
+        repairedLoadingsList[[j]][,i] = -1*loadingsList[[j]][,i]
+      }
+      else{
+        repairedLoadingsList[[j]][,i] = loadingsList[[j]][,i]
+      }
+    }
+  }
+
+  return(repairedLoadingsList)
+}
