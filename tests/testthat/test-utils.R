@@ -4,18 +4,7 @@ test_that("convertModelFormat throws an error with incorrect input model", {
 
   model = "bla"
 
-  subjectMetadata = Fujita2023$sampleMetadata %>%
-    filter(treat2=="WC") %>%
-    select(replicate.id) %>%
-    unique()
-
-  featureMetadata = Fujita2023$taxonomy
-
-  conditionMetadata = Fujita2023$sampleMetadata %>%
-    select(time) %>%
-    unique()
-
-  metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+  metadataPerMode = list(Fujita2023$mode1, Fujita2023$mode2, Fujita2023$mode3)
   expect_error(convertModelFormat(model, metadataPerMode))
 })
 
@@ -23,7 +12,8 @@ test_that("convertModelFormat throws an error with incorrect metadataPerMode obj
   withr::local_package("multiway")
   withr::local_package("dplyr")
 
-  model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
   metadataPerMode = 1:5
   expect_error(convertModelFormat(model, metadataPerMode))
 })
@@ -32,20 +22,12 @@ test_that("convertModelFormat throws a warning with metadataPerMode with the wro
   withr::local_package("multiway")
   withr::local_package("dplyr")
 
-  model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
 
-  subjectMetadata = Fujita2023$sampleMetadata %>%
-    filter(treat2=="WC") %>%
-    select(replicate.id) %>%
-    unique()
+  brokenFeatureMetadata = processedFujita$taxonomy[1:10,]
 
-  featureMetadata = Fujita2023$taxonomy[1:10,]
-
-  conditionMetadata = Fujita2023$sampleMetadata %>%
-    select(time) %>%
-    unique()
-
-  metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+  metadataPerMode = list(processedFujita$mode1, brokenFeatureMetadata, processedFujita$mode3)
   expect_warning(convertModelFormat(model, metadataPerMode))
 })
 
@@ -53,20 +35,10 @@ test_that("convertModelFormat does not throw an error with correct input model",
   withr::local_package("multiway")
   withr::local_package("dplyr")
 
-  model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
 
-  subjectMetadata = Fujita2023$sampleMetadata %>%
-    filter(treat2=="WC") %>%
-    select(replicate.id) %>%
-    unique()
-
-  featureMetadata = Fujita2023$taxonomy
-
-  conditionMetadata = Fujita2023$sampleMetadata %>%
-    select(time) %>%
-    unique()
-
-  metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+  metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
   expect_no_error(convertModelFormat(model, metadataPerMode))
 })
 
@@ -76,18 +48,7 @@ test_that("convertModelFormat throws an error even if model input is a list but 
 
   model = list("A"=c(1,1,1), "B"=c(2,2,2), "C"=c(3,3,3))
 
-  subjectMetadata = Fujita2023$sampleMetadata %>%
-    filter(treat2=="WC") %>%
-    select(replicate.id) %>%
-    unique()
-
-  featureMetadata = Fujita2023$taxonomy
-
-  conditionMetadata = Fujita2023$sampleMetadata %>%
-    select(time) %>%
-    unique()
-
-  metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+  metadataPerMode = list(Fujita2023$mode1, Fujita2023$mode2, Fujita2023$mode3)
   expect_error(convertModelFormat(model, metadataPerMode))
 })
 
@@ -95,20 +56,10 @@ test_that("convertModelFormat produces a list of length 3 for 3-way parafac mode
   withr::local_package("multiway")
   withr::local_package("dplyr")
 
-  model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
 
-  subjectMetadata = Fujita2023$sampleMetadata %>%
-    filter(treat2=="WC") %>%
-    select(replicate.id) %>%
-    unique()
-
-  featureMetadata = Fujita2023$taxonomy
-
-  conditionMetadata = Fujita2023$sampleMetadata %>%
-    select(time) %>%
-    unique()
-
-  metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+  metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
   convertedModel = convertModelFormat(model, metadataPerMode)
   expect_equal(length(convertedModel), 3)
 })
@@ -135,6 +86,7 @@ test_that("convertModelFormat produces output even when metadataPerMode is not s
   withr::local_package("multiway")
   withr::local_package("dplyr")
 
-  model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
   expect_no_error(convertModelFormat(model))
 })

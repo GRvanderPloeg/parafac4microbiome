@@ -40,7 +40,7 @@ plotOverallTCCs = function(TCC_cube){
         plotlist[[plotIterator]] = overallTCC %>%
           dplyr::as_tibble() %>%
           dplyr::mutate(index=dplyr::row_number()) %>%
-          ggplot2::ggplot(aes(x=index,y=value)) +
+          ggplot2::ggplot(ggplot2::aes(x=index,y=value)) +
           ggplot2::geom_bar(stat="identity") +
           ggplot2::xlab("Model number") +
           ggplot2::ylab("Tucker congruence coefficient") +

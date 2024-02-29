@@ -9,9 +9,10 @@
 
 A list object with three elements:
 \describe{
-\item{sampleMetadata}{Dataframe with all the sample metadata, ordered the same as the rows in the data cube.}
-\item{taxonomy}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
 \item{data}{Array object of the data cube}
+\item{mode1}{Dataframe with all the subject metadata, ordered the same as the rows in the data cube.}
+\item{mode2}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
+\item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 ...
 }
 }
@@ -23,14 +24,7 @@ A list object with three elements:
 Fujita2023
 }
 \description{
-A processed version of the Fujita2023 longitudinal microbiome dataset
-The following actions have been taken to process this data:
-\itemize{
-\item Sparsity selection: features were kept if they were <= 99\% sparse
-\item CLR transform
-\item Folding into data cube
-\item Centering across the subject mode
-\item Scaling within the feature mode
-}
+The Fujita2023 longitudinal microbiome dataset as a three-dimensional array,
+with replicates in mode 1, microbial abundances in mode 2 and time in mode 3.
 }
 \keyword{datasets}

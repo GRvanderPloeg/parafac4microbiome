@@ -24,24 +24,13 @@ library(ggplot2)
 set.seed(0)
 
 # Make PARAFAC model
-model = parafac(Fujita2023$data, nfac=3, nstart=100)
+processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+model = parafac(processedFujita$data, nfac=3, nstart=100, verbose=FALSE)
 
 # Flipping the sign of some components to make the output plot equal to the paper.
 model = resign(model, mode="A", absorb="C")
 model = resign(model, mode="B", absorb="C")
 
-# Convert model output to plottable data
-subjectMetadata = Fujita2023$sampleMetadata \%>\%
-filter(treat2=="WC") \%>\%
-select(replicate.id) \%>\%
-unique()
-
-featureMetadata = Fujita2023$taxonomy
-
-conditionMetadata = Fujita2023$sampleMetadata \%>\%
-select(time) \%>\%
-unique()
-
-metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
 convertedModel = convertModelFormat(model, metadataPerMode)
 }

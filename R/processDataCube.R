@@ -1,6 +1,6 @@
 #' Process a multiway array of count data.
 #'
-#' @param cube Multiway array (currently only supports 3-way)
+#' @param dataset See [Fujita2023], [Shao2019] or [vanderPloeg2024].
 #' @param sparsityThreshold Maximum sparsity for a feature to be selected
 #' @param sparsityPerGroupFilter Consider groups when calculating sparsity
 #' @param centerMode Center across mode
@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' processedCube = processDataCube(Fujita2023$data)
+#' processedCube = processDataCube(Fujita2023)
 processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=FALSE, centerMode=0, scaleMode=0){
 
   cube = dataset$data
@@ -30,10 +30,20 @@ processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=
   mode2_filtered = mode2[featureMask,]
 
   # Center
-  cube_cnt = multiway::ncenter(cube_filtered, mode=centerMode)
+  if(centerMode != 0){
+    cube_cnt = multiway::ncenter(cube_filtered, mode=centerMode)
+  }
+  else{
+    cube_cnt = cube_filtered
+  }
 
   # Scale - NOTE: THIS DOES NOT SCALE TO EXACTLY SD=1
-  cube_cnt_scl = multiway::nscale(cube_cnt, mode=scaleMode)
+  if(scaleMode != 0){
+    cube_cnt_scl = multiway::nscale(cube_cnt, mode=scaleMode)
+  }
+  else{
+    cube_cnt_scl = cube_cnt
+  }
 
   return(list("data"=cube_cnt_scl, "mode1"=mode1, "mode2"=mode2_filtered, "mode3"=mode3))
 }

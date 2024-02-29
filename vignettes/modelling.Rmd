@@ -52,7 +52,7 @@ plotPARAFACmodel(convertedModel,
 set.seed(0)
 
 # Make PARAFAC model
-model = parafac(Shao2019$data, nfac=3, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
+model = parafac(Shao2019$data, nfac=3, nstart=5, ctol=1e-4, maxit=100, verbose=FALSE)
 model = resign(model, mode="B", absorb="A")
 
 # Convert model output to plottable data

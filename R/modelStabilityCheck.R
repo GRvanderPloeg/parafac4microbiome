@@ -11,7 +11,8 @@
 #' @export
 #'
 #' @examples
-#' modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' modelStability = modelStabilityCheck(processedFujita$data, processedFujita$mode1, numComponents=3)
 modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetitions=nrow(X), ctol=1e-6, maxit=2500){
 
   numSamples = nrow(X)
