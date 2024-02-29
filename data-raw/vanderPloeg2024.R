@@ -44,60 +44,25 @@ taxa = read.csv("./data-raw/vanderPloeg2024_speciesMetadata.tsv", sep="\t")
 
 # Prep subject metadata
 sampleInfo = microbiome.meta %>% left_join(rf) %>% left_join(age_gender)
+sampleMask = sampleInfo$group == "control" & sampleInfo$niche == "upper jaw, lingual"
 
-# Temporary addition: process down to input data for PARAFAC
+sampleInfo_filtered = sampleInfo[sampleMask,]
+df_filtered = microbiome.numeric[sampleMask,]
 
-# Keep only upper jaw lingual samples and control individuals
-sampleInfo_filtered = sampleInfo %>%
-  filter(group == "control", niche == "upper jaw, lingual")
+# Prep feature metadata
+sparsity = colSums(df_filtered == 0) / nrow(df_filtered)
+featureMask = sparsity < 1
+df_filtered = df_filtered[,featureMask]
+taxa = taxa[featureMask,]
 
-## Filter based on sparsity per group
-threshold = 0.50
-
-df_low = cbind(microbiome.numeric, sampleInfo) %>%
-  as_tibble() %>%
-  filter(RFgroup == 0) %>%
-  select(-all_of(colnames(sampleInfo)))
-
-df_mid = cbind(microbiome.numeric, sampleInfo) %>%
-  as_tibble() %>%
-  filter(RFgroup == 1) %>%
-  select(-all_of(colnames(sampleInfo)))
-
-df_high = cbind(microbiome.numeric, sampleInfo) %>%
-  as_tibble() %>%
-  filter(RFgroup == 2) %>%
-  select(-all_of(colnames(sampleInfo)))
-
-lowSparsity = colSums(df_low==0) / nrow(df_low)
-midSparsity = colSums(df_mid==0) / nrow(df_mid)
-highSparsity = colSums(df_high==0) / nrow(df_high)
-
-lowSelection = lowSparsity <= threshold
-midSelection = midSparsity <= threshold
-highSelection = highSparsity <= threshold
-
-featureSelection = colnames(microbiome.numeric)[lowSelection | midSelection | highSelection]
-
-taxonomy_filtered = taxa %>% filter(asv %in% featureSelection)
-
-# Filter df
-df_filtered = cbind(microbiome.numeric, sampleInfo) %>%
-  as_tibble() %>%
-  filter(group == "control", niche == "upper jaw, lingual") %>%
-  select(all_of(featureSelection))
-
-# CLR with pseudocount 1
-df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
-
-# Fold data cube - take missing samples into account
+# Fold into data cube
 I = 41
-J = 69
+J = 2253
 K = 7
 cube = array(0L, dim=c(I,J,K))
 
 for(k in 1:K){
-  temp = cbind(df_clr, sampleInfo_filtered) %>% as_tibble()
+  temp = cbind(df_filtered, sampleInfo_filtered) %>% as_tibble()
   cube[,,k] = temp %>%
     filter(visit == k) %>%
     right_join(sampleInfo_filtered %>% select(subject) %>% unique()) %>%
@@ -106,20 +71,69 @@ for(k in 1:K){
     as.matrix()
 }
 
-# Center
-cube_cnt = array(0L, dim=c(I,J,K))
-for(j in 1:J){
-  for(k in 1:K){
-    cube_cnt[,j,k] = cube[,j,k] - mean(cube[,j,k], na.rm=TRUE)
-  }
-}
-
-# Scale
-cube_cnt_scl = array(0L, dim=c(I,J,K))
-for(j in 1:J){
-  cube_cnt_scl[,j,] = cube_cnt[,j,] / sd(cube_cnt[,j,], na.rm=TRUE)
-}
+# prepare export
+mode1 = sampleInfo_filtered %>% select(subject, RFgroup) %>% unique() %>% arrange(subject)
+mode2 = taxa %>% select(-representative_sequence)
+mode3 = sampleInfo_filtered %>% select(visit) %>% unique() %>% arrange(visit)
 
 # Export
-vanderPloeg2024 = list("subjectMetadata"=sampleInfo_filtered, "taxonomy"=taxonomy_filtered, "data"=cube_cnt_scl)
+vanderPloeg2024 = list("data"=cube, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 usethis::use_data(vanderPloeg2024, overwrite = TRUE)
+
+# ## Filter based on sparsity per group
+# threshold = 0.50
+#
+# df_low = cbind(microbiome.numeric, sampleInfo) %>%
+#   as_tibble() %>%
+#   filter(RFgroup == 0) %>%
+#   select(-all_of(colnames(sampleInfo)))
+#
+# df_mid = cbind(microbiome.numeric, sampleInfo) %>%
+#   as_tibble() %>%
+#   filter(RFgroup == 1) %>%
+#   select(-all_of(colnames(sampleInfo)))
+#
+# df_high = cbind(microbiome.numeric, sampleInfo) %>%
+#   as_tibble() %>%
+#   filter(RFgroup == 2) %>%
+#   select(-all_of(colnames(sampleInfo)))
+#
+# lowSparsity = colSums(df_low==0) / nrow(df_low)
+# midSparsity = colSums(df_mid==0) / nrow(df_mid)
+# highSparsity = colSums(df_high==0) / nrow(df_high)
+#
+# lowSelection = lowSparsity <= threshold
+# midSelection = midSparsity <= threshold
+# highSelection = highSparsity <= threshold
+#
+# featureSelection = colnames(microbiome.numeric)[lowSelection | midSelection | highSelection]
+#
+# taxonomy_filtered = taxa %>% filter(asv %in% featureSelection)
+#
+# # Filter df
+# df_filtered = cbind(microbiome.numeric, sampleInfo) %>%
+#   as_tibble() %>%
+#   filter(group == "control", niche == "upper jaw, lingual") %>%
+#   select(all_of(featureSelection))
+#
+# # CLR with pseudocount 1
+# df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
+#
+# # Fold data cube - take missing samples into account
+#
+#
+# # Center
+# cube_cnt = array(0L, dim=c(I,J,K))
+# for(j in 1:J){
+#   for(k in 1:K){
+#     cube_cnt[,j,k] = cube[,j,k] - mean(cube[,j,k], na.rm=TRUE)
+#   }
+# }
+#
+# # Scale
+# cube_cnt_scl = array(0L, dim=c(I,J,K))
+# for(j in 1:J){
+#   cube_cnt_scl[,j,] = cube_cnt[,j,] / sd(cube_cnt[,j,], na.rm=TRUE)
+# }
+
+

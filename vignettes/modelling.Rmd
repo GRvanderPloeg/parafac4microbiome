@@ -77,23 +77,12 @@ plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNum
 ```{r vanderPloeg2024 modelling}
 set.seed(0)
 
+processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", centerMode=1, scaleMode=2)
+
 # Make PARAFAC model
-model = parafac(vanderPloeg2024$data, nfac=2, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
+model = parafac(processedPloeg$data, nfac=2, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
 
-# Convert model output to plottable data
-subjectMetadata = vanderPloeg2024$subjectMetadata %>% 
-  select(subject, RFgroup) %>% 
-  arrange(subject) %>%
-  unique()
-
-featureMetadata = vanderPloeg2024$taxonomy
-
-conditionMetadata = vanderPloeg2024$subjectMetadata %>%
-  select(visit) %>%
-  arrange(visit) %>%
-  unique()
-
-metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+metadataPerMode = list(processedPloeg$mode1, processedPloeg$mode2, processedPloeg$mode3)
 convertedModel = convertModelFormat(model, metadataPerMode)
 
 # Prepare plot parameters

@@ -123,31 +123,32 @@ plotPARAFACmodel(convertedModel,
 
 ```{r vanderPloeg comp selection}
 # For computational purposes we deviate from the default settings
-X = vanderPloeg2024$data
-assessment = assessNumComponents(X,
+processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", centerMode=1, scaleMode=2)
+
+assessment = assessNumComponents(processedPloeg$data,
                                  minNumComponents = 1,
                                  maxNumComponents = 3,
                                  numRepetitions = 10,
                                  ctol=1e-6,
                                  maxit=500)
 
-assessment = assessNumComponents(X, minNumComponents = 1, maxNumComponents = 5, numRepetitions = 10, ctol=1e-6, maxit=2500)
+assessment = assessNumComponents(processedPloeg$data, minNumComponents = 1, maxNumComponents = 3, numRepetitions = 10, ctol=1e-6, maxit=2500)
 plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
-plotModelMetric(assessment$metrics, "CORCONDIA")
+#plotModelMetric(assessment$metrics, "CORCONDIA") # BROKEN DUE TO NAs
 plotModelMetric(assessment$metrics, "varExp")
 
 # Model stability check using jack-knifing
-for(f in 1:5){
-  output = modelStabilityCheck(vanderPloeg2024$data,
-                               vanderPloeg2024$sampleMetadata,
+for(f in 1:3){
+  output = modelStabilityCheck(processedPloeg$data,
+                               processedPloeg$mode1,
                                numComponents=f,
                                numRepetitions=10)
   print(plotModelStability(output))
 }
 
 # Tucker congruence coefficients
-for(f in 2:5){
+for(f in 2:3){
   print(plotModelTCCs(assessment$metrics$TCC[[f]]))
   print(plotOverallTCCs(assessment$metrics$TCC[[f]]))
 }
@@ -158,20 +159,7 @@ numComponents = 2
 modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
 finalModel = assessment$models[[numComponents]][[modelChoice]]
 
-# Convert model output to plottable data
-subjectMetadata = vanderPloeg2024$subjectMetadata %>% 
-  select(subject, RFgroup) %>% 
-  arrange(subject) %>%
-  unique()
-
-featureMetadata = vanderPloeg2024$taxonomy
-
-conditionMetadata = vanderPloeg2024$subjectMetadata %>%
-  select(visit) %>%
-  arrange(visit) %>%
-  unique()
-
-metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+metadataPerMode = list(processedPloeg$mode1, processedPloeg$mode2, processedPloeg$mode3)
 convertedModel = convertModelFormat(finalModel, metadataPerMode)
 
 plotPARAFACmodel(convertedModel,
