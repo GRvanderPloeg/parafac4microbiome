@@ -75,8 +75,9 @@ plotPARAFACmodel(convertedModel,
 
 ```{r Shao comp selection}
 # For computational purposes we deviate from the default settings
-X = Shao2019$data
-assessment = assessNumComponents(X,
+processedShao = processDataCube(Shao2019, sparsityThreshold=0.9, considerGroups=TRUE, groupVariable="Delivery_mode", centerMode=1, scaleMode=2)
+
+assessment = assessNumComponents(processedShao$data,
                                  minNumComponents = 1,
                                  maxNumComponents = 2,
                                  numRepetitions = 5,
@@ -90,8 +91,8 @@ plotModelMetric(assessment$metrics, "varExp")
 
 # Model stability check using jack-knifing
 for(f in 1:2){
-  output = modelStabilityCheck(Shao2019$data,
-                               Shao2019$sampleMetadata,
+  output = modelStabilityCheck(processedShao$data,
+                               processedShao$mode1,
                                numComponents=f,
                                numRepetitions=2)
   print(plotModelStability(output))
@@ -107,17 +108,7 @@ numComponents = 2
 modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
 finalModel = assessment$models[[numComponents]][[modelChoice]]
 
-# Convert model output to plottable data
-subjectMetadata = Shao2019$sampleMetadata %>% 
-  select(Individual, Delivery_mode) %>%
-  arrange(Individual) %>%
-  unique()
-
-featureMetadata = Shao2019$taxonomy
-
-conditionMetadata = Shao2019$sampleMetadata %>% select(Time_point) %>% unique()
-
-metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+metadataPerMode = list(processedShao$mode1, processedShao$mode2, processedShao$mode3)
 convertedModel = convertModelFormat(finalModel, metadataPerMode)
 
 plotPARAFACmodel(convertedModel,

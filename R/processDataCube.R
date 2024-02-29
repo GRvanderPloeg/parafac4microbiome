@@ -2,16 +2,17 @@
 #'
 #' @param dataset See [Fujita2023], [Shao2019] or [vanderPloeg2024].
 #' @param sparsityThreshold Maximum sparsity for a feature to be selected
-#' @param sparsityPerGroupFilter Consider groups when calculating sparsity
-#' @param centerMode Center across mode
-#' @param scaleMode Scale within mode
+#' @param considerGroups Consider groups when calculating sparsity
+#' @param groupVariable Variable in mode1 data to use when considering groups
+#' @param centerMode Center across mode (default 0, i.e. do not center)
+#' @param scaleMode Scale within mode (default 0, i.e. do not scale)
 #'
 #' @return CLRed, centered and scaled cube
 #' @export
 #'
 #' @examples
 #' processedCube = processDataCube(Fujita2023)
-processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=FALSE, centerMode=0, scaleMode=0){
+processDataCube = function(dataset, sparsityThreshold=1, considerGroups=FALSE, groupVariable="", centerMode=0, scaleMode=0){
 
   cube = dataset$data
   mode1 = dataset$mode1
@@ -19,8 +20,14 @@ processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=
   mode3 = dataset$mode3
 
   # Select features based on sparsity
-  sparsity = calculateSparsity(cube)
-  featureMask = sparsity <= sparsityThreshold
+  if(considerGroups == TRUE & groupVariable %in% colnames(dataset$mode1)){
+    sparsity = calculateSparsity(dataset, considerGroups=TRUE, groupVariable=groupVariable)
+    featureMask = (colSums(sparsity <= sparsityThreshold) >= 1)
+  }
+  else{
+    sparsity = calculateSparsity(dataset)
+    featureMask = sparsity <= sparsityThreshold
+  }
 
   # Calculate CLR
   cube_clr = multiwayCLR(cube)
@@ -31,7 +38,7 @@ processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=
 
   # Center
   if(centerMode != 0){
-    cube_cnt = multiway::ncenter(cube_filtered, mode=centerMode)
+    cube_cnt = multiwayCenter(cube_filtered, mode=centerMode)
   }
   else{
     cube_cnt = cube_filtered
@@ -39,7 +46,7 @@ processDataCube = function(dataset, sparsityThreshold=1, sparsityPerGroupFilter=
 
   # Scale - NOTE: THIS DOES NOT SCALE TO EXACTLY SD=1
   if(scaleMode != 0){
-    cube_cnt_scl = multiway::nscale(cube_cnt, mode=scaleMode)
+    cube_cnt_scl = multiwayScale(cube_cnt, mode=scaleMode)
   }
   else{
     cube_cnt_scl = cube_cnt

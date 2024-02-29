@@ -9,15 +9,21 @@
 #' library(dplyr)
 #' library(ggplot2)
 #' library(ggpubr)
-#' X = Fujita2023$data
-#' assessment = assessNumComponents(X,
+#'
+#' processedFujita = processDataCube(Fujita2023,
+#'  sparsityThreshold=0.99,
+#'   centerMode=1,
+#'    scaleMode=2)
+#'
+#' assessment = assessNumComponents(processedFujita$data,
 #'  minNumComponents = 1,
-#'  maxNumComponents = 5,
+#'  maxNumComponents = 3,
 #'  numRepetitions = 10,
 #'  ctol=1e-6,
 #'  maxit=2500)
 #'
 #' plotModelTCCs(assessment$metrics$TCC[[2]])
+#'
 plotModelTCCs = function(TCC_cube){
   I = dim(TCC_cube)[1]
   J = dim(TCC_cube)[2]

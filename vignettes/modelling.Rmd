@@ -52,20 +52,12 @@ plotPARAFACmodel(convertedModel,
 set.seed(0)
 
 # Make PARAFAC model
-model = parafac(Shao2019$data, nfac=3, nstart=5, ctol=1e-4, maxit=100, verbose=FALSE)
+processedShao = processDataCube(Shao2019, sparsityThreshold=0.90, centerMode=1, scaleMode=2)
+model = parafac(processedShao$data, nfac=3, nstart=5, ctol=1e-4, maxit=100, verbose=FALSE)
 model = resign(model, mode="B", absorb="A")
 
 # Convert model output to plottable data
-subjectMetadata = Shao2019$sampleMetadata %>% 
-  select(Individual, Delivery_mode) %>%
-  arrange(Individual) %>%
-  unique()
-
-featureMetadata = Shao2019$taxonomy
-
-conditionMetadata = Shao2019$sampleMetadata %>% select(Time_point) %>% unique()
-
-metadataPerMode = list(subjectMetadata, featureMetadata, conditionMetadata)
+metadataPerMode = list(processedShao$mode1, processedShao$mode2, processedShao$mode3)
 convertedModel = convertModelFormat(model, metadataPerMode)
 
 # Prepare plot parameters

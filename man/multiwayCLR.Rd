@@ -13,7 +13,7 @@ multiwayCLR(cube)
 CLRed cube
 }
 \description{
-Perform a centered log-ratio transform over a multiway array
+Propagates NAs corresponding to missing samples.
 }
 \examples{
 cubeCLR = multiwayCLR(Fujita2023$data)

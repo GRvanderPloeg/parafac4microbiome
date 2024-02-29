@@ -1,5 +1,7 @@
 #' Perform a centered log-ratio transform over a multiway array
 #'
+#' Propagates NAs corresponding to missing samples.
+#'
 #' @param cube Multiway array of counts
 #'
 #' @return CLRed cube
@@ -17,7 +19,14 @@ multiwayCLR = function(cube){
 
   for(i in 1:I){
     for(k in 1:K){
-      cube_clr[i,,k] = compositions::clr(cube_pseudo[i,,k])
+      sample = cube_pseudo[i,,k]
+
+      if(all(is.na(sample))){ # propagate NAs corresponding to missing samples
+        cube_clr[i,,k] = sample
+      }
+      else{
+        cube_clr[i,,k] = compositions::clr(sample)
+      }
     }
   }
 

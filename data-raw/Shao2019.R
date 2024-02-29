@@ -39,58 +39,27 @@ sampleInfo = sampleInfo %>% filter(run_accession %in% colnames(df))
 df = df %>% select(all_of(sampleInfo$run_accession)) %>% t() %>% as_tibble()
 colnames(df) = taxa$OTU
 
-# Temporary addition: process down to input data for PARAFAC
-
 # Keep only timepoint 4, 7, 21 and Infancy samples
-sampleInfo_filtered = sampleInfo %>%
-  filter(Infancy_sampling_age_months != "Mother", Time_point %in% c(4,7,21,"Infancy"))
+sampleMask = (sampleInfo$Time_point %in% c(4,7,21,"Infancy")) & (sampleInfo$Infancy_sampling_age_months != "Mother")
+sampleMask = sampleMask & !is.na(sampleMask) # correct for NA results in mask
+sampleInfo_filtered = sampleInfo[sampleMask,]
+df_filtered = df[sampleMask,]
 
-# In-between step: filter taxa to taxa with at least 1 non-zero value
-featureSelection = names(colSums(df)[colSums(df) > 0])
-taxonomy = taxa %>% filter(OTU %in% featureSelection)
-
-df = cbind(df, sampleInfo) %>%
-  filter(Infancy_sampling_age_months != "Mother", Time_point %in% c(4,7,21,"Infancy")) %>%
-  select(featureSelection)
-
-## Filter based on sparsity per group
-threshold = 0.90
-
-df_vaginal = cbind(df, sampleInfo_filtered) %>%
-  as_tibble() %>%
-  filter(Delivery_mode == "Vaginal") %>%
-  select(-all_of(colnames(sampleInfo_filtered)))
-
-df_csection = cbind(df, sampleInfo_filtered) %>%
-  as_tibble() %>%
-  filter(Delivery_mode == "Caesarean") %>%
-  select(-all_of(colnames(sampleInfo_filtered)))
-
-vaginalSparsity = colSums(df_vaginal==0) / nrow(df_vaginal)
-csectionSparsity = colSums(df_csection==0) / nrow(df_csection)
-
-vaginalSelection = vaginalSparsity <= threshold
-csectionSelection = csectionSparsity <= threshold
-featureSelection = colnames(df)[vaginalSelection | csectionSelection]
-
-taxonomy_filtered = taxa %>% filter(OTU %in% featureSelection)
-
-# Filter df
-df_filtered = df %>%
-  select(all_of(featureSelection))
-
-# CLR with pseudocount 1
-df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
+# Remove all-zero features for disk space reasons
+sparsity = colSums(df_filtered==0) / nrow(df_filtered)
+featureMask = sparsity < 1
+df_filtered = df_filtered[,featureMask]
+taxa = taxa[featureMask,]
 
 # Fold data cube - take missing samples into account
 I = 395
-J = 90
+J = 959
 K = 4
 cube = array(0L, dim=c(I,J,K))
 timepoints = c("4","7","21","Infancy")
 
 for(k in 1:K){
-  temp = cbind(df_clr, sampleInfo_filtered) %>% as_tibble()
+  temp = cbind(df_filtered, sampleInfo_filtered) %>% as_tibble()
   cube[,,k] = temp %>%
     filter(Time_point == timepoints[k]) %>%
     right_join(sampleInfo_filtered %>% select(Individual) %>% unique()) %>%
@@ -99,20 +68,16 @@ for(k in 1:K){
     as.matrix()
 }
 
-# Center
-cube_cnt = array(0L, dim=c(I,J,K))
-for(j in 1:J){
-  for(k in 1:K){
-    cube_cnt[,j,k] = cube[,j,k] - mean(cube[,j,k], na.rm=TRUE)
-  }
-}
+# Prepare metadata
+mode1 = sampleInfo_filtered %>%
+  select(Individual, Delivery_mode) %>%
+  unique() %>%
+  arrange(Individual)
 
-# Scale
-cube_cnt_scl = array(0L, dim=c(I,J,K))
-for(j in 1:J){
-  cube_cnt_scl[,j,] = cube_cnt[,j,] / sd(cube_cnt[,j,], na.rm=TRUE)
-}
+mode2 = taxa
+
+mode3 = sampleInfo_filtered %>% filter(Time_point %in% timepoints) %>% select(Time_point) %>% unique()
 
 # Export
-Shao2019 = list("sampleMetadata"=sampleInfo_filtered, "taxonomy"=taxonomy_filtered, "data"=cube_cnt_scl)
+Shao2019 = list("data"=cube, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 usethis::use_data(Shao2019, overwrite = TRUE)

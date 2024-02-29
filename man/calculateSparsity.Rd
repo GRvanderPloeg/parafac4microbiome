@@ -4,17 +4,32 @@
 \alias{calculateSparsity}
 \title{Calculate sparsity across the feature mode of a multiway array}
 \usage{
-calculateSparsity(cube)
+calculateSparsity(dataset, considerGroups = FALSE, groupVariable = "")
 }
 \arguments{
-\item{cube}{Multiway array of counts}
+\item{dataset}{See \link{Fujita2023}, \link{Shao2019} or \link{vanderPloeg2024}.}
+
+\item{considerGroups}{Consider subject groups in calculating sparsity (default FALSE)}
+
+\item{groupVariable}{What column name of mode 1 should be used to consider groups? (default "")}
 }
 \value{
-Vector of sparsity fractions (1 x J) where J is the number of features.
+Vector of sparsity fractions (N x J) where N is the number of groups and J is the number of features.
 }
 \description{
 Calculate sparsity across the feature mode of a multiway array
 }
 \examples{
-sparsity = calculateSparsity(Fujita2023$data)
+# No groups
+sparsity = calculateSparsity(Fujita2023)
+length(sparsity)
+hist(sparsity)
+
+# Consider groups
+colnames(Shao2019$mode1)
+sparsity = calculateSparsity(Shao2019, considerGroups=TRUE, groupVariable="Delivery_mode")
+dim(sparsity)
+hist(sparsity[1,])
+hist(sparsity[2,])
+
 }

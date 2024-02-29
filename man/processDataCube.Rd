@@ -7,7 +7,8 @@
 processDataCube(
   dataset,
   sparsityThreshold = 1,
-  sparsityPerGroupFilter = FALSE,
+  considerGroups = FALSE,
+  groupVariable = "",
   centerMode = 0,
   scaleMode = 0
 )
@@ -17,11 +18,13 @@ processDataCube(
 
 \item{sparsityThreshold}{Maximum sparsity for a feature to be selected}
 
-\item{sparsityPerGroupFilter}{Consider groups when calculating sparsity}
+\item{considerGroups}{Consider groups when calculating sparsity}
 
-\item{centerMode}{Center across mode}
+\item{groupVariable}{Variable in mode1 data to use when considering groups}
 
-\item{scaleMode}{Scale within mode}
+\item{centerMode}{Center across mode (default 0, i.e. do not center)}
+
+\item{scaleMode}{Scale within mode (default 0, i.e. do not scale)}
 }
 \value{
 CLRed, centered and scaled cube
