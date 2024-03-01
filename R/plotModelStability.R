@@ -20,15 +20,17 @@ plotModelStability = function(modelStabilityOutput){
   for(f in 1:numComponents){
     for(m in 1:numModes){
       df = modelStabilityOutput[[m]][[f]]
-      df = cbind(apply(df, 1, stats::median, na.rm=TRUE), apply(df, 1, stats::sd, na.rm=TRUE))
-      colnames(df) = c("m", "s")
+      df = cbind(apply(df, 1, stats::median, na.rm=TRUE),
+                 apply(df, 1, function(x){stats::quantile(x, 0.25, na.rm=TRUE)}),
+                 apply(df, 1, function(x){stats::quantile(x, 0.75, na.rm=TRUE)}))
+      colnames(df) = c("y", "minValue", "maxValue")
 
       plotlist[[plotIterator]] = df %>%
         dplyr::as_tibble() %>%
         dplyr::mutate(index=1:nrow(df)) %>%
-        ggplot2::ggplot(ggplot2::aes(x=index,y=m)) +
+        ggplot2::ggplot(ggplot2::aes(x=index,y=y)) +
         ggplot2::geom_bar(stat="identity") +
-        ggplot2::geom_errorbar(ggplot2::aes(ymin=m-s,ymax=m+s))
+        ggplot2::geom_errorbar(ggplot2::aes(ymin=minValue,ymax=maxValue))
       plotIterator = plotIterator + 1
     }
   }
@@ -39,5 +41,6 @@ plotModelStability = function(modelStabilityOutput){
 
 # Ugly solution for dplyr namespace issues
 index <- NULL
-m <- NULL
-s <- NULL
+y <- NULL
+minValue <- NULL
+maxValue <- NULL

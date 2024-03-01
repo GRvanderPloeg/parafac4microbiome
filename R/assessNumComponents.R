@@ -34,7 +34,7 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
 
     numIterations[,f] = sapply(models, function(model){model$iter})
     SSE[,f] = sapply(models, function(model){model$SSE})
-    CORCONDIA[,f] = sapply(models, function(model){multiway::corcondia(X, model)})
+    CORCONDIA[,f] = sapply(models, function(model){corcondia(X, model)})
     varExp[,f] = sapply(models, function(model){model$Rsq*100})
     allModels[[f]] = models
 

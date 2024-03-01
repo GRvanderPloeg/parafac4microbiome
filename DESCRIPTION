@@ -18,6 +18,7 @@ Imports:
     magrittr,
     methods,
     multiway,
+    rTensor,
     tidyr,
     vctrs
 Depends: 

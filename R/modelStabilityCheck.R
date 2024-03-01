@@ -17,14 +17,24 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetition
 
   numSamples = nrow(X)
   numModes = length(dim(X))
+  samplesToRemove = list()
 
+  if(numRepetitions == nrow(X)){
+    for(i in 1:numRepetitions){samplesToRemove[[i]] = c(i)}
+  }
+  if(numRepetitions != nrow(X)){
+    for(i in 1:numRepetitions){samplesToRemove[[i]] = sample(1:nrow(X), 1)}
+  }
+
+  # Create jack-knifed PARAFAC models
   models = list()
   for(i in 1:numRepetitions){
-    df = X[-i,,]
+    removeSamples = samplesToRemove[[i]]
+    df = X[-removeSamples,,]
     model = multiway::parafac(df, nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
 
     # Modify subject loadings to reflect a missing sample
-    mask = 1:nrow(X) == i
+    mask = 1:nrow(X) %in% removeSamples
     temp = matrix(0L, nrow(X), numComponents)
     temp[mask,] = NA
     temp[!mask,] = model$A
@@ -33,6 +43,7 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetition
     models[[i]] = model
   }
 
+  # Store the output
   A = list()
   B = list()
   C = list()
