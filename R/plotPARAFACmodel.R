@@ -188,5 +188,11 @@ plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=N
   }
 
   outputPlot = ggpubr::ggarrange(plotlist = plotList, ncol=3, nrow=numComponents+1)
-  ggpubr::annotate_figure(outputPlot, top=ggpubr::text_grob(overallTitle))
+
+  if(overallTitle != ""){
+    print(ggpubr::annotate_figure(outputPlot, top=ggpubr::text_grob(overallTitle)))
+  }
+  else{
+    return(plotList)
+  }
 }

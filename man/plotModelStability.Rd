@@ -4,10 +4,36 @@
 \alias{plotModelStability}
 \title{Plot model stability check output.}
 \usage{
-plotModelStability(modelStabilityOutput)
+plotModelStability(
+  modelStabilityOutput,
+  dataset,
+  colourCols = NULL,
+  legendTitles = NULL,
+  xLabels = NULL,
+  legendColNums = NULL,
+  arrangeModes = NULL,
+  continuousModes = NULL,
+  overallTitle = ""
+)
 }
 \arguments{
 \item{modelStabilityOutput}{Outout of the \code{\link[=modelStabilityCheck]{modelStabilityCheck()}} function.}
+
+\item{dataset}{See \link{Fujita2023}, \link{Shao2019} or \link{vanderPloeg2024}.}
+
+\item{colourCols}{Vector of strings stating which column names should be factorized for colours per mode.}
+
+\item{legendTitles}{Vector of strings stating the legend title per mode.}
+
+\item{xLabels}{Vector of strings stating the x-axis labels per mode.}
+
+\item{legendColNums}{Vector of integers stating the desired number of columns for the legends per mode.}
+
+\item{arrangeModes}{Vector of boolean values per mode, stating if the loadings should be arranged according to colourCols (TRUE) or not (FALSE).}
+
+\item{continuousModes}{Vector of boolean values per mode, stating if the loadings should be plotted as a line plot (TRUE) or a bar plot (FALSE).}
+
+\item{overallTitle}{Overall title of the plot.}
 }
 \value{
 Plot
@@ -21,4 +47,5 @@ library(ggplot2)
 library(ggpubr)
 modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
 plotModelStability(modelStability)
+
 }
