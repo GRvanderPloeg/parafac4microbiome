@@ -30,7 +30,7 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
   varExp = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
 
   for(f in minNumComponents:maxNumComponents){
-    models = multiway::parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
+    models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
 
     numIterations[,f] = sapply(models, function(model){model$iter})
     SSE[,f] = sapply(models, function(model){model$SSE})

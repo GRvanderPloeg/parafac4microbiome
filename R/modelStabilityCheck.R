@@ -31,7 +31,7 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetition
   for(i in 1:numRepetitions){
     removeSamples = samplesToRemove[[i]]
     df = X[-removeSamples,,]
-    model = multiway::parafac(df, nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+    model = parafac(df, nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
 
     # Modify subject loadings to reflect a missing sample
     mask = 1:nrow(X) %in% removeSamples

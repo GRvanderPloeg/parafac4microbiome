@@ -13,16 +13,20 @@
 #' modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
 #'
 #' plotModelStability(modelStability,
-#'  dataset=Fujita2023,
+#'  dataset=processedFujita,
 #'  colourCols=c("","Phylum", ""),
+#'  legendTitles=c("","Phylum",""),
 #'  xLabels=c("Replicate", "Feature index", "Time index"),
+#'  legendColNums=c(0,3,0),
 #'  arrangeModes=c(FALSE,TRUE,FALSE),
-#'  continuousModes=c(FALSE,FALSE,TRUE))
+#'  continuousModes=c(FALSE,FALSE,FALSE),
+#'  overallTitle="Fujita2023")
 #'
 plotModelStability = function(modelStabilityOutput, dataset, colourCols=NULL,
                               legendTitles=NULL, xLabels=NULL, legendColNums=NULL,
                               arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
 
+  # Test the length of metadata against the model we're gonna make
 
   numComponents = length(modelStabilityOutput[[1]])
   numModes = length(modelStabilityOutput)
@@ -40,24 +44,45 @@ plotModelStability = function(modelStabilityOutput, dataset, colourCols=NULL,
 
     for(f in 1:numComponents){
       medians[,f] = apply(modelStabilityOutput[[m]][[f]], 1, function(x){median(x,na.rm=TRUE)})
-      mins[,f] = apply(modelStabilityOutput[[m]][[f]], 1, function(x){min(x,na.rm=TRUE)})
-      maxs[,f] = apply(modelStabilityOutput[[m]][[f]], 1, function(x){max(x,na.rm=TRUE)})
+      mins[,f] = medians[,f] - abs(apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::quantile(x,0.25,na.rm=TRUE)}))
+      maxs[,f] = medians[,f] + abs(apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::quantile(x,0.75,na.rm=TRUE)}))
     }
+
     model[[m]] = cbind(medians, metaData[[m]]) %>% dplyr::as_tibble()
-    ymins[[m]] = mins
-    ymaxs[[m]] = maxs
+    ymins[[m]] = cbind(mins, metaData[[m]]) %>% dplyr::as_tibble()
+    ymaxs[[m]] = cbind(maxs, metaData[[m]]) %>% dplyr::as_tibble()
 
     colnames(model[[m]]) = c(paste0("Component_", 1:numComponents), colnames(metaData[[m]]))
-    colnames(ymins[[m]]) = c(paste0("Component_", 1:numComponents))
-    colnames(ymaxs[[m]]) = c(paste0("Component_", 1:numComponents))
-  }
+    colnames(ymins[[m]]) = c(paste0("Component_", 1:numComponents), colnames(metaData[[m]]))
+    colnames(ymaxs[[m]]) = c(paste0("Component_", 1:numComponents), colnames(metaData[[m]]))
 
-  # Also prepare the error bars
+    if(colourCols[m] != ""){
+      model[[m]] = model[[m]] %>% arrange(!!dplyr::sym(colourCols[[m]]))
+      ymins[[m]] = ymins[[m]] %>% arrange(!!dplyr::sym(colourCols[[m]]))
+      ymaxs[[m]] = ymaxs[[m]] %>% arrange(!!dplyr::sym(colourCols[[m]]))
+    }
+  }
 
   # Give it to plotPARAFACmodel
   plotlist = plotPARAFACmodel(model, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes)
 
+  # order of plotlist: iterate over modes first, then components
+  # Step in between: you need to sort the values by the colourCol
+
   # Grab the plots from there and manually add the error bars
+
+  plotIterator = 1
+  for(f in 1:numComponents){
+    for(m in 1:numModes){
+      plot = plotlist[[plotIterator]]
+      data = cbind(model[[m]][,f], ymins[[m]][,f], ymaxs[[m]][,f])
+      colnames(data) = c("y", "ymin", "ymax")
+      data = data %>% as_tibble() %>% mutate(index=1:nrow(.))
+      plot = plot + geom_errorbar(aes(x=index, ymin=ymin, ymax=ymax), width=0.2, data=data, inherit.aes = FALSE)
+      plotlist[[plotIterator]] = plot
+      plotIterator = plotIterator + 1
+    }
+  }
 
   # numComponents = length(modelStabilityOutput[[1]])
   # numModes = length(modelStabilityOutput)
@@ -195,7 +220,7 @@ plotModelStability = function(modelStabilityOutput, dataset, colourCols=NULL,
   #   }
   # }
 
-  plot = ggpubr::ggarrange(plotlist=plotlist)
+  plot = ggpubr::ggarrange(plotlist=plotlist, nrow=numComponents+1, ncol=numModes)
   return(plot)
 }
 

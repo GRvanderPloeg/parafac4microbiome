@@ -43,9 +43,17 @@ for(f in 1:3){
   output = modelStabilityCheck(processedFujita$data,
                                processedFujita$mode1,
                                numComponents=f,
-                               numRepetitions=25,
-                               ctol=1e-8)
-  print(plotModelStability(output))
+                               numRepetitions=50,
+                               ctol=1e-9)
+  print(plotModelStability(output,
+                           processedFujita,
+                           colourCols = c("", "Genus", ""),
+                           legendTitles = c("", "Genus", ""),
+                           xLabels = c("Replicate", "Feature index", "Time point"),
+                           legendColNums = c(0,5,0),
+                           arrangeModes = c(FALSE, TRUE, FALSE),
+                           continuousModes = c(FALSE,FALSE,FALSE),
+                           overallTitle = "Fujita PARAFAC model"))
 }
 
 # Tucker congruence coefficients
