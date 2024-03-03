@@ -29,7 +29,7 @@ assessNumComponents(
 \value{
 List object of the following:
 \itemize{
-\item metrics: metrics of every create model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
+\item metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
 \item models: all created models.
 }
 }

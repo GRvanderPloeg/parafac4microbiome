@@ -8,7 +8,9 @@ modelStabilityCheck(
   X,
   sampleMetadata,
   numComponents = 1,
-  numRepetitions = nrow(X),
+  numFolds = nrow(X),
+  considerGroups = FALSE,
+  groupVariable = "",
   ctol = 1e-06,
   maxit = 2500
 )
@@ -20,7 +22,11 @@ modelStabilityCheck(
 
 \item{numComponents}{Number of components of the desired PARAFAC model}
 
-\item{numRepetitions}{Number of jack-knifed samples to create}
+\item{numFolds}{Number of jack-knifed samples to create}
+
+\item{considerGroups}{Consider subject groups in calculating sparsity (default FALSE)}
+
+\item{groupVariable}{What column name of mode 1 should be used to consider groups? (default "")}
 
 \item{ctol}{Change in SSQ needed for model to be converged (default 1e-6).}
 

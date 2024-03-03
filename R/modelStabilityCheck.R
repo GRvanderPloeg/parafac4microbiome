@@ -1,9 +1,10 @@
 #' Jack-knifed PARAFAC models to determine model stability
 #'
+#' @inheritParams calculateSparsity
 #' @param X Input data cube
 #' @param sampleMetadata Input sample metadata
 #' @param numComponents Number of components of the desired PARAFAC model
-#' @param numRepetitions Number of jack-knifed samples to create
+#' @param numFolds Number of jack-knifed samples to create
 #' @param ctol Change in SSQ needed for model to be converged (default 1e-6).
 #' @param maxit Maximum number of iterations (default 2500).
 #'
@@ -13,22 +14,47 @@
 #' @examples
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' modelStability = modelStabilityCheck(processedFujita$data, processedFujita$mode1, numComponents=3)
-modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numRepetitions=nrow(X), ctol=1e-6, maxit=2500){
+modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numFolds=nrow(X),
+                               considerGroups=FALSE, groupVariable="", ctol=1e-6, maxit=2500){
+  # TODO: catch considerGroups=TRUE but groupVariable is "" or the other way around
 
   numSamples = nrow(X)
   numModes = length(dim(X))
   samplesToRemove = list()
 
-  if(numRepetitions == nrow(X)){
-    for(i in 1:numRepetitions){samplesToRemove[[i]] = c(i)}
+  # Determine which samples to remove per fold
+  if(considerGroups == TRUE & groupVariable %in% colnames(sampleMetadata)){
+    groupNames = unique(sampleMetadata[groupVariable]) %>% dplyr::pull()
+    numGroups = length(groupNames)
+    drawIndices = list()
+
+    # Determine the row indices for all samples per group
+    for(i in 1:numGroups){
+      df = sampleMetadata %>% dplyr::mutate(index=dplyr::row_number())
+      mask = df[groupVariable] == groupNames[i]
+      drawIndices[[i]] = df[mask,"index"] %>% dplyr::pull()
+    }
+
+    for(i in 1:numFolds){
+      indices = c()
+      for(j in 1:numGroups){
+        indices = c(indices, sample(drawIndices[[j]], 1)) # draw one sample from each group
+      }
+      samplesToRemove[[i]] = indices
+    }
   }
-  if(numRepetitions != nrow(X)){
-    for(i in 1:numRepetitions){samplesToRemove[[i]] = sample(1:nrow(X), 1)}
+  else{
+    if(numFolds == nrow(X)){
+      for(i in 1:numFolds){samplesToRemove[[i]] = c(i)} # every sample cut out once
+    }
+    else if(numFolds != nrow(X)){
+      for(i in 1:numFolds){samplesToRemove[[i]] = sample(1:nrow(X), 1)} # cut one sample randomly at a time
+    }
   }
 
   # Create jack-knifed PARAFAC models
   models = list()
-  for(i in 1:numRepetitions){
+  for(i in 1:numFolds){
     removeSamples = samplesToRemove[[i]]
     df = X[-removeSamples,,]
     model = parafac(df, nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)

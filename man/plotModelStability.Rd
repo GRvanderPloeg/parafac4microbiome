@@ -12,7 +12,6 @@ plotModelStability(
   xLabels = NULL,
   legendColNums = NULL,
   arrangeModes = NULL,
-  continuousModes = NULL,
   overallTitle = ""
 )
 }
@@ -31,8 +30,6 @@ plotModelStability(
 
 \item{arrangeModes}{Vector of boolean values per mode, stating if the loadings should be arranged according to colourCols (TRUE) or not (FALSE).}
 
-\item{continuousModes}{Vector of boolean values per mode, stating if the loadings should be plotted as a line plot (TRUE) or a bar plot (FALSE).}
-
 \item{overallTitle}{Overall title of the plot.}
 }
 \value{
@@ -45,7 +42,23 @@ Plot model stability check output.
 library(dplyr)
 library(ggplot2)
 library(ggpubr)
-modelStability = modelStabilityCheck(Fujita2023$data, Fujita2023$sampleMetadata, numComponents=3)
-plotModelStability(modelStability)
+
+processedFujita = processDataCube(Fujita2023,
+sparsityThreshold=0.99,
+centerMode=1,
+scaleMode=2)
+
+modelStability = modelStabilityCheck(processedFujita$data,
+processedFujita$sampleMetadata,
+numComponents=3)
+
+plotModelStability(modelStability,
+ dataset=processedFujita,
+ colourCols=c("","Phylum", ""),
+ legendTitles=c("","Phylum",""),
+ xLabels=c("Replicate", "Feature index", "Time index"),
+ legendColNums=c(0,3,0),
+ arrangeModes=c(FALSE,TRUE,FALSE),
+ overallTitle="Fujita2023")
 
 }

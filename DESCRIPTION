@@ -19,6 +19,7 @@ Imports:
     methods,
     multiway,
     rTensor,
+    stats,
     tidyr,
     vctrs
 Depends: 

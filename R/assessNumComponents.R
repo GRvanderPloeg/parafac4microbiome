@@ -8,7 +8,7 @@
 #' @param maxit Maximum number of iterations (default 2500).
 #'
 #' @return List object of the following:
-#' * metrics: metrics of every create model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
+#' * metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
 #' * models: all created models.
 #'
 #' @export
