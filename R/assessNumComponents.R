@@ -34,10 +34,13 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
 
     if(numCores > 1){
       cl = parallel::makeCluster(numCores)
-      ce = parallel::clusterEvalQ(cl, library(multiway))
-      ce2 = parallel::clusterEvalQ(cl, library(parafac4microbiome))
+      doParallel::registerDoParallel(cl)
       parallel::clusterSetRNGStream(cl, 1)
-      models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE, parallel=TRUE, cl=cl)
+      models = foreach::foreach(i=1:numRepetitions) %dopar% {
+        library(multiway)
+        library(parafac4microbiome)
+        model=parafac(X, nfac=f, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+      }
       parallel::stopCluster(cl)
     } else{
       models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)

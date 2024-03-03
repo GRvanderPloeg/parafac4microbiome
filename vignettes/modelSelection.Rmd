@@ -26,10 +26,10 @@ library(ggpubr)
 minNumComponents = 1
 maxNumComponents = 3
 numRepetitions = 25 # number of randomly initialized models
-numFolds = 50 # number of jack-knifed models
+numFolds = 8 # number of jack-knifed models
 ctol = 1e-6
 maxit = 500
-numCores=32
+numCores=2
 
 colourCols = c("", "Genus", "")
 legendTitles = c("", "Genus", "")
@@ -95,7 +95,7 @@ plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNum
 minNumComponents = 1
 maxNumComponents = 3
 numRepetitions = 25 # number of randomly initialized models
-numFolds = 50 # number of jack-knifed models
+numFolds = 10 # number of jack-knifed models
 ctol=1e-6 # this is a really bad setting but is needed to save computational time
 
 colourCols = c("Delivery_mode", "phylum", "")
@@ -114,7 +114,7 @@ assessment = assessNumComponents(processedShao$data,
                                  numRepetitions,
                                  ctol,
                                  maxit,
-                                 numCores=32)
+                                 numCores=2)
 
 plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
@@ -131,7 +131,7 @@ for(f in minNumComponents:maxNumComponents){
                                groupVariable="Delivery_mode",
                                ctol,
                                maxit=250,
-                               numCores=32)
+                               numCores=2)
   print(plotModelStability(output, processedShao, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
                            overallTitle = paste0("Jack-knifed Shao2019, numFolds=", numFolds)))
 }
@@ -164,8 +164,8 @@ plotPARAFACmodel(convertedModel,
 # For computational purposes we deviate from the default settings
 minNumComponents = 1
 maxNumComponents = 3
-numRepetitions = 10 # number of randomly initialized models
-numFolds = 100 # number of jack-knifed models
+numRepetitions = 25 # number of randomly initialized models
+numFolds = 25 # number of jack-knifed models
 ctol = 1e-6
 maxit = 250
 
@@ -185,7 +185,7 @@ assessment = assessNumComponents(processedPloeg$data,
                                  numRepetitions,
                                  ctol,
                                  maxit,
-                                 numCores=32)
+                                 numCores=2)
 
 plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
@@ -202,7 +202,7 @@ for(f in minNumComponents:maxNumComponents){
                                groupVariable="RFgroup",
                                ctol,
                                maxit,
-                               numCores=32)
+                               numCores=2)
   print(plotModelStability(output, processedPloeg, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
                            overallTitle = paste0("Jack-knifed Ploeg2024, numFolds=", numFolds)))
 }

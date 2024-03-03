@@ -47,7 +47,7 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numFolds=nrow
   }
   else{
     if(numFolds == nrow(X)){
-      for(i in 1:numFolds){samplesToRemove[[i]] = c(i)} # every sample cut out once
+      for(i in 1:numFolds){samplesToRemove[[i]] = c(i)} # cut out every sample once
     }
     else if(numFolds != nrow(X)){
       for(i in 1:numFolds){samplesToRemove[[i]] = sample(1:nrow(X), 1)} # cut one sample randomly at a time
