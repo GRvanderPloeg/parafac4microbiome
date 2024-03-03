@@ -6,6 +6,7 @@
 #' @param numRepetitions Number of randomly initialized models to create (default 100).
 #' @param ctol Change in SSQ needed for model to be converged (default 1e-6).
 #' @param maxit Maximum number of iterations (default 2500).
+#' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
 #' @return List object of the following:
 #' * metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
@@ -16,7 +17,7 @@
 #' @examples
 #' X = Fujita2023$data
 #' output = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=10)
-assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-6, maxit=2500){
+assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-6, maxit=2500, numCores=1){
 
   metrics = list()
   allModels = list()
@@ -30,7 +31,17 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
   varExp = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
 
   for(f in minNumComponents:maxNumComponents){
-    models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
+
+    if(numCores > 1){
+      cl = parallel::makeCluster(numCores)
+      ce = parallel::clusterEvalQ(cl, library(multiway))
+      ce2 = parallel::clusterEvalQ(cl, library(parafac4microbiome))
+      parallel::clusterSetRNGStream(cl, 1)
+      models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE, parallel=TRUE, cl=cl)
+      parallel::stopCluster(cl)
+    } else{
+      models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
+    }
 
     numIterations[,f] = sapply(models, function(model){model$iter})
     SSE[,f] = sapply(models, function(model){model$SSE})

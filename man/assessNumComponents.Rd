@@ -10,7 +10,8 @@ assessNumComponents(
   maxNumComponents = 5,
   numRepetitions = 100,
   ctol = 1e-06,
-  maxit = 2500
+  maxit = 2500,
+  numCores = 1
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ assessNumComponents(
 \item{ctol}{Change in SSQ needed for model to be converged (default 1e-6).}
 
 \item{maxit}{Maximum number of iterations (default 2500).}
+
+\item{numCores}{Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)}
 }
 \value{
 List object of the following:

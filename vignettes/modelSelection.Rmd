@@ -29,6 +29,7 @@ numRepetitions = 25 # number of randomly initialized models
 numFolds = 50 # number of jack-knifed models
 ctol = 1e-6
 maxit = 500
+numCores=32
 
 colourCols = c("", "Genus", "")
 legendTitles = c("", "Genus", "")
@@ -45,8 +46,9 @@ assessment = assessNumComponents(processedFujita$data,
                                  minNumComponents,
                                  maxNumComponents,
                                  numRepetitions,
-                                 ctol,
-                                 maxit)
+                                 ctol=ctol,
+                                 maxit=maxit,
+                                 numCores=numCores)
 
 plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
@@ -58,7 +60,8 @@ for(f in minNumComponents:maxNumComponents){
   output = modelStabilityCheck(processedFujita$data,
                                processedFujita$mode1,
                                numComponents=f,
-                               numFolds)
+                               numFolds=numFolds,
+                               numCores=numCores)
   print(plotModelStability(output, processedFujita,colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
                            overallTitle = paste0("Jack-knifed Fujita2023, numFolds=", numFolds)))
 }
@@ -92,8 +95,8 @@ plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNum
 minNumComponents = 1
 maxNumComponents = 3
 numRepetitions = 25 # number of randomly initialized models
-numFolds = 5 # number of jack-knifed models
-ctol=1e-3 # this is a really bad setting but is needed to save computational time
+numFolds = 50 # number of jack-knifed models
+ctol=1e-6 # this is a really bad setting but is needed to save computational time
 
 colourCols = c("Delivery_mode", "phylum", "")
 legendTitles = c("Delivery mode", "Phylum", "")
@@ -110,7 +113,8 @@ assessment = assessNumComponents(processedShao$data,
                                  maxNumComponents,
                                  numRepetitions,
                                  ctol,
-                                 maxit=250)
+                                 maxit,
+                                 numCores=32)
 
 plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
@@ -126,7 +130,8 @@ for(f in minNumComponents:maxNumComponents){
                                considerGroups=TRUE,
                                groupVariable="Delivery_mode",
                                ctol,
-                               maxit=100)
+                               maxit=250,
+                               numCores=32)
   print(plotModelStability(output, processedShao, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
                            overallTitle = paste0("Jack-knifed Shao2019, numFolds=", numFolds)))
 }
@@ -160,8 +165,8 @@ plotPARAFACmodel(convertedModel,
 minNumComponents = 1
 maxNumComponents = 3
 numRepetitions = 10 # number of randomly initialized models
-numFolds = 50 # number of jack-knifed models
-ctol = 1e-4
+numFolds = 100 # number of jack-knifed models
+ctol = 1e-6
 maxit = 250
 
 colourCols = c("RFgroup", "Phylum", "")
@@ -179,7 +184,8 @@ assessment = assessNumComponents(processedPloeg$data,
                                  maxNumComponents,
                                  numRepetitions,
                                  ctol,
-                                 maxit)
+                                 maxit,
+                                 numCores=32)
 
 plotModelMetric(assessment$metrics, "numIterations")
 plotModelMetric(assessment$metrics, "SSE")
@@ -195,7 +201,8 @@ for(f in minNumComponents:maxNumComponents){
                                considerGroups=TRUE,
                                groupVariable="RFgroup",
                                ctol,
-                               maxit)
+                               maxit,
+                               numCores=32)
   print(plotModelStability(output, processedPloeg, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
                            overallTitle = paste0("Jack-knifed Ploeg2024, numFolds=", numFolds)))
 }
