@@ -51,8 +51,8 @@ plotModelStability = function(modelStabilityOutput, dataset, colourCols=NULL,
 
     for(f in 1:numComponents){
       medians[,f] = apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::median(x,na.rm=TRUE)})
-      mins[,f] = medians[,f] - abs(apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::quantile(x,0.25,na.rm=TRUE)}))
-      maxs[,f] = medians[,f] + abs(apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::quantile(x,0.75,na.rm=TRUE)}))
+      mins[,f] = apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::quantile(x,0.25,na.rm=TRUE)})
+      maxs[,f] = apply(modelStabilityOutput[[m]][[f]], 1, function(x){stats::quantile(x,0.75,na.rm=TRUE)})
     }
 
     model[[m]] = cbind(medians, metaData[[m]]) %>% dplyr::as_tibble()

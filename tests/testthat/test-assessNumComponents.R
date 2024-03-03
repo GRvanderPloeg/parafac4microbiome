@@ -19,3 +19,7 @@ test_that("Each item in output models is length numRepetitions", {
 test_that("A nonsensical minNumComponents throws an error", {
   expect_error(assessNumComponents(Fujita2023$data, minNumComponents=-3, maxNumComponents=3, numRepetitions=10))
 })
+
+test_that("A nonsensical numRepetitions throws an error", {
+  expect_error(assessNumComponents(Fujita2023$data, minNumComponents=-3, maxNumComponents=3, numRepetitions=-10))
+})

@@ -151,7 +151,7 @@ parafac = function (X, nfac, nstart = 10, const = NULL, control = NULL,
                     maxit = 500, ctol = 1e-04, parallel = FALSE, cl = NULL, output = c("best",
                                                                                        "all"), verbose = TRUE, backfit = FALSE)
 {
-  model = multiway::parafac(X, nfac, nstart, const, control,
+  models = multiway::parafac(X, nfac, nstart, const, control,
                             Afixed, Bfixed, Cfixed, Dfixed,
                             Astart, Bstart, Cstart, Dstart,
                             Astruc, Bstruc, Cstruc, Dstruc,
@@ -159,12 +159,28 @@ parafac = function (X, nfac, nstart = 10, const = NULL, control = NULL,
                             maxit, ctol, parallel, cl, output, verbose, backfit)
 
   # Put all the variation into mode A to make the models equal to Rasmus Bro's implementation in Matlab
-  model = multiway::rescale(model, mode="B", newscale=sqrt(1/nrow(model$B)), absorb="A")
-  model = multiway::rescale(model, mode="C", newscale=sqrt(1/nrow(model$C)), absorb="A")
+  if(nstart > 1){
+    newModels = list()
+    for(i in 1:nstart){
+      newModel = models[[i]]
+      newModel = multiway::rescale(newModel, mode="B", newscale=sqrt(1/nrow(newModel$B)), absorb="A")
+      newModel = multiway::rescale(newModel, mode="C", newscale=sqrt(1/nrow(newModel$C)), absorb="A")
 
-  if(length(dim(X))==4){
-    model = multiway::rescale(model, mode="D", newscale=sqrt(1/nrow(model$D)), absorb="A")
+      if(length(dim(X))==4){
+        newModel = multiway::rescale(newModel, mode="D", newscale=sqrt(1/nrow(newModel$D)), absorb="A")
+      }
+      newModels[[i]] = newModel
+    }
+    return(newModels)
   }
+  else{
+    model = models
+    model = multiway::rescale(model, mode="B", newscale=sqrt(1/nrow(model$B)), absorb="A")
+    model = multiway::rescale(model, mode="C", newscale=sqrt(1/nrow(model$C)), absorb="A")
 
-  return(model)
+    if(length(dim(X))==4){
+      model = multiway::rescale(model, mode="D", newscale=sqrt(1/nrow(model$D)), absorb="A")
+    }
+    return(model)
+  }
 }

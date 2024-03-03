@@ -81,6 +81,9 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numFolds=nrow
 
   # Fix the issue where randomly some components/modes have flipped signs
   # Uses non-exported helper functions in utils.R
+  stabilizedA = list()
+  stabilizedB = list()
+  stabilizedC = list()
   for(i in 1:numComponents){
     evidenceA = checkForFlippedLoadings(A[[i]])
     evidenceB = checkForFlippedLoadings(B[[i]])
@@ -88,10 +91,10 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numFolds=nrow
     evidenceMatrix = rbind(evidenceA, evidenceB, evidenceC)
 
     repairedLoadings = repairLoadings(A[[i]], B[[i]], C[[i]], evidenceMatrix)
-    A[[i]] = repairedLoadings[[1]]
-    B[[i]] = repairedLoadings[[2]]
-    C[[i]] = repairedLoadings[[3]]
+    stabilizedA[[i]] = repairedLoadings[[1]]
+    stabilizedB[[i]] = repairedLoadings[[2]]
+    stabilizedC[[i]] = repairedLoadings[[3]]
   }
 
-  return(list(A,B,C))
+  return(list(stabilizedA, stabilizedB, stabilizedC))
 }

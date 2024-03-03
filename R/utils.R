@@ -73,15 +73,20 @@ convertModelFormat = function(model, metadataPerMode=list()){
 checkForFlippedLoadings = function(loadingMatrix){
 
   numRepetitions = ncol(loadingMatrix)
-  medianLoadings = apply(loadingMatrix, 1, function(x){stats::median(x, na.rm=TRUE)})
+
+  # Arbitrarily define the "correct loadings" as the median of all folds
+  correctLoadings = apply(loadingMatrix, 1, function(x){stats::median(x, na.rm=TRUE)})
   evidence = rep(FALSE, numRepetitions)
 
+  # Check every repetition
   for(j in 1:numRepetitions){
     loading = loadingMatrix[,j]
-    option1 = sum((loading - medianLoadings)^2, na.rm=TRUE) # not flipped
-    option2 = sum((-1*loading - medianLoadings)^2, na.rm=TRUE) # flipped sign
+    flippedLoading = -1*loading
 
-    if(option2 < option1){
+    diff = sum((correctLoadings-loading)^2, na.rm=TRUE)
+    flippedDiff = sum((correctLoadings-flippedLoading)^2, na.rm=TRUE)
+
+    if(flippedDiff < diff){
       evidence[j] = TRUE
     }
   }
@@ -89,7 +94,7 @@ checkForFlippedLoadings = function(loadingMatrix){
 }
 
 repairLoadings = function(A, B, C, evidenceMatrix){
-
+  # TODO: not robust towards 4 modes
   loadingsList = list(A, B, C)
   numRepetitions = ncol(A)
   numModes = length(loadingsList)
@@ -99,12 +104,14 @@ repairLoadings = function(A, B, C, evidenceMatrix){
   repairedC = array(0L, dim=dim(C))
   repairedLoadingsList = list(repairedA, repairedB, repairedC)
 
-  flipped = which(colSums(evidenceMatrix) == 2) # exactly 2 modes need to be flipped to cancel out
+  flipped = which(colSums(evidenceMatrix) >= 2) # exactly 2 modes need to be flipped to cancel out
 
   for(i in 1:numRepetitions){
+    numFlipped = 0
     for(j in 1:numModes){
-      if(i %in% flipped & evidenceMatrix[j,i]){
+      if(i %in% flipped & evidenceMatrix[j,i] & numFlipped < 2){
         repairedLoadingsList[[j]][,i] = -1*loadingsList[[j]][,i]
+        numFlipped = numFlipped + 1
       }
       else{
         repairedLoadingsList[[j]][,i] = loadingsList[[j]][,i]
