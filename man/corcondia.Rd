@@ -22,7 +22,6 @@ parafac or parafac2 model. For Parafac2, the diagnostic is calculated after
 transforming the data.
 }
 \examples{
-library(rTensor)
 library(multiway)
 ##########   EXAMPLE   ##########
 

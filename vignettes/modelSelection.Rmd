@@ -25,11 +25,11 @@ library(ggpubr)
 # Setup
 minNumComponents = 1
 maxNumComponents = 3
-numRepetitions = 25 # number of randomly initialized models
+numRepetitions = 5 # number of randomly initialized models
 numFolds = 8 # number of jack-knifed models
 ctol = 1e-6
-maxit = 500
-numCores=2
+maxit = 200
+numCores= 1
 
 colourCols = c("", "Genus", "")
 legendTitles = c("", "Genus", "")
@@ -41,48 +41,26 @@ continuousModes = c(FALSE,FALSE,TRUE)
 # Preprocess
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 
-# For computational purposes we deviate from the default settings
-assessment = assessNumComponents(processedFujita$data,
-                                 minNumComponents,
-                                 maxNumComponents,
-                                 numRepetitions,
-                                 ctol=ctol,
-                                 maxit=maxit,
-                                 numCores=numCores)
-
-plotModelMetric(assessment$metrics, "numIterations")
-plotModelMetric(assessment$metrics, "SSE")
-plotModelMetric(assessment$metrics, "CORCONDIA")
-plotModelMetric(assessment$metrics, "varExp")
+# Assess the metrics to determine the correct number of components
+assessment = assessNumComponents(processedFujita$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+assessment$plots$overview
 
 # Model stability check using jack-knifing
 for(f in minNumComponents:maxNumComponents){
-  output = modelStabilityCheck(processedFujita$data,
-                               processedFujita$mode1,
-                               numComponents=f,
-                               numFolds=numFolds,
-                               numCores=numCores)
-  print(plotModelStability(output, processedFujita,colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                           overallTitle = paste0("Jack-knifed Fujita2023, numFolds=", numFolds)))
+  stabilityCheck = modelStabilityCheck(processedFujita, numComponents=f, numFolds=numFolds, considerGroups=FALSE,
+                               groupVariable="", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)
+  print(stabilityCheck$plot)
 }
 
-# Tucker congruence coefficients
-for(f in 2:3){
-  print(plotModelTCCs(assessment$metrics$TCC[[f]]))
-  print(plotOverallTCCs(assessment$metrics$TCC[[f]]))
-}
-
+# CORCONDIA is still well above 60 and the model is moderately stable at 3 components.
 # Here we decide on selecting the best 3-component model, i.e. explaining the largest amount of variation.
 # Alternative: select based on maximum CORCONDIA.
 numComponents = 3
 modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
 finalModel = assessment$models[[numComponents]][[modelChoice]]
 
-# Convert model output to plottable data
-metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
-convertedModel = convertModelFormat(finalModel, metadataPerMode)
-
-plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+plotPARAFACmodel(finalModel, processedFujita, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Fujita PARAFAC model")
 
@@ -94,9 +72,11 @@ plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNum
 # For computational purposes we deviate from the default settings
 minNumComponents = 1
 maxNumComponents = 3
-numRepetitions = 25 # number of randomly initialized models
-numFolds = 10 # number of jack-knifed models
-ctol=1e-6 # this is a really bad setting but is needed to save computational time
+numRepetitions = 5 # number of randomly initialized models
+numFolds = 5 # number of jack-knifed models
+maxit = 200
+ctol= 1e-4 # this is a really bad setting but is needed to save computational time
+numCores = 1
 
 colourCols = c("Delivery_mode", "phylum", "")
 legendTitles = c("Delivery mode", "Phylum", "")
@@ -108,37 +88,17 @@ continuousModes = c(FALSE,FALSE,TRUE)
 # Pre-process the data
 processedShao = processDataCube(Shao2019, sparsityThreshold=0.9, considerGroups=TRUE, groupVariable="Delivery_mode", centerMode=1, scaleMode=2)
 
-assessment = assessNumComponents(processedShao$data,
-                                 minNumComponents,
-                                 maxNumComponents,
-                                 numRepetitions,
-                                 ctol,
-                                 maxit,
-                                 numCores=2)
-
-plotModelMetric(assessment$metrics, "numIterations")
-plotModelMetric(assessment$metrics, "SSE")
-plotModelMetric(assessment$metrics, "CORCONDIA")
-plotModelMetric(assessment$metrics, "varExp")
+# Assess the metrics to determine the correct number of components
+assessment = assessNumComponents(processedShao$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+assessment$plots$overview
 
 # Model stability check using jack-knifing
 for(f in minNumComponents:maxNumComponents){
-  output = modelStabilityCheck(processedShao$data,
-                               processedShao$mode1,
-                               numComponents=f,
-                               numFolds=numFolds,
-                               considerGroups=TRUE,
-                               groupVariable="Delivery_mode",
-                               ctol,
-                               maxit=250,
-                               numCores=2)
-  print(plotModelStability(output, processedShao, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                           overallTitle = paste0("Jack-knifed Shao2019, numFolds=", numFolds)))
+  stabilityCheck = modelStabilityCheck(processedShao, numComponents=f, numFolds=numFolds, considerGroups=TRUE,
+                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)
+  print(stabilityCheck$plot)
 }
-
-# Tucker congruence coefficients
-plotModelTCCs(assessment$metrics$TCC[[2]])
-plotOverallTCCs(assessment$metrics$TCC[[2]])
 
 # Here we decide on selecting the best 2-component model, i.e. explaining the largest amount of variation.
 # Alternative: select based on maximum CORCONDIA.
@@ -146,10 +106,7 @@ numComponents = 2
 modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
 finalModel = assessment$models[[numComponents]][[modelChoice]]
 
-metadataPerMode = list(processedShao$mode1, processedShao$mode2, processedShao$mode3)
-convertedModel = convertModelFormat(finalModel, metadataPerMode)
-
-plotPARAFACmodel(convertedModel,
+plotPARAFACmodel(finalModel, processedShao,
   colourCols,
   legendTitles,
   xLabels,
@@ -164,10 +121,11 @@ plotPARAFACmodel(convertedModel,
 # For computational purposes we deviate from the default settings
 minNumComponents = 1
 maxNumComponents = 3
-numRepetitions = 25 # number of randomly initialized models
-numFolds = 25 # number of jack-knifed models
+numRepetitions = 5 # number of randomly initialized models
+numFolds = 5 # number of jack-knifed models
 ctol = 1e-6
 maxit = 250
+numCores = 1
 
 colourCols = c("RFgroup", "Phylum", "")
 legendTitles = c("RF group", "Phylum", "")
@@ -179,38 +137,16 @@ continuousModes = c(FALSE,FALSE,TRUE)
 # Preprocess the data
 processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", centerMode=1, scaleMode=2)
 
-assessment = assessNumComponents(processedPloeg$data,
-                                 minNumComponents,
-                                 maxNumComponents,
-                                 numRepetitions,
-                                 ctol,
-                                 maxit,
-                                 numCores=2)
-
-plotModelMetric(assessment$metrics, "numIterations")
-plotModelMetric(assessment$metrics, "SSE")
-plotModelMetric(assessment$metrics, "CORCONDIA")
-plotModelMetric(assessment$metrics, "varExp")
+# Assess the metrics to determine the correct number of components
+assessment = assessNumComponents(processedPloeg$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+assessment$plots$overview
 
 # Model stability check using jack-knifing
 for(f in minNumComponents:maxNumComponents){
-  output = modelStabilityCheck(processedPloeg$data,
-                               processedPloeg$mode1,
-                               numComponents=f,
-                               numFolds=numFolds,
-                               considerGroups=TRUE,
-                               groupVariable="RFgroup",
-                               ctol,
-                               maxit,
-                               numCores=2)
-  print(plotModelStability(output, processedPloeg, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                           overallTitle = paste0("Jack-knifed Ploeg2024, numFolds=", numFolds)))
-}
-
-# Tucker congruence coefficients
-for(f in 2:3){
-  print(plotModelTCCs(assessment$metrics$TCC[[f]]))
-  print(plotOverallTCCs(assessment$metrics$TCC[[f]]))
+  stabilityCheck = modelStabilityCheck(processedPloeg, numComponents=f, numFolds=numFolds, considerGroups=TRUE,
+                               groupVariable="RFgroup", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)
+  print(stabilityCheck$plot)
 }
 
 # Here we decide on selecting the best 2-component model, i.e. explaining the largest amount of variation.
@@ -219,10 +155,7 @@ numComponents = 2
 modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
 finalModel = assessment$models[[numComponents]][[modelChoice]]
 
-metadataPerMode = list(processedPloeg$mode1, processedPloeg$mode2, processedPloeg$mode3)
-convertedModel = convertModelFormat(finalModel, metadataPerMode)
-
-plotPARAFACmodel(convertedModel,
+plotPARAFACmodel(finalModel, processedPloeg,
   colourCols,
   legendTitles,
   xLabels,

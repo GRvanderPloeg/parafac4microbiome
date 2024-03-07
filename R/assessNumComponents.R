@@ -8,7 +8,8 @@
 #' @param maxit Maximum number of iterations (default 2500).
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
-#' @return List object of the following:
+#' @return A list object of the following:
+#' * plot: Plots of all assessed metrics and an overview plot showing a summary of all of them.
 #' * metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
 #' * models: all created models.
 #'
@@ -16,7 +17,8 @@
 #'
 #' @examples
 #' X = Fujita2023$data
-#' output = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=10)
+#' assessment = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=10)
+#' assessment$plots$overview
 assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-6, maxit=2500, numCores=1){
 
   metrics = list()
@@ -32,6 +34,7 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
 
   for(f in minNumComponents:maxNumComponents){
 
+    # Parallelized
     if(numCores > 1){
       cl = parallel::makeCluster(numCores)
       doParallel::registerDoParallel(cl)
@@ -72,5 +75,6 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
                  "varExp"=varExp,
                  "TCC"=TCC)
 
-  return(list("metrics"=metrics, "models"=allModels))
+  plots = plotModelMetric(metrics)
+  return(list("plots"=plots, "metrics"=metrics, "models"=allModels))
 }

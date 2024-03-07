@@ -21,7 +21,6 @@ Imports:
     methods,
     multiway,
     parallel,
-    rTensor,
     stats,
     tidyr,
     vctrs

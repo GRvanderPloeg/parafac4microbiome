@@ -5,21 +5,24 @@
 \title{Jack-knifed PARAFAC models to determine model stability}
 \usage{
 modelStabilityCheck(
-  X,
-  sampleMetadata,
+  dataset,
   numComponents = 1,
   numFolds = nrow(X),
   considerGroups = FALSE,
   groupVariable = "",
+  colourCols = NULL,
+  legendTitles = NULL,
+  xLabels = NULL,
+  legendColNums = NULL,
+  arrangeModes = NULL,
+  continuousModes = NULL,
   ctol = 1e-06,
   maxit = 2500,
   numCores = 1
 )
 }
 \arguments{
-\item{X}{Input data cube}
-
-\item{sampleMetadata}{Input sample metadata}
+\item{dataset}{See \link{Fujita2023}, \link{Shao2019} or \link{vanderPloeg2024}.}
 
 \item{numComponents}{Number of components of the desired PARAFAC model}
 
@@ -29,6 +32,18 @@ modelStabilityCheck(
 
 \item{groupVariable}{What column name of mode 1 should be used to consider groups? (default "")}
 
+\item{colourCols}{Vector of strings stating which column names should be factorized for colours per mode.}
+
+\item{legendTitles}{Vector of strings stating the legend title per mode.}
+
+\item{xLabels}{Vector of strings stating the x-axis labels per mode.}
+
+\item{legendColNums}{Vector of integers stating the desired number of columns for the legends per mode.}
+
+\item{arrangeModes}{Vector of boolean values per mode, stating if the loadings should be arranged according to colourCols (TRUE) or not (FALSE).}
+
+\item{continuousModes}{Vector of boolean values per mode, stating if the loadings should be plotted as a line plot (TRUE) or a bar plot (FALSE).}
+
 \item{ctol}{Change in SSQ needed for model to be converged (default 1e-6).}
 
 \item{maxit}{Maximum number of iterations (default 2500).}
@@ -36,12 +51,13 @@ modelStabilityCheck(
 \item{numCores}{Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)}
 }
 \value{
-List of all As, Bs, Cs of the PARAFAC models.
+List of all As, Bs, Cs of the PARAFAC models as well as a plot of the median model with error bars.
 }
 \description{
 Jack-knifed PARAFAC models to determine model stability
 }
 \examples{
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-modelStability = modelStabilityCheck(processedFujita$data, processedFujita$mode1, numComponents=3)
+modelStability = modelStabilityCheck(processedFujita, numComponents=3)
+
 }

@@ -44,7 +44,7 @@ processDataCube = function(dataset, sparsityThreshold=1, considerGroups=FALSE, g
     cube_cnt = cube_filtered
   }
 
-  # Scale - NOTE: THIS DOES NOT SCALE TO EXACTLY SD=1
+  # Scale
   if(scaleMode != 0){
     cube_cnt_scl = multiwayScale(cube_cnt, mode=scaleMode)
   }

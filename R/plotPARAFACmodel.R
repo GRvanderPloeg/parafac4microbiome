@@ -1,6 +1,7 @@
 #' Plot PARAFAC model
 #'
-#' @param model Reformatted [multiway::parafac()] output using [convertModelFormat()].
+#' @param model Model output from [parafac4microbiome::parafac()].
+#' @param dataset The input dataset used to create the model.
 #' @param colourCols Vector of strings stating which column names should be factorized for colours per mode.
 #' @param legendTitles Vector of strings stating the legend title per mode.
 #' @param xLabels Vector of strings stating the x-axis labels per mode.
@@ -22,15 +23,8 @@
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' model = parafac(processedFujita$data, nfac=3, nstart=100, verbose=FALSE)
 #'
-#' # Flipping the sign of some components to make the output plot equal to the paper.
-#' model = resign(model, mode="A", absorb="C")
-#' model = resign(model, mode="B", absorb="C")
-#'
-#' metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
-#' convertedModel = convertModelFormat(model, metadataPerMode)
-#'
 #' # Make plot
-#' plotPARAFACmodel(convertedModel,
+#' plotPARAFACmodel(model, processedFujita,
 #'   colourCols = c("", "Genus", ""),
 #'   legendTitles = c("", "Genus", ""),
 #'   xLabels = c("Replicate", "Feature index", "Time point"),
@@ -39,8 +33,12 @@
 #'   continuousModes = c(FALSE,FALSE,TRUE),
 #'   overallTitle = "Fujita PARAFAC model")
 #'
-plotPARAFACmodel = function(model, colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
-  stopifnot(class(model) == "list")
+plotPARAFACmodel = function(model, dataset, colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
+  if(methods::is(model, "parafac")){
+    model = convertModelFormat(model, list(dataset$mode1, dataset$mode2, dataset$mode3))
+  }
+
+  stopifnot(methods::is(model,"list"))
 
   numModes = length(model)
 

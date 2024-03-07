@@ -1,27 +1,3 @@
-#' Reformat parafac model output to plottable data.
-#'
-#' @param model Model object (output of [multiway::parafac()])
-#' @param metadataPerMode List object with metadata per mode in the cube
-
-#' @return List object of the reformatted modes.
-#' @export
-#'
-#' @examples
-#' library(multiway)
-#' library(dplyr)
-#' library(ggplot2)
-#' set.seed(0)
-#'
-#' # Make PARAFAC model
-#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=3, nstart=100, verbose=FALSE)
-#'
-#' # Flipping the sign of some components to make the output plot equal to the paper.
-#' model = resign(model, mode="A", absorb="C")
-#' model = resign(model, mode="B", absorb="C")
-#'
-#' metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
-#' convertedModel = convertModelFormat(model, metadataPerMode)
 convertModelFormat = function(model, metadataPerMode=list()){
   stopifnot(class(model) == "parafac")
   stopifnot(class(metadataPerMode) == "list")
@@ -120,4 +96,61 @@ repairLoadings = function(A, B, C, evidenceMatrix){
   }
 
   return(repairedLoadingsList)
+}
+
+reinflateBlock = function(loadingVectors){
+
+  if(methods::is(loadingVectors, "parafac")){
+    model = loadingVectors
+    loadingVectors = list()
+    numComponents = ncol(model$A)
+    numModes = length(model$const)
+
+    loadingVectors[[1]] = model$A
+    loadingVectors[[2]] = model$B
+    loadingVectors[[3]] = model$C
+    if(numModes == 4){
+      loadingVectors[[4]] = model$D
+    }
+  }
+  stopifnot(class(loadingVectors) == "list")
+  stopifnot(length(unique(unlist(lapply(loadingVectors, ncol)))) == 1) # number of components should be equal in all modes
+
+  numComponents = unique(unlist(lapply(loadingVectors, ncol)))
+  dimX = unlist(lapply(loadingVectors, nrow))
+
+  M = array(0L, dimX)
+
+  # Two-way
+  if(length(loadingVectors) == 2){
+    for(i in 1:numComponents){
+      A = matrix(loadingVectors[[1]][,i])
+      B = matrix(loadingVectors[[2]][,i])
+      M = M + array(tcrossprod(A, B), dimX)
+    }
+  }
+  # Three-way
+  else if(length(loadingVectors) == 3){
+    for(i in 1:numComponents){
+      A = matrix(loadingVectors[[1]][,i])
+      B = matrix(loadingVectors[[2]][,i])
+      C = matrix(loadingVectors[[3]][,i])
+      M = M + array(tcrossprod(A, multiway::krprod(C, B)), dimX)
+    }
+  }
+  # Four-way
+  else if(length(loadingVectors) == 4){
+    for(i in 1:numComponents){
+      A = matrix(loadingVectors[[1]][,i])
+      B = matrix(loadingVectors[[2]][,i])
+      C = matrix(loadingVectors[[3]][,i])
+      D = matrix(loadingVectors[[4]][,i])
+      M = M + array(tcrossprod(A, multiway::krprod(multiway::krprod(A,C), C)), dimX)
+    }
+  }
+  else{
+    stop("reinflateBlock cannot deal with 5-way or higher order arrays.")
+  }
+
+  return(M)
 }

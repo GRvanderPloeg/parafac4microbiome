@@ -12,7 +12,6 @@
 #' @export
 #'
 #' @examples
-#' library(rTensor)
 #' library(multiway)
 #' ##########   EXAMPLE   ##########
 #'
@@ -45,8 +44,12 @@ corcondia = function (X, object, divisor = c("nfac", "core"))
     corcon = multiway::corcondia(X, object, divisor)
   }
   else{
-    M = object$A %*% t(rTensor::khatri_rao(object$C, object$B))
-    reinflatedX = array(M, dim=dim(X))
+    # Old approach
+    # M = object$A %*% t(rTensor::khatri_rao(object$C, object$B))
+    # reinflatedX = array(M, dim=dim(X))
+
+    # New approach
+    reinflatedX = reinflateBlock(object)
 
     # fill in NAs with imputed values
     newX = X

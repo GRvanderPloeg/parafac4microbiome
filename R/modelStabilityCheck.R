@@ -1,28 +1,51 @@
 #' Jack-knifed PARAFAC models to determine model stability
 #'
 #' @inheritParams calculateSparsity
-#' @param X Input data cube
-#' @param sampleMetadata Input sample metadata
+#' @inheritParams plotPARAFACmodel
 #' @param numComponents Number of components of the desired PARAFAC model
 #' @param numFolds Number of jack-knifed samples to create
 #' @param ctol Change in SSQ needed for model to be converged (default 1e-6).
 #' @param maxit Maximum number of iterations (default 2500).
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
-#' @return List of all As, Bs, Cs of the PARAFAC models.
+#' @return List of all As, Bs, Cs of the PARAFAC models as well as a plot of the median model with error bars.
 #' @export
 #' @importFrom foreach %dopar%
 #'
 #' @examples
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' modelStability = modelStabilityCheck(processedFujita$data, processedFujita$mode1, numComponents=3)
-modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numFolds=nrow(X),
-                               considerGroups=FALSE, groupVariable="", ctol=1e-6, maxit=2500, numCores=1){
+#' modelStability = modelStabilityCheck(processedFujita, numComponents=3)
+#'
+modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), considerGroups=FALSE, groupVariable="",
+                               colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL,
+                               continuousModes=NULL, ctol=1e-6, maxit=2500, numCores=1){
   # TODO: catch considerGroups=TRUE but groupVariable is "" or the other way around
 
+  X = dataset$data
+  sampleMetadata = dataset$mode1
   numSamples = nrow(X)
   numModes = length(dim(X))
   samplesToRemove = list()
+
+  # Convert default settings to usable content.
+  if(is.null(colourCols)){
+    colourCols = rep("", numModes)
+  }
+  if(is.null(legendTitles)){
+    legendTitles = rep("", numModes)
+  }
+  if(is.null(xLabels)){
+    xLabels = rep("", numModes)
+  }
+  if(is.null(legendColNums)){
+    legendColNums = rep(0, numModes)
+  }
+  if(is.null(arrangeModes)){
+    arrangeModes = rep(FALSE, numModes)
+  }
+  if(is.null(continuousModes)){
+    continuousModes = rep(FALSE, numModes)
+  }
 
   # Determine which samples to remove per fold
   if(considerGroups == TRUE & groupVariable %in% colnames(sampleMetadata)){
@@ -103,5 +126,9 @@ modelStabilityCheck = function(X, sampleMetadata, numComponents=1, numFolds=nrow
     stabilizedC[[i]] = repairedLoadings[[3]]
   }
 
-  return(list(stabilizedA, stabilizedB, stabilizedC))
+  # Add a plot of the loadings to the output
+  overallTitle = paste0("Jack-knifed models, numFolds=", numFolds)
+  plot = plotModelStability(stabilizedA, stabilizedB, stabilizedC, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, overallTitle)
+
+  return(list("As"=stabilizedA, "Bs"=stabilizedB, "Cs"=stabilizedC, "plot"=plot))
 }

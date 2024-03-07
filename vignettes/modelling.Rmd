@@ -34,11 +34,8 @@ model = parafac(processedFujita$data, nfac=3, nstart=10, ctol=1e-6, maxit=2500, 
 model = resign(model, mode="A", absorb="C")
 model = resign(model, mode="B", absorb="C")
 
-# Convert model output to plottable data
-metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
-convertedModel = convertModelFormat(model, metadataPerMode)
-
-plotPARAFACmodel(convertedModel,
+# Plot PARAFAC model
+plotPARAFACmodel(model, processedFujita,
   colourCols = c("", "Genus", ""),
   legendTitles = c("", "Genus", ""),
   xLabels = c("Replicate", "Feature index", "Time point"),
@@ -51,49 +48,43 @@ plotPARAFACmodel(convertedModel,
 ```{r shao2019 modelling}
 set.seed(0)
 
-# Make PARAFAC model
+# Process count data
 processedShao = processDataCube(Shao2019, sparsityThreshold=0.90, centerMode=1, scaleMode=2)
+
+# Make PARAFAC model
 model = parafac(processedShao$data, nfac=3, nstart=5, ctol=1e-4, maxit=100, verbose=FALSE)
 model = resign(model, mode="B", absorb="A")
 
-# Convert model output to plottable data
-metadataPerMode = list(processedShao$mode1, processedShao$mode2, processedShao$mode3)
-convertedModel = convertModelFormat(model, metadataPerMode)
-
-# Prepare plot parameters
-colourCols = c("Delivery_mode", "phylum", "")
-legendTitles = c("Delivery mode", "Phylum", "")
-xLabels = c("Subject index", "Feature index", "Time index")
-legendColNums = c(3,5,0)
-arrangeModes = c(TRUE, TRUE, FALSE)
-continuousModes = c(FALSE,FALSE,TRUE)
-overallTitle = "Shao 2019"
-
 # Make plot
-plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+plotPARAFACmodel(model, processedShao,
+                 colourCols = c("Delivery_mode", "phylum", ""),
+                 legendTitles = c("Delivery mode", "Phylum", ""),
+                 xLabels = c("Subject index", "Feature index", "Time index"),
+                 legendColNums = c(3,5,0),
+                 arrangeModes = c(TRUE, TRUE, FALSE),
+                 continuousModes = c(FALSE,FALSE,TRUE),
+                 overallTitle = "Shao 2019")
 ```
 
 
 ```{r vanderPloeg2024 modelling}
 set.seed(0)
 
+# Process data cube
 processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", centerMode=1, scaleMode=2)
 
 # Make PARAFAC model
 model = parafac(processedPloeg$data, nfac=2, nstart=10, ctol=1e-6, maxit=2500, verbose=FALSE)
 
-metadataPerMode = list(processedPloeg$mode1, processedPloeg$mode2, processedPloeg$mode3)
-convertedModel = convertModelFormat(model, metadataPerMode)
-
-# Prepare plot parameters
-colourCols = c("RFgroup", "Phylum", "")
-legendTitles = c("RF group", "Phylum", "")
-xLabels = c("Subject index", "Feature index", "Time index")
-legendColNums = c(2,5,0)
-arrangeModes = c(TRUE, TRUE, FALSE)
-continuousModes = c(FALSE,FALSE,TRUE)
-overallTitle = "vanderPloeg 2024"
-
 # Make plot
-plotPARAFACmodel(convertedModel, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+plotPARAFACmodel(model, processedPloeg,
+                 colourCols = c("RFgroup", "Phylum", ""),
+                 legendTitles = c("RF group", "Phylum", ""),
+                 xLabels = c("Subject index", "Feature index", "Time index"),
+                 legendColNums = c(2,5,0),
+                 arrangeModes = c(TRUE, TRUE, FALSE),
+                 continuousModes = c(FALSE,FALSE,TRUE),
+                 overallTitle = "vanderPloeg 2024")
+
+# Post hoc clustering?
 ```

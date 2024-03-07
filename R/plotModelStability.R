@@ -1,43 +1,32 @@
-#' Plot model stability check output.
-#'
-#' @inheritParams plotPARAFACmodel
-#' @inheritParams processDataCube
-#' @param modelStabilityOutput Outout of the [modelStabilityCheck()] function.
-#' @return Plot
-#' @export
-#'
-#' @examples
-#' library(dplyr)
-#' library(ggplot2)
-#' library(ggpubr)
-#'
-#' processedFujita = processDataCube(Fujita2023,
-#' sparsityThreshold=0.99,
-#' centerMode=1,
-#' scaleMode=2)
-#'
-#' modelStability = modelStabilityCheck(processedFujita$data,
-#' processedFujita$sampleMetadata,
-#' numComponents=3)
-#'
-#' plotModelStability(modelStability,
-#'  dataset=processedFujita,
-#'  colourCols=c("","Phylum", ""),
-#'  legendTitles=c("","Phylum",""),
-#'  xLabels=c("Replicate", "Feature index", "Time index"),
-#'  legendColNums=c(0,3,0),
-#'  arrangeModes=c(FALSE,TRUE,FALSE),
-#'  overallTitle="Fujita2023")
-#'
-plotModelStability = function(modelStabilityOutput, dataset, colourCols=NULL,
+plotModelStability = function(As, Bs, Cs, dataset, colourCols=NULL,
                               legendTitles=NULL, xLabels=NULL, legendColNums=NULL,
-                              arrangeModes=NULL, overallTitle=""){
+                              arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
 
   # Test the length of metadata against the model we're gonna make
-
+  modelStabilityOutput = list(As, Bs, Cs)
   numComponents = length(modelStabilityOutput[[1]])
   numModes = length(modelStabilityOutput)
   metaData = list(dataset$mode1, dataset$mode2, dataset$mode3)
+
+  # Convert default settings to usable content.
+  if(is.null(colourCols)){
+    colourCols = rep("", numModes)
+  }
+  if(is.null(legendTitles)){
+    legendTitles = rep("", numModes)
+  }
+  if(is.null(xLabels)){
+    xLabels = rep("", numModes)
+  }
+  if(is.null(legendColNums)){
+    legendColNums = rep(0, numModes)
+  }
+  if(is.null(arrangeModes)){
+    arrangeModes = rep(FALSE, numModes)
+  }
+  if(is.null(continuousModes)){
+    continuousModes = rep(FALSE, numModes)
+  }
 
   # Make a fake model object
   model = list()
@@ -72,7 +61,7 @@ plotModelStability = function(modelStabilityOutput, dataset, colourCols=NULL,
 
   # Make a regular model plot as if the medians are the loadings
   # No support for continuousModes because we need bar plots with error bars
-  plotlist = plotPARAFACmodel(model, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes=rep(FALSE,numModes))
+  plotlist = plotPARAFACmodel(model, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes=rep(FALSE,numModes))
 
   # Iterate over the plots and add error bars
   plotIterator = 1

@@ -6,6 +6,7 @@
 \usage{
 plotPARAFACmodel(
   model,
+  dataset,
   colourCols = NULL,
   legendTitles = NULL,
   xLabels = NULL,
@@ -16,7 +17,9 @@ plotPARAFACmodel(
 )
 }
 \arguments{
-\item{model}{Reformatted \code{\link[multiway:parafac]{multiway::parafac()}} output using \code{\link[=convertModelFormat]{convertModelFormat()}}.}
+\item{model}{Model output from \code{\link[=parafac]{parafac()}}.}
+
+\item{dataset}{The input dataset used to create the model.}
 
 \item{colourCols}{Vector of strings stating which column names should be factorized for colours per mode.}
 
@@ -48,15 +51,8 @@ set.seed(0)
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 model = parafac(processedFujita$data, nfac=3, nstart=100, verbose=FALSE)
 
-# Flipping the sign of some components to make the output plot equal to the paper.
-model = resign(model, mode="A", absorb="C")
-model = resign(model, mode="B", absorb="C")
-
-metadataPerMode = list(processedFujita$mode1, processedFujita$mode2, processedFujita$mode3)
-convertedModel = convertModelFormat(model, metadataPerMode)
-
 # Make plot
-plotPARAFACmodel(convertedModel,
+plotPARAFACmodel(model, processedFujita,
   colourCols = c("", "Genus", ""),
   legendTitles = c("", "Genus", ""),
   xLabels = c("Replicate", "Feature index", "Time point"),
