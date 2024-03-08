@@ -1,0 +1,112 @@
+---
+title: "vanderPloeg2024_analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vanderPloeg2024_analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 12,
+  fig.height = 6
+)
+options(tibble.print_min = 6L, tibble.print.max = 6L, digits = 3)
+```
+
+# Introduction
+In this vignette we examine and model the vanderPloeg2024 data in more detail.
+
+```{r setup}
+library(parafac4microbiome)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+```
+
+# Processing the data cube
+The data cube in vanderPloeg2024$data contains unprocessed counts. The function processDataCube() performs the processing of these counts with the following steps:
+
+*   It performs feature selection based on the sparsityThreshold setting. Sparsity is here defined as the fraction of samples where a microbial abundance (ASV/OTU or otherwise) is zero. For vanderPloeg2024 we can take the RFgroups groups into account for feature selection. We do this by calculating the sparsity for each feature in each subject group and compare those against the sparsity threshold that we set. If a feature passes the threshold in either group, it is selected.
+*   It performs a centered log-ratio transformation of each sample using the compositions::clr() function with a pseudo-count of one (on all features, prior to selection based on sparsity).
+*   It centers and scales the three-way array. This is a complex subject, for which we refer to a [paper by Rasmus Bro and Age Smilde](https://doi.org/10.1002/cem.773). By centering across the subject mode, we make the subjects comparable to each other within each time point. Scaling within the feature mode avoids the PARAFAC model focussing on features with abnormally high variation.
+
+The outcome of processing is a new version of the dataset. Please refer to the documentation of processDataCube() for more information.
+
+```{r data processing}
+processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", centerMode=1, scaleMode=2)
+```
+
+# Determining the correct number of components
+A critical aspect of PARAFAC modelling is to determine the correct number of components. We have developed the function assessNumComponents() for this purpose. We give the function our new dataset and specify the minimum and maximum number of components to investigate and the number of randomly initialized models to try for each number of components.
+
+Note: this vignette reflects a minimum working example for analysing this dataset due to computational limitations. Hence, we only look at 1-3 components with 5 random initializations each. These settings are not ideal for real datasets. Please refer to the documentation of assessNumComponents() for more information.
+
+```{r vanderPloeg2024 num comp selection}
+# Setup
+# For computational purposes we deviate from the default settings
+minNumComponents = 1
+maxNumComponents = 3
+numRepetitions = 5 # number of randomly initialized models
+numFolds = 5 # number of jack-knifed models
+ctol = 1e-6
+maxit = 250
+numCores = 1
+
+colourCols = c("RFgroup", "Phylum", "")
+legendTitles = c("RF group", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(2,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
+
+# Assess the metrics to determine the correct number of components
+assessment = assessNumComponents(processedPloeg$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+```
+
+We will now inspect the output plots of interest for vanderPloeg2024.
+
+```{r overview plot}
+assessment$plots$overview
+```
+This seems a clear-cut case for a two-component model, as the three-component models have a CORCONDIA of -600. The maximum amount of variation we can describe is ~20%.
+
+```{r TCC}
+assessment$plots$TCC[[2]]
+assessment$plots$TCC[[3]]
+```
+The Tucker Congruence Coefficients show us how similar the loading vectors in the same mode are to each other, between the various components. A value >=0.85 has been described as problematic in the literature. They confirm what we already observed with the CORCONDIA metric: the loadings in the feature and time mode in the three-component model are highly similar to each other. Hence we must select a two-component model.
+
+# Jack-knifed models
+Next, we investigate the stability of the models when jack-knifing out samples. We briefly inspect the two-component and three-component cases although we already know which will be more appropriate for this data.
+
+```{r model stability}
+modelStabilityCheck(processedPloeg, numComponents=2, numFolds=numFolds, considerGroups=TRUE,
+                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
+modelStabilityCheck(processedPloeg, numComponents=3, numFolds=numFolds, considerGroups=TRUE,
+                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
+```
+
+The two-component models are very stable. The three-component models indeed show very similar time profiles and also some instability.
+
+# Model selection
+We have decided that a two-component model is the most appropriate for the vanderPloeg2024 dataset. We can now select one of the random initializations from the assessNumComponents() output as our final model. We're going to select the random initialisation that corresponded the maximum amount of variation explained for three components.
+
+```{r model selection}
+numComponents = 2
+modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
+finalModel = assessment$models[[numComponents]][[modelChoice]]
+```
+
+Finally, we visualize the model using plotPARAFACmodel().
+
+```{r model plot}
+plotPARAFACmodel(finalModel, processedPloeg, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+  continuousModes = c(FALSE,FALSE,TRUE),
+  overallTitle = "vanderPloeg2024 PARAFAC model")
+```
