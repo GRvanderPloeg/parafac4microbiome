@@ -16,30 +16,30 @@ The parafac4microbiome package enables R users with an easy way to
 create Parallel Factor Analysis (PARAFAC) models for longitudinal
 microbiome data.
 
-- ‘processDataCube()’ can be used to process the microbiome count data
+- `processDataCube()` can be used to process the microbiome count data
   appropriately for a multi-way data array.
-- ‘parafac()’ allows the user to create a Parallel Factor Analysis model
+- `parafac()` allows the user to create a Parallel Factor Analysis model
   of the multi-way data array.
-- ‘assessNumComponents()’ helps the user select the appropriate number
+- `assessNumComponents()` helps the user select the appropriate number
   of components for the PARAFAC model.
-- ‘modelStabilityCheck()’ performs jack-knifing of samples to inspect
+- `modelStabilityCheck()` performs jack-knifing of samples to inspect
   the stability of the PARAFAC model.
-- ‘plotPARAFACmodel()’ helps visually inspect the PARAFAC model.
+- `plotPARAFACmodel()` helps visually inspect the PARAFAC model.
 
-This package also comes with three example datasets: \* ‘Fujita2023’: an
+This package also comes with three example datasets: \* `Fujita2023`: an
 in-vitro experiment of ocean inocula on peptide medium, sampled every
 day for 110 days (<https://doi.org/10.1186/s40168-023-01474-5>). \*
-‘Shao2019’: a large cohort dataset of vaginally and caesarean-section
+`Shao2019`: a large cohort dataset of vaginally and caesarean-section
 born infants from London
 (<https://www.nature.com/articles/s41586-019-1560-1>). \*
-‘vanderPloeg2024’: a small gingivitis intervention dataset with specific
+`vanderPloeg2024`: a small gingivitis intervention dataset with specific
 response groups (manuscript in preparation).
 
 A basic introduction to the package is given in
-‘vignette(“PARAFAC_introduction”)’ and modelling the example datasets
+`vignette("PARAFAC_introduction")` and modelling the example datasets
 are elaborated in their respective vignettes
-‘vignette(“Fujita2023_analysis”)’, ‘vignette(“Shao2019_analysis”)’ and
-‘vignette(“vanderPloeg2024_analysis”)’.
+`vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and
+`vignette("vanderPloeg2024_analysis")`.
 
 ## Installation
 
