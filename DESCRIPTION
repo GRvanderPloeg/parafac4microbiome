@@ -12,7 +12,6 @@ RoxygenNote: 7.3.1
 Imports: 
     compositions,
     cowplot,
-    doParallel,
     dplyr,
     foreach,
     ggplot2,
@@ -20,7 +19,6 @@ Imports:
     magrittr,
     methods,
     multiway,
-    parallel,
     stats,
     tidyr,
     vctrs

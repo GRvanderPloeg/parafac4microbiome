@@ -78,14 +78,20 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
   }
 
   # Create jack-knifed PARAFAC models - parallelized
-  cl = parallel::makeCluster(numCores)
-  doParallel::registerDoParallel(cl)
-  models = foreach::foreach(i=1:numFolds) %dopar% {
-    library(multiway)
-    library(parafac4microbiome)
-    model=parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+  # cl = parallel::makeCluster(numCores)
+  # doParallel::registerDoParallel(cl)
+  # models = foreach::foreach(i=1:numFolds) %dopar% {
+  #   library(multiway)
+  #   library(parafac4microbiome)
+  #   model=parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+  # }
+  # parallel::stopCluster(cl)
+
+  # Fallback option for jack-knifed PARAFAC models
+  models = list()
+  for(i in 1:numFolds){
+    models[[i]] = parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
   }
-  parallel::stopCluster(cl)
 
   # Modify subject loadings to reflect a missing sample
   for(i in 1:numFolds){
