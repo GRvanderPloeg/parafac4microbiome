@@ -41,6 +41,9 @@ for(k in 1:K){
     as.matrix()
 }
 
+# Somehow there are half counts in there, so round the data
+cube = round(cube)
+
 # Export
 Fujita2023 = list("data"=cube, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 usethis::use_data(Fujita2023, overwrite = TRUE)
