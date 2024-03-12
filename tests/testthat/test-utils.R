@@ -162,3 +162,21 @@ test_that("reinflateBlock can deal with parafac objects", {
   model = parafac(X, nfac=2, nstart=1, verbose=FALSE)
   expect_no_error(reinflateBlock(model))
 })
+
+test_that("Size of A is the same as the transformed version of A in correctPARAFACloadings", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+  expect_equal(dim(model$A), dim(correctPARAFACloadings(processedFujita, model, 1)))
+})
+
+test_that("Size of B is the same as the transformed version of A in correctPARAFACloadings", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+  expect_equal(dim(model$B), dim(correctPARAFACloadings(processedFujita, model, 2)))
+})
+
+test_that("Size of C is the same as the transformed version of A in correctPARAFACloadings", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+  expect_equal(dim(model$C), dim(correctPARAFACloadings(processedFujita, model, 3)))
+})

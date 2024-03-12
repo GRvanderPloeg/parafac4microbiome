@@ -154,3 +154,59 @@ reinflateBlock = function(loadingVectors){
 
   return(M)
 }
+
+#' Transform PARAFAC loadings to an orthonormal basis.
+#' Note: this function only works for 3-way PARAFAC models.
+#'
+#' @inheritParams plotPARAFACmodel
+#' @param modeToCorrect Correct the subject (1), feature (2) or time mode (3).
+#'
+#' @return Corrected loadings of the specified mode.
+#' @export
+#'
+#' @examples
+#' library(multiway)
+#' library(dplyr)
+#' library(ggplot2)
+#' set.seed(0)
+#'
+#' # Make PARAFAC model
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' model = parafac(processedFujita$data, nfac=2, nstart=100, verbose=FALSE)
+#'
+#' correctedA = correctPARAFACloadings(processedFujita, model, 1)
+#' plot(correctedA[,1], correctedA[,2])
+correctPARAFACloadings = function(dataset, model, modeToCorrect){
+
+  if(methods::is(model, "parafac")){
+    model = convertModelFormat(model, list(dataset$mode1, dataset$mode2, dataset$mode3))
+  }
+
+  A = model[[1]] %>% dplyr::select(starts_with("Component")) %>% as.matrix()
+  B = model[[2]] %>% dplyr::select(starts_with("Component")) %>% as.matrix()
+  C = model[[3]] %>% dplyr::select(starts_with("Component")) %>% as.matrix()
+
+  if(modeToCorrect == 1){
+    F = paramGUI::kroneckercol(C, B) %>% as.matrix()
+    Ftilde = pracma::gramSchmidt(F)$Q
+    T = pracma::pinv(F) %*% Ftilde
+    Atilde = A %*% T
+    result = Atilde
+  }
+  else if(modeToCorrect == 2){
+    F = paramGUI::kroneckercol(A, C) %>% as.matrix()
+    Ftilde = pracma::gramSchmidt(F)$Q
+    T = pracma::pinv(F) %*% Ftilde
+    Btilde = B %*% T
+    result = Btilde
+  }
+  else if(modeToCorrect == 3){
+    F = paramGUI::kroneckercol(B, A) %>% as.matrix()
+    Ftilde = pracma::gramSchmidt(F)$Q
+    T = pracma::pinv(F) %*% Ftilde
+    Ctilde = C %*% T
+    result = Ctilde
+  }
+
+  return(result)
+}
