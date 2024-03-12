@@ -50,16 +50,16 @@ You can install the development version of parafac4microbiome from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("GRvanderPloeg/parafac4microbiome")
+devtools::install_github("GRvanderPloeg/parafac4microbiome", build_vignettes = TRUE)
 ```
 
 ## Citation
 
 Please use the following citation when using this package:
 
-- van der Ploeg, G. R., et al. (2024). Multi-way modelling of oral
-  microbial dynamics and host-microbiome interactions during induced
-  gingivitis. \[Manuscript in preparation\].
+- van der Ploeg, G. R., et al. (2024). Exploratory analysis of
+  longitudinal microbiome data using Parallel Factor Analysis:
+  opportunities and challenges \[Manuscript in preparation\].
 
 ## Usage
 
