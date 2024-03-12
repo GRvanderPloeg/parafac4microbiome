@@ -26,14 +26,16 @@ microbiome data.
   the stability of the PARAFAC model.
 - `plotPARAFACmodel()` helps visually inspect the PARAFAC model.
 
-This package also comes with three example datasets: \* `Fujita2023`: an
-in-vitro experiment of ocean inocula on peptide medium, sampled every
-day for 110 days (<https://doi.org/10.1186/s40168-023-01474-5>). \*
-`Shao2019`: a large cohort dataset of vaginally and caesarean-section
-born infants from London
-(<https://www.nature.com/articles/s41586-019-1560-1>). \*
-`vanderPloeg2024`: a small gingivitis intervention dataset with specific
-response groups (manuscript in preparation).
+This package also comes with three example datasets.
+
+- `Fujita2023`: an in-vitro experiment of ocean inocula on peptide
+  medium, sampled every day for 110 days
+  (<https://doi.org/10.1186/s40168-023-01474-5>).
+- `Shao2019`: a large cohort dataset of vaginally and caesarean-section
+  born infants from London
+  (<https://www.nature.com/articles/s41586-019-1560-1>).
+- `vanderPloeg2024`: a small gingivitis intervention dataset with
+  specific response groups (manuscript in preparation).
 
 A basic introduction to the package is given in
 `vignette("PARAFAC_introduction")` and modelling the example datasets
