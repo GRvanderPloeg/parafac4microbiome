@@ -19,7 +19,13 @@
 modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), considerGroups=FALSE, groupVariable="",
                                colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL,
                                continuousModes=NULL, ctol=1e-6, maxit=2500, numCores=1){
-  # TODO: catch considerGroups=TRUE but groupVariable is "" or the other way around
+
+  if(considerGroups == TRUE & groupVariable == ""){
+    warning("When setting considerGroups to TRUE, please also specify a groupVariable.")
+    return(0)
+  } else if(considerGroups == FALSE & groupVariable != ""){
+    considerGroups = TRUE
+  }
 
   X = dataset$data
   sampleMetadata = dataset$mode1
@@ -78,19 +84,18 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
   }
 
   # Create jack-knifed PARAFAC models - parallelized
-  # cl = parallel::makeCluster(numCores)
-  # doParallel::registerDoParallel(cl)
-  # models = foreach::foreach(i=1:numFolds) %dopar% {
-  #   library(multiway)
-  #   library(parafac4microbiome)
-  #   model=parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
-  # }
-  # parallel::stopCluster(cl)
-
-  # Fallback option for jack-knifed PARAFAC models
-  models = list()
-  for(i in 1:numFolds){
-    models[[i]] = parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+  if(numCores > 1){
+    cl = parallel::makeCluster(numCores)
+    doParallel::registerDoParallel(cl)
+    models = foreach::foreach(i=1:numFolds) %dopar% {
+      model = parafac4microbiome::parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+    }
+    parallel::stopCluster(cl)
+  } else{
+    models = list()
+    for(i in 1:numFolds){
+      models[[i]] = parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+    }
   }
 
   # Modify subject loadings to reflect a missing sample

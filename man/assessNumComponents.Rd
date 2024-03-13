@@ -42,6 +42,6 @@ Create randomly initialized models for component selection
 }
 \examples{
 X = Fujita2023$data
-assessment = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=10)
+assessment = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=5)
 assessment$plots$overview
 }
