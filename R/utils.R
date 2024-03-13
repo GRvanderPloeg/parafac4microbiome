@@ -168,11 +168,13 @@ reinflateBlock = function(loadingVectors){
 #' library(multiway)
 #' library(dplyr)
 #' library(ggplot2)
+#' library(paramGUI)
+#' library(pracma)
 #' set.seed(0)
 #'
 #' # Make PARAFAC model
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=2, nstart=100, verbose=FALSE)
+#' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
 #'
 #' correctedA = correctPARAFACloadings(processedFujita, model, 1)
 #' plot(correctedA[,1], correctedA[,2])
@@ -182,9 +184,9 @@ correctPARAFACloadings = function(dataset, model, modeToCorrect){
     model = convertModelFormat(model, list(dataset$mode1, dataset$mode2, dataset$mode3))
   }
 
-  A = model[[1]] %>% dplyr::select(starts_with("Component")) %>% as.matrix()
-  B = model[[2]] %>% dplyr::select(starts_with("Component")) %>% as.matrix()
-  C = model[[3]] %>% dplyr::select(starts_with("Component")) %>% as.matrix()
+  A = model[[1]] %>% dplyr::select(dplyr::starts_with("Component")) %>% as.matrix()
+  B = model[[2]] %>% dplyr::select(dplyr::starts_with("Component")) %>% as.matrix()
+  C = model[[3]] %>% dplyr::select(dplyr::starts_with("Component")) %>% as.matrix()
 
   if(modeToCorrect == 1){
     F = paramGUI::kroneckercol(C, B) %>% as.matrix()

@@ -19,6 +19,8 @@ Imports:
     magrittr,
     methods,
     multiway,
+    paramGUI,
+    pracma,
     stats,
     tidyr,
     vctrs
