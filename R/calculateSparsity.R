@@ -26,6 +26,13 @@ calculateSparsity = function(dataset, considerGroups=FALSE, groupVariable=""){
   J = dim(cube)[2]
   K = dim(cube)[3]
 
+  if(considerGroups == TRUE & groupVariable == ""){
+    warning("When setting considerGroups to TRUE, please also specify a groupVariable.")
+    return(0)
+  } else if(considerGroups == FALSE & groupVariable != ""){
+    considerGroups = TRUE
+  }
+
   if(considerGroups == TRUE & groupVariable %in% colnames(dataset$mode1)){
     groups = dataset$mode1[,groupVariable] %>% dplyr::pull() %>% unique()
     numGroups = length(groups)

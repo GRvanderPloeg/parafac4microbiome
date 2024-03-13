@@ -179,34 +179,31 @@ reinflateBlock = function(loadingVectors){
 #' correctedA = correctPARAFACloadings(processedFujita, model, 1)
 #' plot(correctedA[,1], correctedA[,2])
 correctPARAFACloadings = function(dataset, model, modeToCorrect){
+  stopifnot(methods::is(model, "parafac"))
 
-  if(methods::is(model, "parafac")){
-    model = convertModelFormat(model, list(dataset$mode1, dataset$mode2, dataset$mode3))
-  }
-
-  A = model[[1]] %>% dplyr::select(dplyr::starts_with("Component")) %>% as.matrix()
-  B = model[[2]] %>% dplyr::select(dplyr::starts_with("Component")) %>% as.matrix()
-  C = model[[3]] %>% dplyr::select(dplyr::starts_with("Component")) %>% as.matrix()
+  A = model$A
+  B = model$B
+  C = model$C
 
   if(modeToCorrect == 1){
     F = paramGUI::kroneckercol(C, B) %>% as.matrix()
     Ftilde = pracma::gramSchmidt(F)$Q
     T = pracma::pinv(F) %*% Ftilde
-    Atilde = A %*% T
+    Atilde = A %*% pracma::pinv(t(T))
     result = Atilde
   }
   else if(modeToCorrect == 2){
     F = paramGUI::kroneckercol(A, C) %>% as.matrix()
     Ftilde = pracma::gramSchmidt(F)$Q
     T = pracma::pinv(F) %*% Ftilde
-    Btilde = B %*% T
+    Btilde = B %*% pracma::pinv(t(T))
     result = Btilde
   }
   else if(modeToCorrect == 3){
     F = paramGUI::kroneckercol(B, A) %>% as.matrix()
     Ftilde = pracma::gramSchmidt(F)$Q
     T = pracma::pinv(F) %*% Ftilde
-    Ctilde = C %*% T
+    Ctilde = C %*% pracma::pinv(t(T))
     result = Ctilde
   }
 

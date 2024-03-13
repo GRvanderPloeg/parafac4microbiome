@@ -14,3 +14,15 @@ test_that("The length of the sparsity output vector is equal to J", {
 test_that("Sparsity calculation ignores NAs", {
   expect_false(any(is.na(calculateSparsity(Shao2019))))
 })
+
+test_that("Sparsity calculation does not throw an error when setting only a group variable", {
+  expect_no_error(calculateSparsity(Shao2019, groupVariable="Delivery_mode"))
+})
+
+test_that("Sparsity calculation gives a warning when setting only considerGroups", {
+  expect_warning(calculateSparsity(Shao2019, considerGroups=TRUE))
+})
+
+test_that("Sparsity calculation can be done taking groups into account", {
+  expect_no_error(calculateSparsity(Shao2019, considerGroups=TRUE, groupVariable="Delivery_mode"))
+})
