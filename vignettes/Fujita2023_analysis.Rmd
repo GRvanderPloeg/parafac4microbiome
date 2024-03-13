@@ -1,5 +1,5 @@
 ---
-title: "Fujita2023 analysis"
+title: "Fujita2023_analysis"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Fujita2023_analysis}

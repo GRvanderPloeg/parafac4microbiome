@@ -36,3 +36,4 @@ Suggests:
     withr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://grvanderploeg.github.io/parafac4microbiome/

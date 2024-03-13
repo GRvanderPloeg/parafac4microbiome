@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   fig.height = 6
 )
 options(tibble.print_min = 6L, tibble.print.max = 6L, digits = 3)
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 # Introduction

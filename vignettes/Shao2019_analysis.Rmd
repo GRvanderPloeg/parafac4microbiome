@@ -1,5 +1,5 @@
 ---
-title: "Shao2019 analysis"
+title: "Shao2019_analysis"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Shao2019_analysis}
