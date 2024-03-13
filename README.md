@@ -1,13 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# parafac4microbiome
+# parafac4microbiome <a href="https://grvanderploeg.github.io/parafac4microbiome/"><img src="man/figures/logo.png" alt="parafac4microbiome website" align="right" height="139"/></a>
 
 <!-- badges: start -->
 
 [![Codecov test
 coverage](https://codecov.io/gh/GRvanderPloeg/parafac4microbiome/branch/master/graph/badge.svg)](https://app.codecov.io/gh/GRvanderPloeg/parafac4microbiome?branch=master)
 [![R-CMD-check](https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 ## Overview
@@ -84,6 +85,7 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.3.3
 library(ggpubr)
 set.seed(0) # for reproducibility
 
@@ -102,6 +104,8 @@ plotPARAFACmodel(model, processedFujita,
   arrangeModes = c(FALSE, TRUE, FALSE),
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Fujita PARAFAC model")
+#> Warning in get_plot_component(plot, "guide-box"): Multiple components found;
+#> returning the first one. To return all, use `return_all = TRUE`.
 ```
 
 <img src="man/figures/README-usage-1.png" width="100%" />
