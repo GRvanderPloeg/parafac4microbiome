@@ -34,7 +34,6 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
 
   for(f in minNumComponents:maxNumComponents){
 
-    # Parallelized
     if(numCores > 1){
       cl = parallel::makeCluster(numCores)
       doParallel::registerDoParallel(cl)
@@ -46,9 +45,6 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
     } else{
       models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
     }
-
-    # Fallback option without parallelisation
-    # models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
 
     numIterations[,f] = sapply(models, function(model){model$iter})
     SSE[,f] = sapply(models, function(model){model$SSE})

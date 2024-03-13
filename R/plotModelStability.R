@@ -61,7 +61,7 @@ plotModelStability = function(As, Bs, Cs, dataset, colourCols=NULL,
 
   # Make a regular model plot as if the medians are the loadings
   # No support for continuousModes because we need bar plots with error bars
-  plotlist = plotPARAFACmodel(model, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes=rep(FALSE,numModes))
+  plotlist = plotPARAFACmodel(model, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes)
 
   # Iterate over the plots and add error bars
   plotIterator = 1

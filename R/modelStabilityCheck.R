@@ -139,7 +139,7 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
 
   # Add a plot of the loadings to the output
   overallTitle = paste0("Jack-knifed models, numFolds=", numFolds)
-  plot = plotModelStability(stabilizedA, stabilizedB, stabilizedC, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, overallTitle)
+  plot = plotModelStability(stabilizedA, stabilizedB, stabilizedC, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
 
   return(list("As"=stabilizedA, "Bs"=stabilizedB, "Cs"=stabilizedC, "plot"=plot))
 }
