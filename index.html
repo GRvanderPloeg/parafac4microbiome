@@ -147,7 +147,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> <span class="co"># for reproducibility</span></span>
 <span></span>
 <span><span class="co"># Process the data cube</span></span>
-<span><span class="va">processedFujita</span> <span class="op">=</span> <span class="fu"><a href="reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">Fujita2023</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.99</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedFujita</span> <span class="op">=</span> <span class="fu"><a href="reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">Fujita2023</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.99</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Make a PARAFAC model</span></span>
 <span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
@@ -160,9 +160,7 @@
 <span>  legendColNums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span>,</span>
 <span>  arrangeModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Fujita PARAFAC model"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span></code></pre></div>
+<span>  overallTitle <span class="op">=</span> <span class="st">"Fujita PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-usage-1.png" width="100%"></p>
 </div>
 </div>
