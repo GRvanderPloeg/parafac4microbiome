@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,8 +83,8 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette we examine and model the vanderPloeg2024 data in
-more detail.</p>
+<p>In this vignette we examine and model the
+<code>vanderPloeg2024</code> data in more detail.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.github.io/parafac4microbiome/">parafac4microbiome</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -103,19 +103,20 @@ more detail.</p>
 <h2 id="processing-the-data-cube">Processing the data cube<a class="anchor" aria-label="anchor" href="#processing-the-data-cube"></a>
 </h2>
 <p>The data cube in vanderPloeg2024$data contains unprocessed counts.
-The function processDataCube() performs the processing of these counts
-with the following steps:</p>
+The function <code><a href="../reference/processDataCube.html">processDataCube()</a></code> performs the processing of
+these counts with the following steps:</p>
 <ul>
 <li>It performs feature selection based on the sparsityThreshold
 setting. Sparsity is here defined as the fraction of samples where a
-microbial abundance (ASV/OTU or otherwise) is zero. For vanderPloeg2024
-we can take the RFgroups groups into account for feature selection. We
-do this by calculating the sparsity for each feature in each subject
-group and compare those against the sparsity threshold that we set. If a
-feature passes the threshold in either group, it is selected.</li>
+microbial abundance (ASV/OTU or otherwise) is zero. For
+<code>vanderPloeg2024</code> we can take the RFgroups groups into
+account for feature selection. We do this by calculating the sparsity
+for each feature in each subject group and compare those against the
+sparsity threshold that we set. If a feature passes the threshold in
+either group, it is selected.</li>
 <li>It performs a centered log-ratio transformation of each sample using
-the compositions::clr() function with a pseudo-count of one (on all
-features, prior to selection based on sparsity).</li>
+the <code><a href="https://rdrr.io/pkg/compositions/man/clr.html" class="external-link">compositions::clr()</a></code> function with a pseudo-count of one
+(on all features, prior to selection based on sparsity).</li>
 <li>It centers and scales the three-way array. This is a complex
 subject, for which we refer to a <a href="https://doi.org/10.1002/cem.773" class="external-link">paper by Rasmus Bro and Age
 Smilde</a>. By centering across the subject mode, we make the subjects
@@ -124,25 +125,25 @@ feature mode avoids the PARAFAC model focussing on features with
 abnormally high variation.</li>
 </ul>
 <p>The outcome of processing is a new version of the dataset. Please
-refer to the documentation of processDataCube() for more
+refer to the documentation of <code><a href="../reference/processDataCube.html">processDataCube()</a></code> for more
 information.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">processedPloeg</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">vanderPloeg2024</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">processedPloeg</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">vanderPloeg2024</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="determining-the-correct-number-of-components">Determining the correct number of components<a class="anchor" aria-label="anchor" href="#determining-the-correct-number-of-components"></a>
 </h2>
 <p>A critical aspect of PARAFAC modelling is to determine the correct
 number of components. We have developed the function
-assessNumComponents() for this purpose. We give the function our new
-dataset and specify the minimum and maximum number of components to
-investigate and the number of randomly initialized models to try for
-each number of components.</p>
+<code><a href="../reference/assessNumComponents.html">assessNumComponents()</a></code> for this purpose. We give the
+function our new dataset and specify the minimum and maximum number of
+components to investigate and the number of randomly initialized models
+to try for each number of components.</p>
 <p>Note: this vignette reflects a minimum working example for analysing
 this dataset due to computational limitations. Hence, we only look at
 1-3 components with 5 random initializations each. These settings are
 not ideal for real datasets. Please refer to the documentation of
-assessNumComponents() for more information.</p>
+<code><a href="../reference/assessNumComponents.html">assessNumComponents()</a></code> for more information.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Setup</span></span>
 <span><span class="co"># For computational purposes we deviate from the default settings</span></span>
@@ -164,7 +165,7 @@ assessNumComponents() for more information.</p>
 <span><span class="co"># Assess the metrics to determine the correct number of components</span></span>
 <span><span class="va">assessment</span> <span class="op">=</span> <span class="fu"><a href="../reference/assessNumComponents.html">assessNumComponents</a></span><span class="op">(</span><span class="va">processedPloeg</span><span class="op">$</span><span class="va">data</span>, <span class="va">minNumComponents</span>, <span class="va">maxNumComponents</span>, <span class="va">numRepetitions</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span></span></code></pre></div>
 <p>We will now inspect the output plots of interest for
-vanderPloeg2024.</p>
+<code>vanderPloeg2024</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
 <p><img src="vanderPloeg2024_analysis_files/figure-html/overview%20plot-1.png" width="1152">
@@ -219,15 +220,17 @@ indeed show very similar time profiles and also some instability.</p>
 <h2 id="model-selection">Model selection<a class="anchor" aria-label="anchor" href="#model-selection"></a>
 </h2>
 <p>We have decided that a two-component model is the most appropriate
-for the vanderPloeg2024 dataset. We can now select one of the random
-initializations from the assessNumComponents() output as our final
-model. We’re going to select the random initialisation that corresponded
-the maximum amount of variation explained for three components.</p>
+for the <code>vanderPloeg2024</code> dataset. We can now select one of
+the random initializations from the <code><a href="../reference/assessNumComponents.html">assessNumComponents()</a></code>
+output as our final model. We’re going to select the random
+initialisation that corresponded the maximum amount of variation
+explained for two components.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numComponents</span> <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="va">modelChoice</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">assessment</span><span class="op">$</span><span class="va">metrics</span><span class="op">$</span><span class="va">varExp</span><span class="op">[</span>,<span class="va">numComponents</span><span class="op">]</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">assessment</span><span class="op">$</span><span class="va">metrics</span><span class="op">$</span><span class="va">varExp</span><span class="op">[</span>,<span class="va">numComponents</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">finalModel</span> <span class="op">=</span> <span class="va">assessment</span><span class="op">$</span><span class="va">models</span><span class="op">[[</span><span class="va">numComponents</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">modelChoice</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p>Finally, we visualize the model using plotPARAFACmodel().</p>
+<p>Finally, we visualize the model using
+<code><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel()</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">finalModel</span>, <span class="va">processedPloeg</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
 <span>  overallTitle <span class="op">=</span> <span class="st">"vanderPloeg2024 PARAFAC model"</span><span class="op">)</span></span>
@@ -246,7 +249,7 @@ the maximum amount of variation explained for three components.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Roel van der Ploeg.</p>
+<p>Developed by Geert Roelof van der Ploeg.</p>
 </div>
 
 <div class="pkgdown-footer-right">

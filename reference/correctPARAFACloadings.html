@@ -14,7 +14,7 @@ Note: this function only works for 3-way PARAFAC models."><meta property="og:ima
     
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,13 +57,26 @@ Note: this function only works for 3-way PARAFAC models.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correctPARAFACloadings</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">model</span>, <span class="va">modeToCorrect</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">correctPARAFACloadings</span><span class="op">(</span><span class="va">dataset</span>, <span class="va">model</span>, <span class="va">modeToCorrect</span>, moreOutput <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>dataset</dt>
-<dd><p>The input dataset used to create the model.</p></dd>
+<dd><p>A longitudinal microbiome dataset, ideally processed with <code><a href="processDataCube.html">processDataCube()</a></code>, formatted as follows:</p><dl><dt>data</dt>
+<dd><p>Array object of the data cube</p></dd>
+
+<dt>mode1</dt>
+<dd><p>Dataframe with all the subject metadata, ordered the same as the rows in the data cube.</p></dd>
+
+<dt>mode2</dt>
+<dd><p>Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.</p></dd>
+
+<dt>mode3</dt>
+<dd><p>Dataframe with the time metadata, ordered the same as the third dimension in the array.</p></dd>
+
+
+</dl></dd>
 
 
 <dt>model</dt>
@@ -72,6 +85,10 @@ Note: this function only works for 3-way PARAFAC models.</p>
 
 <dt>modeToCorrect</dt>
 <dd><p>Correct the subject (1), feature (2) or time mode (3).</p></dd>
+
+
+<dt>moreOutput</dt>
+<dd><p>Give orthonormal basis and transformation matrices as part of output (default FALSE).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -112,7 +129,7 @@ Note: this function only works for 3-way PARAFAC models.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Roel van der Ploeg.</p>
+  <p></p><p>Developed by Geert Roelof van der Ploeg.</p>
 </div>
 
 <div class="pkgdown-footer-right">
