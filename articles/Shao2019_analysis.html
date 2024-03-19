@@ -194,22 +194,12 @@ components.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelStabilityCheck.html">modelStabilityCheck</a></span><span class="op">(</span><span class="va">processedShao</span>, numComponents<span class="op">=</span><span class="fl">2</span>, numFolds<span class="op">=</span><span class="va">numFolds</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>                               groupVariable<span class="op">=</span><span class="st">"Delivery_mode"</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
-<span>                               <span class="va">continuousModes</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span>
-<span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span></code></pre></div>
+<span>                               <span class="va">continuousModes</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
 <p><img src="Shao2019_analysis_files/figure-html/model%20stability-1.png" width="1152"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelStabilityCheck.html">modelStabilityCheck</a></span><span class="op">(</span><span class="va">processedShao</span>, numComponents<span class="op">=</span><span class="fl">3</span>, numFolds<span class="op">=</span><span class="va">numFolds</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>                               groupVariable<span class="op">=</span><span class="st">"Delivery_mode"</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
-<span>                               <span class="va">continuousModes</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span>
-<span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span></code></pre></div>
+<span>                               <span class="va">continuousModes</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
 <p><img src="Shao2019_analysis_files/figure-html/model%20stability-2.png" width="1152">
 Both models are quite unstable. The models likely need more iterations
 or a more strict tolerance to converge properly (see documentation of
@@ -236,12 +226,7 @@ explained for two components.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">finalModel</span>, <span class="va">processedShao</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
 <span>  continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Shao PARAFAC model"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span>
-<span></span>
-<span><span class="co">#&gt; Warning in get_plot_component(plot, "guide-box"): Multiple components found;</span></span>
-<span><span class="co">#&gt; returning the first one. To return all, use `return_all = TRUE`.</span></span></code></pre></div>
+<span>  overallTitle <span class="op">=</span> <span class="st">"Shao PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Shao2019_analysis_files/figure-html/model%20plot-1.png" width="1152"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
