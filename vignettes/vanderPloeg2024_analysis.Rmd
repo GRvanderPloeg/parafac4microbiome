@@ -59,7 +59,7 @@ numCores = 1
 colourCols = c("RFgroup", "Phylum", "")
 legendTitles = c("RF group", "Phylum", "")
 xLabels = c("Subject index", "Feature index", "Time index")
-legendColNums = c(2,5,0)
+legendColNums = c(3,5,0)
 arrangeModes = c(TRUE, TRUE, FALSE)
 continuousModes = c(FALSE,FALSE,TRUE)
 

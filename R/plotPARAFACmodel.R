@@ -171,9 +171,15 @@ plotPARAFACmodel = function(model, dataset, colourCols=NULL, legendTitles=NULL, 
       }
 
       if(n==1 & colourCol != "" & colourCol %in% colnames(model[[m]])){
-        legends[[m]] = cowplot::get_legend(plot +
-                                    ggplot2::scale_fill_discrete(legendTitles[m]) +
-                                    ggplot2::guides(fill = ggplot2::guide_legend(ncol=legendColNums[m])))
+        # Old solution - throws warnings
+        # legends[[m]] = cowplot::get_legend(plot +
+        #                             ggplot2::scale_fill_discrete(legendTitles[m]) +
+        #                             ggplot2::guides(fill = ggplot2::guide_legend(ncol=legendColNums[m])))
+
+        legends[[m]] = cowplot::get_plot_component(plot +
+                                             ggplot2::scale_fill_discrete(legendTitles[m]) +
+                                             ggplot2::guides(fill = ggplot2::guide_legend(ncol=legendColNums[m])) +
+                                             ggplot2::theme(legend.position="top"), "guide-box-top")
       }
 
       plotList[[plotIterator]] = plot + ggplot2::theme(legend.position="none")

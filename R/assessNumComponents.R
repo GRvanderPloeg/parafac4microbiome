@@ -25,7 +25,7 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
   allModels = list()
   numModes = length(dim(X))
 
-  names = list(1:numRepetitions, paste0(minNumComponents:maxNumComponents, " components"))
+  names = list(1:numRepetitions, minNumComponents:maxNumComponents) #list(1:numRepetitions, paste0(minNumComponents:maxNumComponents, " components"))
   numIterations = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
   SSE = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
   CORCONDIA = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
