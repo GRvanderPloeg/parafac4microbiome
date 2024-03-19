@@ -90,7 +90,7 @@ library(ggpubr)
 set.seed(0) # for reproducibility
 
 # Process the data cube
-processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
 
 # Make a PARAFAC model
 model = parafac(processedFujita$data, nfac=3, verbose=FALSE)
@@ -104,8 +104,6 @@ plotPARAFACmodel(model, processedFujita,
   arrangeModes = c(FALSE, TRUE, FALSE),
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Fujita PARAFAC model")
-#> Warning in get_plot_component(plot, "guide-box"): Multiple components found;
-#> returning the first one. To return all, use `return_all = TRUE`.
 ```
 
 <img src="man/figures/README-usage-1.png" width="100%" />
