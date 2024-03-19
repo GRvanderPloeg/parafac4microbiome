@@ -13,7 +13,7 @@ coverage](https://codecov.io/gh/GRvanderPloeg/parafac4microbiome/branch/master/g
 
 ## Overview
 
-The parafac4microbiome package enables R users with an easy way to
+The `parafac4microbiome` package enables R users with an easy way to
 create Parallel Factor Analysis (PARAFAC) models for longitudinal
 microbiome data.
 
@@ -46,7 +46,7 @@ are elaborated in their respective vignettes
 
 ## Installation
 
-You can install the development version of parafac4microbiome from
+You can install the development version of `parafac4microbiome` from
 [GitHub](https://github.com/) with:
 
 ``` r

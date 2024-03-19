@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculateVarExp.R
 \name{calculateVarExp}
 \alias{calculateVarExp}
-\title{Calculate variance explained of a PARAFAC model}
+\title{Calculate the variation explained by a PARAFAC model.}
 \usage{
 calculateVarExp(model, X)
 }
@@ -12,10 +12,10 @@ calculateVarExp(model, X)
 \item{X}{Input data of the PARAFAC model.}
 }
 \value{
-The variance explained of the model, expressed as a fraction (between 0-1).
+The variation explained by the model, expressed as a fraction (between 0-1).
 }
 \description{
-Calculate variance explained of a PARAFAC model
+Calculate the variation explained by a PARAFAC model.
 }
 \examples{
 X = Fujita2023$data

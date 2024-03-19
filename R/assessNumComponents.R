@@ -1,4 +1,4 @@
-#' Create randomly initialized models for component selection
+#' Create randomly initialized models for determining the correct number of components.
 #'
 #' @param X Input data
 #' @param minNumComponents Minimum number of components (default 1).

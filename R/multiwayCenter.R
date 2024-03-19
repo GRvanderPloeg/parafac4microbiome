@@ -1,11 +1,11 @@
-#' Center a multiway array
+#' Center a multi-way array
 #'
-#' This function exists because [multiway::ncenter()] cannot handle NAs.
+#' Note: this function exists because [multiway::ncenter()] cannot handle NAs.
 #'
-#' @param cube Multiway array
+#' @param cube Multi-way array
 #' @param mode Mode to center across: 1=subjects,2=features,3=time (default 1).
 #'
-#' @return Centered multiway array
+#' @return Centered multi-way array
 #' @export
 #'
 #' @examples

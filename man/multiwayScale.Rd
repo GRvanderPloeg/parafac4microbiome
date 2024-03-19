@@ -2,20 +2,20 @@
 % Please edit documentation in R/multiwayScale.R
 \name{multiwayScale}
 \alias{multiwayScale}
-\title{Scale a multiway array}
+\title{Scale a multi-way array}
 \usage{
 multiwayScale(cube, mode = 2)
 }
 \arguments{
-\item{cube}{Multiway array}
+\item{cube}{Multi-way array}
 
-\item{mode}{Mode to center across: 1=subjects,2=features,3=time (default 2).}
+\item{mode}{Mode to scale within: 1=subjects,2=features,3=time (default 2).}
 }
 \value{
-Scaled multiway array
+Scaled multi-way array
 }
 \description{
-This function exists because \code{\link[multiway:nscale]{multiway::nscale()}} cannot handle NAs.
+Note: this function exists because \code{\link[multiway:nscale]{multiway::nscale()}} cannot handle NAs.
 }
 \examples{
 cube_scl = multiwayCenter(Fujita2023$data)

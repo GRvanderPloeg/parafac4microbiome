@@ -1,11 +1,11 @@
-#' Scale a multiway array
+#' Scale a multi-way array
 #'
-#' This function exists because [multiway::nscale()] cannot handle NAs.
+#' Note: this function exists because [multiway::nscale()] cannot handle NAs.
 #'
-#' @param cube Multiway array
-#' @param mode Mode to center across: 1=subjects,2=features,3=time (default 2).
+#' @param cube Multi-way array
+#' @param mode Mode to scale within: 1=subjects,2=features,3=time (default 2).
 #'
-#' @return Scaled multiway array
+#' @return Scaled multi-way array
 #' @export
 #'
 #' @examples

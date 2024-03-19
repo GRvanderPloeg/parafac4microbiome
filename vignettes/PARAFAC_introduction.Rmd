@@ -19,7 +19,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 # Introduction
-Welcome to the parafac4microbiome R package. In this vignette we explain the data available in this package, how you can model them using PARAFAC and how to plot the outcome. We require the following packages and dependencies for our intentions.
+Welcome to the `parafac4microbiome` R package! In this vignette we explain the data available in this package, how you can model them using PARAFAC and how to plot the outcome. We require the following packages and dependencies.
 
 ```{r setup}
 library(parafac4microbiome)
@@ -29,14 +29,14 @@ library(ggplot2)
 ```
 
 # Datasets
-The parafac4microbiome package comes with three datasets: Fujita2023, Shao2019 and vanderPloeg2024. These refer to the first authors of their respective papers. Each of the dataset objects are lists with the following contents:
+The `parafac4microbiome` package comes with three datasets: `Fujita2023`, `Shao2019` and `vanderPloeg2024`. These refer to the first authors of their respective papers. Each of the dataset objects are lists with the following contents:
 
 *   data: the data cube of microbiome counts.
 *   mode1: metadata corresponding to the subject mode.
 *   mode2: metadata corresponding to the feature (microbial abundances) mode.
 *   mode3: metadata corresponding to the time mode.
 
-We briefly show what the data in these datasets look like and then focus on Fujita2023 for the remainder of this vignette. For details on the datasets we refer to the parafac4microbiome paper and to the original papers as listed in their respective help files. Modelling and component selection are explained in more detail in the vignettes corresponding to each dataset: [Fujita2023]("./Fujita2023_analysis.html), [Shao2019]("./Shao2019_analysis.html) and [vanderPloeg2024]("./vanderPloeg2024_analysis.html).
+We briefly show what the data in these datasets look like and then focus on `Fujita2023` for the remainder of this vignette. For details on the datasets we refer to the parafac4microbiome paper and to the original papers as listed in their respective help files. Modelling and component selection are explained in more detail in the vignettes corresponding to each dataset: `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`.
 
 ```{r datasets}
 dim(Fujita2023$data)
@@ -52,21 +52,21 @@ head(Fujita2023$mode3)
 
 # Analysis
 ## Processing the data cube
-As shown above, the data cube in Fujita2023$data contains unprocessed counts. The function processDataCube() performs the processing of these counts with the following steps:
+As shown above, the data cube in Fujita2023$data contains unprocessed counts. The function `processDataCube()` performs the processing of these counts with the following steps:
 
 *   It performs feature selection based on the sparsityThreshold setting. Sparsity is here defined as the fraction of samples where a microbial abundance (ASV/OTU or otherwise) is zero.
-*   It performs a centered log-ratio transformation of each sample using the compositions::clr() function with a pseudo-count of one (on all features, prior to selection based on sparsity).
+*   It performs a centered log-ratio transformation of each sample using the `compositions::clr()` function with a pseudo-count of one (on all features, prior to selection based on sparsity).
 *   It centers and scales the three-way array. This is a complex subject, for which we refer to a [paper by Rasmus Bro and Age Smilde](https://doi.org/10.1002/cem.773). By centering across the subject mode, we make the subjects comparable to each other within each time point. Scaling within the feature mode avoids the PARAFAC model focussing on features with abnormally high variation.
 
-The outcome of processing is a new version of the dataset. Please refer to the documentation of processDataCube() for more information.
+The outcome of processing is a new version of the dataset. Please refer to the documentation of `processDataCube()` for more information.
 
 ```{r data processing}
-processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
 head(processedFujita$data[,,1])
 ```
 
 ## Making a PARAFAC model
-The processed data is ready to be modelled using Parallel Factor Analysis. Here we arbitrarily set the number of factors (i.e. the number of components) to be three. This is normally the outcome of a more detailed investigation into the correct number of components, described in the [Fujita2023]("./Fujita2023_analysis.html), [Shao2019]("./Shao2019_analysis.html) and [vanderPloeg2024]("./vanderPloeg2024_analysis.html) vignettes. The output of the function is a parafac object containing the loadings in each mode and some statistics like R-squared and the sum of squared error.
+The processed data is ready to be modelled using Parallel Factor Analysis. Here we arbitrarily set the number of factors (i.e. the number of components) to be three. This is normally the outcome of a more detailed investigation into the correct number of components, described in `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`. The output of the function is a parafac object containing the loadings in each mode and some statistics like R-squared and the sum of squared error.
 
 ```{r fujita2023 modelling}
 set.seed(0) # for reproducibility
@@ -78,19 +78,20 @@ head(model$C)
 model$Rsq
 ```
 
-This model explains 39 percent of the variation in the processed data cube.
+This model explains `r model$Rsq*100` percent of the variation in the processed data cube.
 
 ## Plotting a PARAFAC model
-We have implemented the plotPARAFACmodel() function to allow the user full control over how they want to visualize their model. As such, there are a lot of plotting options that can be used, which you can see below. A brief overview:
-*   colourCols: per mode (subject, feature, time), specifies by what variable the loading bar plot should be coloured.
-*   legendTitles: titles of the legends per mode, if colourCode is not specified for a mode, a legend will not be generated.
-*   xLabels: labels for the x axis of each mode.
-*   legendColNums: the number of columns in the legend for each mode. If colourCode is not specified for a mode, a legend will not be generated.
-*   arrangeModes: a vector of boolean values specifying if the loadings should be grouped by their colourCol for easier inspection.
-*   continuousModes: a vector of boolean values specifying if the loadings should be visualized with a line plot instead of the default bar plot.
-*   overallTitle: title of the plot.
+We have implemented the `plotPARAFACmodel()` function to allow the user full control over how they want to visualize their model. As such, there are a lot of plotting options that can be used, which you can see below. A brief overview:
 
-For a full overview, please refer to the documentation of plotPARAFACmodel.
+*    colourCols: per mode (subject, feature, time), specifies by what variable the loading bar plot should be coloured.
+*    legendTitles: titles of the legends per mode, if colourCode is not specified for a mode, a legend will not be generated.
+*    xLabels: labels for the x axis of each mode.
+*    legendColNums: the number of columns in the legend for each mode. If colourCode is not specified for a mode, a legend will not be generated.
+*    arrangeModes: a vector of boolean values specifying if the loadings should be grouped by their colourCol for easier inspection.
+*    continuousModes: a vector of boolean values specifying if the loadings should be visualized with a line plot instead of the default bar plot.
+*    overallTitle: title of the plot.
+
+For a full overview, please refer to the documentation of `plotPARAFACmodel()`.
 
 ```{r plotting}
 plotPARAFACmodel(model, processedFujita,
@@ -103,4 +104,4 @@ plotPARAFACmodel(model, processedFujita,
   overallTitle = "Fujita PARAFAC model")
 ```
 
-This concludes the introduction to the parafac4microbiome package. We hope this gives you sufficient information to get started. For more details on modelling specific datasets, please refer to the vignettes for [Fujita2023]("./Fujita2023_analysis.html), [Shao2019]("./Shao2019_analysis.html) and [vanderPloeg2024]("./vanderPloeg2024_analysis.html).
+This concludes the introduction to the `parafac4microbiome` package. We hope this gives you sufficient information to get started. For more details on modelling specific datasets, please refer to `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`

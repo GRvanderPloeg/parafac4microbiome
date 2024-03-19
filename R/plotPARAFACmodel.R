@@ -1,7 +1,13 @@
-#' Plot PARAFAC model
+#' Plot a PARAFAC model
 #'
 #' @param model Model output from [parafac4microbiome::parafac()].
-#' @param dataset The input dataset used to create the model.
+#' @param dataset A longitudinal microbiome dataset, ideally processed with [processDataCube()], formatted as follows:
+#' \describe{
+#'   \item{data}{Array object of the data cube}
+#'   \item{mode1}{Dataframe with all the subject metadata, ordered the same as the rows in the data cube.}
+#'   \item{mode2}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
+#'   \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
+#' }
 #' @param colourCols Vector of strings stating which column names should be factorized for colours per mode.
 #' @param legendTitles Vector of strings stating the legend title per mode.
 #' @param xLabels Vector of strings stating the x-axis labels per mode.

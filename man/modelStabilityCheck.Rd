@@ -2,7 +2,7 @@
 % Please edit documentation in R/modelStabilityCheck.R
 \name{modelStabilityCheck}
 \alias{modelStabilityCheck}
-\title{Jack-knifed PARAFAC models to determine model stability}
+\title{Jack-knifing procedure to determine PARAFAC model stability.}
 \usage{
 modelStabilityCheck(
   dataset,
@@ -26,11 +26,11 @@ modelStabilityCheck(
 
 \item{numComponents}{Number of components of the desired PARAFAC model}
 
-\item{numFolds}{Number of jack-knifed samples to create}
+\item{numFolds}{Number of jack-knifed operations to perform}
 
 \item{considerGroups}{Consider subject groups in calculating sparsity (default FALSE)}
 
-\item{groupVariable}{What column name of mode 1 should be used to consider groups? (default "")}
+\item{groupVariable}{Column name in dataset$mode1 that should be used to consider groups (default "")}
 
 \item{colourCols}{Vector of strings stating which column names should be factorized for colours per mode.}
 
@@ -54,7 +54,7 @@ modelStabilityCheck(
 List of all As, Bs, Cs of the PARAFAC models as well as a plot of the median model with error bars.
 }
 \description{
-Jack-knifed PARAFAC models to determine model stability
+Jack-knifing procedure to determine PARAFAC model stability.
 }
 \examples{
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plotPARAFACmodel.R
 \name{plotPARAFACmodel}
 \alias{plotPARAFACmodel}
-\title{Plot PARAFAC model}
+\title{Plot a PARAFAC model}
 \usage{
 plotPARAFACmodel(
   model,
@@ -19,7 +19,13 @@ plotPARAFACmodel(
 \arguments{
 \item{model}{Model output from \code{\link[=parafac]{parafac()}}.}
 
-\item{dataset}{The input dataset used to create the model.}
+\item{dataset}{A longitudinal microbiome dataset, ideally processed with \code{\link[=processDataCube]{processDataCube()}}, formatted as follows:
+\describe{
+\item{data}{Array object of the data cube}
+\item{mode1}{Dataframe with all the subject metadata, ordered the same as the rows in the data cube.}
+\item{mode2}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
+\item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
+}}
 
 \item{colourCols}{Vector of strings stating which column names should be factorized for colours per mode.}
 
@@ -39,7 +45,7 @@ plotPARAFACmodel(
 Plot object
 }
 \description{
-Plot PARAFAC model
+Plot a PARAFAC model
 }
 \examples{
 library(multiway)

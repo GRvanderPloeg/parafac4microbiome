@@ -1,8 +1,8 @@
-#' Calculate sparsity across the feature mode of a multiway array
+#' Calculate sparsity across the feature mode of a multi-way array.
 #'
 #' @param dataset See [Fujita2023], [Shao2019] or [vanderPloeg2024].
 #' @param considerGroups Consider subject groups in calculating sparsity (default FALSE)
-#' @param groupVariable What column name of mode 1 should be used to consider groups? (default "")
+#' @param groupVariable Column name in dataset$mode1 that should be used to consider groups (default "")
 #'
 #' @return Vector of sparsity fractions (N x J) where N is the number of groups and J is the number of features.
 #' @export

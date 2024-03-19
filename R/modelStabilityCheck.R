@@ -1,9 +1,9 @@
-#' Jack-knifed PARAFAC models to determine model stability
+#' Jack-knifing procedure to determine PARAFAC model stability.
 #'
 #' @inheritParams calculateSparsity
 #' @inheritParams plotPARAFACmodel
 #' @param numComponents Number of components of the desired PARAFAC model
-#' @param numFolds Number of jack-knifed samples to create
+#' @param numFolds Number of jack-knifed operations to perform
 #' @param ctol Change in SSQ needed for model to be converged (default 1e-6).
 #' @param maxit Maximum number of iterations (default 2500).
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)

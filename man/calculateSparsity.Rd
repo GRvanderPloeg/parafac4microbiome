@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculateSparsity.R
 \name{calculateSparsity}
 \alias{calculateSparsity}
-\title{Calculate sparsity across the feature mode of a multiway array}
+\title{Calculate sparsity across the feature mode of a multi-way array.}
 \usage{
 calculateSparsity(dataset, considerGroups = FALSE, groupVariable = "")
 }
@@ -11,13 +11,13 @@ calculateSparsity(dataset, considerGroups = FALSE, groupVariable = "")
 
 \item{considerGroups}{Consider subject groups in calculating sparsity (default FALSE)}
 
-\item{groupVariable}{What column name of mode 1 should be used to consider groups? (default "")}
+\item{groupVariable}{Column name in dataset$mode1 that should be used to consider groups (default "")}
 }
 \value{
 Vector of sparsity fractions (N x J) where N is the number of groups and J is the number of features.
 }
 \description{
-Calculate sparsity across the feature mode of a multiway array
+Calculate sparsity across the feature mode of a multi-way array.
 }
 \examples{
 # No groups

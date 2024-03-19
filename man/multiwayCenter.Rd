@@ -2,20 +2,20 @@
 % Please edit documentation in R/multiwayCenter.R
 \name{multiwayCenter}
 \alias{multiwayCenter}
-\title{Center a multiway array}
+\title{Center a multi-way array}
 \usage{
 multiwayCenter(cube, mode = 1)
 }
 \arguments{
-\item{cube}{Multiway array}
+\item{cube}{Multi-way array}
 
 \item{mode}{Mode to center across: 1=subjects,2=features,3=time (default 1).}
 }
 \value{
-Centered multiway array
+Centered multi-way array
 }
 \description{
-This function exists because \code{\link[multiway:ncenter]{multiway::ncenter()}} cannot handle NAs.
+Note: this function exists because \code{\link[multiway:ncenter]{multiway::ncenter()}} cannot handle NAs.
 }
 \examples{
 cube_cnt = multiwayCenter(Fujita2023$data)

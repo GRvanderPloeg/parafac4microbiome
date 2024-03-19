@@ -2,18 +2,18 @@
 % Please edit documentation in R/multiwayCLR.R
 \name{multiwayCLR}
 \alias{multiwayCLR}
-\title{Perform a centered log-ratio transform over a multiway array}
+\title{Perform a centered log-ratio transform over a multi-way array}
 \usage{
 multiwayCLR(cube)
 }
 \arguments{
-\item{cube}{Multiway array of counts}
+\item{cube}{Multi-way array of counts}
 }
 \value{
 CLRed cube
 }
 \description{
-Propagates NAs corresponding to missing samples.
+Note: Propagates NAs corresponding to missing samples.
 }
 \examples{
 cubeCLR = multiwayCLR(Fujita2023$data)

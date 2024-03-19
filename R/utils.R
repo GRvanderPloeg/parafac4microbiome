@@ -160,6 +160,7 @@ reinflateBlock = function(loadingVectors){
 #'
 #' @inheritParams plotPARAFACmodel
 #' @param modeToCorrect Correct the subject (1), feature (2) or time mode (3).
+#' @param moreOutput Give orthonormal basis and transformation matrices as part of output (default FALSE).
 #'
 #' @return Corrected loadings of the specified mode.
 #' @export
@@ -178,7 +179,7 @@ reinflateBlock = function(loadingVectors){
 #'
 #' correctedA = correctPARAFACloadings(processedFujita, model, 1)
 #' plot(correctedA[,1], correctedA[,2])
-correctPARAFACloadings = function(dataset, model, modeToCorrect){
+correctPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FALSE){
   stopifnot(methods::is(model, "parafac"))
 
   A = model$A
@@ -207,5 +208,10 @@ correctPARAFACloadings = function(dataset, model, modeToCorrect){
     result = Ctilde
   }
 
-  return(result)
+  if(!moreOutput){
+    return(result)
+  } else{
+    return(list("correctedLoading"=result, "T"=T, "Ftilde"=Ftilde, "F"=F))
+  }
+
 }

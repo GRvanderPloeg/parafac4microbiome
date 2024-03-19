@@ -1,8 +1,8 @@
-#' Perform a centered log-ratio transform over a multiway array
+#' Perform a centered log-ratio transform over a multi-way array
 #'
-#' Propagates NAs corresponding to missing samples.
+#' Note: Propagates NAs corresponding to missing samples.
 #'
-#' @param cube Multiway array of counts
+#' @param cube Multi-way array of counts
 #'
 #' @return CLRed cube
 #' @export

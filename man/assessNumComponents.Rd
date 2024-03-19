@@ -2,7 +2,7 @@
 % Please edit documentation in R/assessNumComponents.R
 \name{assessNumComponents}
 \alias{assessNumComponents}
-\title{Create randomly initialized models for component selection}
+\title{Create randomly initialized models for determining the correct number of components.}
 \usage{
 assessNumComponents(
   X,
@@ -38,7 +38,7 @@ A list object of the following:
 }
 }
 \description{
-Create randomly initialized models for component selection
+Create randomly initialized models for determining the correct number of components.
 }
 \examples{
 X = Fujita2023$data

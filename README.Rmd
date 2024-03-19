@@ -9,8 +9,11 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
+  fig.width = 12,
+  fig.height = 6,
   out.width = "100%"
 )
+options(tibble.print_min = 6L, tibble.print.max = 6L, digits = 3)
 ```
 
 # parafac4microbiome <a href="https://grvanderploeg.github.io/parafac4microbiome/"><img src="man/figures/logo.png" alt="parafac4microbiome website" align="right" height="139"/></a>
@@ -23,7 +26,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The parafac4microbiome package enables R users with an easy way to create Parallel Factor Analysis (PARAFAC) models for longitudinal microbiome data.
+The `parafac4microbiome` package enables R users with an easy way to create Parallel Factor Analysis (PARAFAC) models for longitudinal microbiome data.
 
 -   `processDataCube()` can be used to process the microbiome count data appropriately for a multi-way data array.
 -   `parafac()` allows the user to create a Parallel Factor Analysis model of the multi-way data array.
@@ -41,7 +44,7 @@ A basic introduction to the package is given in `vignette("PARAFAC_introduction"
 
 ## Installation
 
-You can install the development version of parafac4microbiome from [GitHub](https://github.com/) with:
+You can install the development version of `parafac4microbiome` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -65,7 +68,7 @@ library(ggpubr)
 set.seed(0) # for reproducibility
 
 # Process the data cube
-processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
 
 # Make a PARAFAC model
 model = parafac(processedFujita$data, nfac=3, verbose=FALSE)

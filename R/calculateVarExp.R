@@ -1,10 +1,10 @@
-#' Calculate variance explained of a PARAFAC model
+#' Calculate the variation explained by a PARAFAC model.
 #'
 #'
 #' @param model PARAFAC model output from the [parafac4microbiome::parafac()] function.
 #' @param X Input data of the PARAFAC model.
 #'
-#' @return The variance explained of the model, expressed as a fraction (between 0-1).
+#' @return The variation explained by the model, expressed as a fraction (between 0-1).
 #' @export
 #'
 #' @examples

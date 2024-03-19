@@ -1,10 +1,10 @@
 Package: parafac4microbiome
-Title: Parallel Factor Analysis modelling for microbiome data
-Version: 0.0.0.9000
+Title: Parallel Factor Analysis modelling for longitudinal microbiome data
+Version: 0.0.1
 Authors@R: 
-    person("Roel", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre"),
+    person("Geert Roelof", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0007-5204-3386"))
-Description: Creation and selection of Parallel Factor Analysis models for microbiome data.
+Description: Creation and selection of Parallel Factor Analysis models for longitudinal microbiome data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
