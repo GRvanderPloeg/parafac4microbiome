@@ -49,5 +49,5 @@
 #'   \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 #'   ...
 #' }
-#' @source <https://doi.org/10.1186/s40168-023-01474-5>
+#' @source <https://doi.org/10.1101/2024.03.18.585469 >
 "vanderPloeg2024"
