@@ -36,7 +36,8 @@ This package also comes with three example datasets.
   born infants from London
   (<https://www.nature.com/articles/s41586-019-1560-1>).
 - `vanderPloeg2024`: a small gingivitis intervention dataset with
-  specific response groups (manuscript in preparation).
+  specific response groups
+  (<https://doi.org/10.1101/2024.03.18.585469>).
 
 A basic introduction to the package is given in
 `vignette("PARAFAC_introduction")` and modelling the example datasets
