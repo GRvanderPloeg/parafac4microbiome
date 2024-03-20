@@ -98,10 +98,20 @@ repairLoadings = function(A, B, C, evidenceMatrix){
   return(repairedLoadingsList)
 }
 
-reinflateBlock = function(loadingVectors){
+#' Reconstruct the data cube based on a PARAFAC model.
+#'
+#' Note: currently only works for three and four-way data.
+#' @inheritParams plotPARAFACmodel
+#'
+#' @return Multi-way array of the reconstructed data.
+#' @export
+#'
+#' @examples
+#' model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
+#' reinflatedData = reinflateBlock(model)
+reinflateBlock = function(model){
 
-  if(methods::is(loadingVectors, "parafac")){
-    model = loadingVectors
+  if(methods::is(model, "parafac")){
     loadingVectors = list()
     numComponents = ncol(model$A)
     numModes = length(model$const)
@@ -112,39 +122,41 @@ reinflateBlock = function(loadingVectors){
     if(numModes == 4){
       loadingVectors[[4]] = model$D
     }
-  }
-  stopifnot(class(loadingVectors) == "list")
-  stopifnot(length(unique(unlist(lapply(loadingVectors, ncol)))) == 1) # number of components should be equal in all modes
 
-  numComponents = unique(unlist(lapply(loadingVectors, ncol)))
-  dimX = unlist(lapply(loadingVectors, nrow))
+    model = loadingVectors
+  }
+  stopifnot(class(model) == "list")
+  stopifnot(length(unique(unlist(lapply(model, ncol)))) == 1) # number of components should be equal in all modes
+
+  numComponents = unique(unlist(lapply(model, ncol)))
+  dimX = unlist(lapply(model, nrow))
 
   M = array(0L, dimX)
 
   # Two-way
-  if(length(loadingVectors) == 2){
+  if(length(model) == 2){
     for(i in 1:numComponents){
-      A = matrix(loadingVectors[[1]][,i])
-      B = matrix(loadingVectors[[2]][,i])
+      A = matrix(model[[1]][,i])
+      B = matrix(model[[2]][,i])
       M = M + array(tcrossprod(A, B), dimX)
     }
   }
   # Three-way
-  else if(length(loadingVectors) == 3){
+  else if(length(model) == 3){
     for(i in 1:numComponents){
-      A = matrix(loadingVectors[[1]][,i])
-      B = matrix(loadingVectors[[2]][,i])
-      C = matrix(loadingVectors[[3]][,i])
+      A = matrix(model[[1]][,i])
+      B = matrix(model[[2]][,i])
+      C = matrix(model[[3]][,i])
       M = M + array(tcrossprod(A, multiway::krprod(C, B)), dimX)
     }
   }
   # Four-way
-  else if(length(loadingVectors) == 4){
+  else if(length(model) == 4){
     for(i in 1:numComponents){
-      A = matrix(loadingVectors[[1]][,i])
-      B = matrix(loadingVectors[[2]][,i])
-      C = matrix(loadingVectors[[3]][,i])
-      D = matrix(loadingVectors[[4]][,i])
+      A = matrix(model[[1]][,i])
+      B = matrix(model[[2]][,i])
+      C = matrix(model[[3]][,i])
+      D = matrix(model[[4]][,i])
       M = M + array(tcrossprod(A, multiway::krprod(multiway::krprod(A,C), C)), dimX)
     }
   }
