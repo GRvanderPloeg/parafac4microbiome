@@ -106,47 +106,19 @@ test_that("reinflateBlock gives a 3-way cube if you give it three column vectors
   expect_equal(length(dim(X)), 3)
 })
 
-test_that("reinflateBlock gives a 4-way cube if you give it four column vectors", {
-  loadingVectors = list(matrix(rnorm(20), nrow=20, ncol=1),
-                  matrix(rnorm(50), nrow=50, ncol=1),
-                  matrix(rnorm(4), nrow=4, ncol=1),
-                  matrix(rnorm(3), nrow=3, ncol=1))
-  X = reinflateBlock(loadingVectors)
-  expect_equal(length(dim(X)), 4)
-})
-
-test_that("reinflateBlock throws an error if you give it more than 4 vectors", {
-  loadingVectors = list(matrix(rnorm(20), nrow=20, ncol=1),
-                  matrix(rnorm(50), nrow=50, ncol=1),
-                  matrix(rnorm(4), nrow=4, ncol=1),
-                  matrix(rnorm(3), nrow=3, ncol=1),
-                  matrix(rnorm(100), nrow=100, ncol=1))
-  expect_error(reinflateBlock(loadingVectors))
-})
-
 test_that("reinflateBlock throws an error if you give it unequal components over the vectors", {
   loadingVectors = list(matrix(rnorm(40), nrow=20, ncol=2),
                         matrix(rnorm(150), nrow=50, ncol=3),
-                        matrix(rnorm(8), nrow=4, ncol=2),
-                        matrix(rnorm(6), nrow=3, ncol=2))
+                        matrix(rnorm(8), nrow=4, ncol=2))
   expect_error(reinflateBlock(loadingVectors))
 })
 
-test_that("reinflateBlock can deal with multiple components at once", {
+test_that("reinflateBlock cannot deal with more than 3 components", {
   loadingVectors = list(matrix(rnorm(40), nrow=20, ncol=2),
                         matrix(rnorm(100), nrow=50, ncol=2),
                         matrix(rnorm(8), nrow=4, ncol=2),
                         matrix(rnorm(6), nrow=3, ncol=2))
-  expect_no_error(reinflateBlock(loadingVectors))
-})
-
-test_that("The output shape of reinflateBlock with multiple components is correct", {
-  loadingVectors = list(matrix(rnorm(40), nrow=20, ncol=2),
-                        matrix(rnorm(100), nrow=50, ncol=2),
-                        matrix(rnorm(8), nrow=4, ncol=2),
-                        matrix(rnorm(6), nrow=3, ncol=2))
-  X = reinflateBlock(loadingVectors)
-  expect_equal(dim(X), c(20, 50, 4, 3))
+  expect_error(reinflateBlock(loadingVectors))
 })
 
 test_that("reinflateBlock cannot deal with non-lists", {
@@ -163,20 +135,20 @@ test_that("reinflateBlock can deal with parafac objects", {
   expect_no_error(reinflateBlock(model))
 })
 
-test_that("Size of A is the same as the transformed version of A in correctPARAFACloadings", {
+test_that("Size of A is the same as the transformed version of A in transformPARAFACloadings", {
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
   model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$A), dim(correctPARAFACloadings(processedFujita, model, 1)))
+  expect_equal(dim(model$A), dim(transformPARAFACloadings(processedFujita, model, 1)))
 })
 
-test_that("Size of B is the same as the transformed version of A in correctPARAFACloadings", {
+test_that("Size of B is the same as the transformed version of A in transformPARAFACloadings", {
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
   model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$B), dim(correctPARAFACloadings(processedFujita, model, 2)))
+  expect_equal(dim(model$B), dim(transformPARAFACloadings(processedFujita, model, 2)))
 })
 
-test_that("Size of C is the same as the transformed version of A in correctPARAFACloadings", {
+test_that("Size of C is the same as the transformed version of A in transformPARAFACloadings", {
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
   model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$C), dim(correctPARAFACloadings(processedFujita, model, 3)))
+  expect_equal(dim(model$C), dim(transformPARAFACloadings(processedFujita, model, 3)))
 })

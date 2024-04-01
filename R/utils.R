@@ -100,7 +100,7 @@ repairLoadings = function(A, B, C, evidenceMatrix){
 
 #' Reconstruct the data cube based on a PARAFAC model.
 #'
-#' Note: currently only works for three and four-way data.
+#' Note: currently only works for three-way data.
 #' @inheritParams plotPARAFACmodel
 #'
 #' @return Multi-way array of the reconstructed data.
@@ -150,16 +150,6 @@ reinflateBlock = function(model){
       M = M + array(tcrossprod(A, multiway::krprod(C, B)), dimX)
     }
   }
-  # Four-way
-  else if(length(model) == 4){
-    for(i in 1:numComponents){
-      A = matrix(model[[1]][,i])
-      B = matrix(model[[2]][,i])
-      C = matrix(model[[3]][,i])
-      D = matrix(model[[4]][,i])
-      M = M + array(tcrossprod(A, multiway::krprod(multiway::krprod(A,C), C)), dimX)
-    }
-  }
   else{
     stop("reinflateBlock cannot deal with 5-way or higher order arrays.")
   }
@@ -189,11 +179,9 @@ reinflateBlock = function(model){
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
 #'
-#' correctedA = correctPARAFACloadings(processedFujita, model, 1)
-#' plot(correctedA[,1], correctedA[,2])
-correctPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FALSE){
-  stopifnot(methods::is(model, "parafac"))
-
+#' transformedA = transformPARAFACloadings(processedFujita, model, 1)
+#' plot(transformedA[,1], transformedA[,2])
+transformPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FALSE){
   A = model$A
   B = model$B
   C = model$C
@@ -226,4 +214,111 @@ correctPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FALS
     return(list("correctedLoading"=result, "T"=T, "Ftilde"=Ftilde, "F"=F))
   }
 
+}
+
+#' Export the PARAFAC model
+#'
+#' Currently only supports 3-mode models.
+#'
+#' @inheritParams plotPARAFACmodel
+#' @param prefix Prefix file name
+#' @param path Path to a folder
+#' @param saveRDS Save an RDS of the PARAFAC model object? (true/false, default=FALSE)
+#'
+#' @return Saves mode1, mode2, mode3, input data, modelled data, and data as modelled per component in .csv files.
+#' @export
+#'
+#' @examples
+#' library(multiway)
+#' library(dplyr)
+#' library(ggplot2)
+#' library(paramGUI)
+#' library(pracma)
+#' set.seed(0)
+#'
+#' # Make PARAFAC model
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+#' \dontrun{
+#' exportPARAFAC(model, processedFujita, prefix="Fujita_")
+#' }
+#'
+exportPARAFAC = function(model, dataset, prefix="PARAFACmodel_", path="./", saveRDS=FALSE){
+  stopifnot(methods::is(model, "parafac"))
+
+  A = model$A
+  B = model$B
+  C = model$C
+  numComponents = ncol(A)
+
+  mode1 = cbind(A, dataset$mode1) %>% dplyr::as_tibble()
+  mode2 = cbind(B, dataset$mode2) %>% dplyr::as_tibble()
+  mode3 = cbind(C, dataset$mode3) %>% dplyr::as_tibble()
+  input = dataset$data
+  model = reinflateBlock(model)
+
+  components = list()
+  for(f in 1:numComponents){
+    fakeA = matrix(A[,f])
+    fakeB = matrix(B[,f])
+    fakeC = matrix(C[,f])
+    fakeModel = list(fakeA, fakeB, fakeC)
+    components[[f]] = reinflateBlock(fakeModel)
+  }
+
+  utils::write.table(mode1, paste0(path,prefix,"_mode1.csv"), sep=",", row.names=FALSE, col.names=FALSE)
+  utils::write.table(mode2, paste0(path,prefix,"_mode2.csv"), sep=",", row.names=FALSE, col.names=FALSE)
+  utils::write.table(mode3, paste0(path,prefix,"_mode3.csv"), sep=",", row.names=FALSE, col.names=FALSE)
+  utils::write.table(input, paste0(path,prefix,"_input.csv"), sep=",", row.names=FALSE, col.names=FALSE)
+  utils::write.table(model, paste0(path,prefix,"_model.csv"), sep=",", row.names=FALSE, col.names=FALSE)
+
+  for(i in 1:length(components)){
+    utils::write.table(components[[i]], paste0(path,prefix,"_component_",i,".csv"), sep=",", row.names=FALSE, col.names=FALSE)
+  }
+
+  if(saveRDS == TRUE){
+    saveRDS(model, paste0(path,prefix,"_model.RDS"))
+  }
+}
+
+#' Import PARAFAC model
+#'
+#' @inheritParams exportPARAFAC
+#' @param numComponents Number of components in the model
+#'
+#' @return List of: the PARAFAC model, the dataset used, the data as modelled
+#' @export
+#'
+#' @examples
+#' library(multiway)
+#' library(dplyr)
+#' library(ggplot2)
+#' library(paramGUI)
+#' library(pracma)
+#' set.seed(0)
+#'
+#' # Make PARAFAC model
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+#' \dontrun{
+#' exportPARAFAC(model, processedFujita, prefix="Fujita_")
+#' importedModel = importPARAFAC(path="./", prefix="Fujita_", numComponents=2)
+#' }
+#'
+importPARAFAC = function(path, prefix, numComponents){
+  mode1 = utils::read.csv(paste0(path,prefix,"_mode1.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
+  mode2 = utils::read.csv(paste0(path,prefix,"_mode2.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
+  mode3 = utils::read.csv(paste0(path,prefix,"_mode3.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
+  input = utils::read.csv(paste0(path,prefix,"_input.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
+  modelledData = utils::read.csv(paste0(path,prefix,"_model.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
+
+  components = list()
+  for(i in 1:length(numComponents)){
+    component[[i]] = utils::read.csv(paste0(path,prefix,"_component_",i,".csv"), sep=",", header=FALSE) %>% dplyr::as_tibble()
+  }
+
+  dataset = list("data"=input, "mode1"=mode1[,(numComponents+1):ncol(mode1)], "mode2"=mode2[,(numComponents+1):ncol(mode1)], "mode3"=mode3[,(numComponents+1):ncol(mode1)])
+  model = list("A"=mode1[,1:numComponents], "B"=mode2[,1:numComponents], "C"=mode3[,1:numComponents])
+
+  output = list("model"=model, "dataset"=dataset, "reconstructedData"=modelledData, "reconstructedPerComponent"=components)
 }

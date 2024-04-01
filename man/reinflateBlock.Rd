@@ -13,7 +13,7 @@ reinflateBlock(model)
 Multi-way array of the reconstructed data.
 }
 \description{
-Note: currently only works for three and four-way data.
+Note: currently only works for three-way data.
 }
 \examples{
 model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
