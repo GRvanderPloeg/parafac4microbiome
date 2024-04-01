@@ -49,7 +49,10 @@
     <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/corcondia.html</loc>
   </url>
   <url>
-    <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/correctPARAFACloadings.html</loc>
+    <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/exportPARAFAC.html</loc>
+  </url>
+  <url>
+    <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/importPARAFAC.html</loc>
   </url>
   <url>
     <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/index.html</loc>
@@ -80,6 +83,9 @@
   </url>
   <url>
     <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/reinflateBlock.html</loc>
+  </url>
+  <url>
+    <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/transformPARAFACloadings.html</loc>
   </url>
   <url>
     <loc>https://grvanderploeg.github.io/parafac4microbiome/reference/vanderPloeg2024.html</loc>
