@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,6 +54,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plotPARAFACmodel</span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="va">dataset</span>,</span>
+<span>  <span class="va">numComponents</span>,</span>
 <span>  colourCols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legendTitles <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xLabels <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -85,6 +86,10 @@
 
 
 </dl></dd>
+
+
+<dt>numComponents</dt>
+<dd><p>Number of PARAFAC components in the model.</p></dd>
 
 
 <dt>colourCols</dt>
@@ -135,6 +140,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Make plot</span></span></span>
 <span class="r-in"><span><span class="fu">plotPARAFACmodel</span><span class="op">(</span><span class="va">model</span>, <span class="va">processedFujita</span>,</span></span>
+<span class="r-in"><span>  numComponents <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>  colourCols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  legendTitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  xLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replicate"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time point"</span><span class="op">)</span>,</span></span>

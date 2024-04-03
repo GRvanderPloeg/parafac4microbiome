@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@
 <p>You can install the development version of <code>parafac4microbiome</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"GRvanderPloeg/parafac4microbiome"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"GRvanderPloeg/parafac4microbiome"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
@@ -154,13 +154,14 @@
 <span></span>
 <span><span class="co"># Plot the PARAFAC model using some metadata</span></span>
 <span><span class="fu"><a href="reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">processedFujita</span>,</span>
-<span>  colourCols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span>
-<span>  legendTitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span>
-<span>  xLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replicate"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time point"</span><span class="op">)</span>,</span>
-<span>  legendColNums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span>,</span>
-<span>  arrangeModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Fujita PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
+<span>                 numComponents <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                 colourCols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>                 legendTitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span>
+<span>                 xLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Replicate"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time point"</span><span class="op">)</span>,</span>
+<span>                 legendColNums <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span>,</span>
+<span>                 arrangeModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                 continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                 overallTitle <span class="op">=</span> <span class="st">"Fujita PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-usage-1.png" width="100%"></p>
 </div>
 </div>

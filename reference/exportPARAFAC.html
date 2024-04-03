@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">exportPARAFAC</span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  <span class="va">dataset</span>,</span>
-<span>  prefix <span class="op">=</span> <span class="st">"PARAFACmodel_"</span>,</span>
+<span>  prefix <span class="op">=</span> <span class="st">"PARAFACmodel"</span>,</span>
 <span>  path <span class="op">=</span> <span class="st">"./"</span>,</span>
 <span>  saveRDS <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -92,7 +92,7 @@
 
 
 <dt>saveRDS</dt>
-<dd><p>Save an RDS of the PARAFAC model object? (true/false, default=FALSE)</p></dd>
+<dd><p>Save an RDS of the PARAFAC model object? (true/false, default=TRUE)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -123,7 +123,7 @@
 <span class="r-in"><span><span class="va">processedFujita</span> <span class="op">=</span> <span class="fu"><a href="processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">Fujita2023</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.99</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">2</span>, nstart<span class="op">=</span><span class="fl">1</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="fu">exportPARAFAC</span><span class="op">(</span><span class="va">model</span>, <span class="va">processedFujita</span>, prefix<span class="op">=</span><span class="st">"Fujita_"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">exportPARAFAC</span><span class="op">(</span><span class="va">model</span>, <span class="va">processedFujita</span>, prefix<span class="op">=</span><span class="st">"Fujita"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
