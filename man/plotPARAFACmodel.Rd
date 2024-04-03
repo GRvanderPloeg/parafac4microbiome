@@ -7,6 +7,7 @@
 plotPARAFACmodel(
   model,
   dataset,
+  numComponents,
   colourCols = NULL,
   legendTitles = NULL,
   xLabels = NULL,
@@ -26,6 +27,8 @@ plotPARAFACmodel(
 \item{mode2}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
 \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 }}
+
+\item{numComponents}{Number of PARAFAC components in the model.}
 
 \item{colourCols}{Vector of strings stating which column names should be factorized for colours per mode.}
 
@@ -59,6 +62,7 @@ model = parafac(processedFujita$data, nfac=3, nstart=100, verbose=FALSE)
 
 # Make plot
 plotPARAFACmodel(model, processedFujita,
+  numComponents = 3,
   colourCols = c("", "Genus", ""),
   legendTitles = c("", "Genus", ""),
   xLabels = c("Replicate", "Feature index", "Time point"),

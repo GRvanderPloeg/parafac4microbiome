@@ -4,7 +4,14 @@
 \alias{importPARAFAC}
 \title{Import PARAFAC model}
 \usage{
-importPARAFAC(path, prefix, numComponents)
+importPARAFAC(
+  path,
+  prefix,
+  numComponents,
+  sep = ",",
+  loadRDS = TRUE,
+  header = TRUE
+)
 }
 \arguments{
 \item{path}{Path to a folder}
@@ -12,6 +19,12 @@ importPARAFAC(path, prefix, numComponents)
 \item{prefix}{Prefix file name}
 
 \item{numComponents}{Number of components in the model}
+
+\item{sep}{Separator character for the input files (default=",")}
+
+\item{loadRDS}{Load a previously saved RDS object of the model (default=TRUE)}
+
+\item{header}{Expect headers in the csv files (default=TRUE)}
 }
 \value{
 List of: the PARAFAC model, the dataset used, the data as modelled

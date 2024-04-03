@@ -8,6 +8,7 @@
 #'   \item{mode2}{Taxonomic classification of the microbiota, ordered the same as the columns in the data cube.}
 #'   \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 #' }
+#' @param numComponents Number of PARAFAC components in the model.
 #' @param colourCols Vector of strings stating which column names should be factorized for colours per mode.
 #' @param legendTitles Vector of strings stating the legend title per mode.
 #' @param xLabels Vector of strings stating the x-axis labels per mode.
@@ -31,6 +32,7 @@
 #'
 #' # Make plot
 #' plotPARAFACmodel(model, processedFujita,
+#'   numComponents = 3,
 #'   colourCols = c("", "Genus", ""),
 #'   legendTitles = c("", "Genus", ""),
 #'   xLabels = c("Replicate", "Feature index", "Time point"),
@@ -39,13 +41,23 @@
 #'   continuousModes = c(FALSE,FALSE,TRUE),
 #'   overallTitle = "Fujita PARAFAC model")
 #'
-plotPARAFACmodel = function(model, dataset, colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
+plotPARAFACmodel = function(model, dataset, numComponents, colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
+
   if(methods::is(model, "parafac")){
     model = convertModelFormat(model, list(dataset$mode1, dataset$mode2, dataset$mode3))
   }
+  else{
+    A = cbind(model[[1]], dataset$mode1)
+    colnames(A) = c(paste0("Component_", 1:ncol(model[[1]])), colnames(dataset$mode1))
+    B = cbind(model[[2]], dataset$mode2)
+    colnames(B) = c(paste0("Component_", 1:ncol(model[[2]])), colnames(dataset$mode2))
+    C = cbind(model[[3]], dataset$mode3)
+    colnames(C) = c(paste0("Component_", 1:ncol(model[[3]])), colnames(dataset$mode3))
+
+    model = list(A,B,C)
+  }
 
   stopifnot(methods::is(model,"list"))
-
   numModes = length(model)
 
   # Convert default settings to usable content.
@@ -120,7 +132,6 @@ plotPARAFACmodel = function(model, dataset, colourCols=NULL, legendTitles=NULL, 
     continuousModes = rep(FALSE, numModes)
   }
 
-  numComponents = ncol(model[[1]] %>% dplyr::select(dplyr::all_of(dplyr::starts_with("Component_"))))
   plotList = list()
   legends = list()
   empty = ggplot2::ggplot() + ggplot2::theme_void()

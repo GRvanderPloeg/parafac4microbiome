@@ -179,12 +179,22 @@ reinflateBlock = function(model){
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
 #'
-#' transformedA = transformPARAFACloadings(processedFujita, model, 1)
+#' transformedA = transformPARAFACloadings(model, 1)
 #' plot(transformedA[,1], transformedA[,2])
-transformPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FALSE){
-  A = model$A
-  B = model$B
-  C = model$C
+transformPARAFACloadings = function(model, modeToCorrect, moreOutput=FALSE){
+
+  # This function is purposefully generic about the class of model.
+  # It may be either a list of A, B, C or a parafac class object from multiway.
+  if(methods::is(model, "parafac")){
+    A = model$A
+    B = model$B
+    C = model$C
+  }
+  else{
+    A = as.matrix(model[[1]])
+    B = as.matrix(model[[2]])
+    C = as.matrix(model[[3]])
+  }
 
   if(modeToCorrect == 1){
     F = paramGUI::kroneckercol(C, B) %>% as.matrix()
@@ -223,7 +233,7 @@ transformPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FA
 #' @inheritParams plotPARAFACmodel
 #' @param prefix Prefix file name
 #' @param path Path to a folder
-#' @param saveRDS Save an RDS of the PARAFAC model object? (true/false, default=FALSE)
+#' @param saveRDS Save an RDS of the PARAFAC model object? (true/false, default=TRUE)
 #'
 #' @return Saves mode1, mode2, mode3, input data, modelled data, and data as modelled per component in .csv files.
 #' @export
@@ -240,10 +250,10 @@ transformPARAFACloadings = function(dataset, model, modeToCorrect, moreOutput=FA
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
 #' \dontrun{
-#' exportPARAFAC(model, processedFujita, prefix="Fujita_")
+#' exportPARAFAC(model, processedFujita, prefix="Fujita")
 #' }
 #'
-exportPARAFAC = function(model, dataset, prefix="PARAFACmodel_", path="./", saveRDS=FALSE){
+exportPARAFAC = function(model, dataset, prefix="PARAFACmodel", path="./", saveRDS=FALSE){
   stopifnot(methods::is(model, "parafac"))
 
   A = model$A
@@ -255,7 +265,7 @@ exportPARAFAC = function(model, dataset, prefix="PARAFACmodel_", path="./", save
   mode2 = cbind(B, dataset$mode2) %>% dplyr::as_tibble()
   mode3 = cbind(C, dataset$mode3) %>% dplyr::as_tibble()
   input = dataset$data
-  model = reinflateBlock(model)
+  modelledData = reinflateBlock(model)
 
   components = list()
   for(f in 1:numComponents){
@@ -266,14 +276,14 @@ exportPARAFAC = function(model, dataset, prefix="PARAFACmodel_", path="./", save
     components[[f]] = reinflateBlock(fakeModel)
   }
 
-  utils::write.table(mode1, paste0(path,prefix,"_mode1.csv"), sep=",", row.names=FALSE, col.names=FALSE)
-  utils::write.table(mode2, paste0(path,prefix,"_mode2.csv"), sep=",", row.names=FALSE, col.names=FALSE)
-  utils::write.table(mode3, paste0(path,prefix,"_mode3.csv"), sep=",", row.names=FALSE, col.names=FALSE)
-  utils::write.table(input, paste0(path,prefix,"_input.csv"), sep=",", row.names=FALSE, col.names=FALSE)
-  utils::write.table(model, paste0(path,prefix,"_model.csv"), sep=",", row.names=FALSE, col.names=FALSE)
+  utils::write.table(mode1, paste0(path,prefix,"_mode1.csv"), sep=",", row.names=FALSE, col.names=TRUE)
+  utils::write.table(mode2, paste0(path,prefix,"_mode2.csv"), sep=",", row.names=FALSE, col.names=TRUE)
+  utils::write.table(mode3, paste0(path,prefix,"_mode3.csv"), sep=",", row.names=FALSE, col.names=TRUE)
+  utils::write.table(input, paste0(path,prefix,"_input.csv"), sep=",", row.names=FALSE, col.names=TRUE)
+  utils::write.table(modelledData, paste0(path,prefix,"_modelledData.csv"), sep=",", row.names=FALSE, col.names=TRUE)
 
   for(i in 1:length(components)){
-    utils::write.table(components[[i]], paste0(path,prefix,"_component_",i,".csv"), sep=",", row.names=FALSE, col.names=FALSE)
+    utils::write.table(components[[i]], paste0(path,prefix,"_component_",i,".csv"), sep=",", row.names=FALSE, col.names=TRUE)
   }
 
   if(saveRDS == TRUE){
@@ -285,6 +295,9 @@ exportPARAFAC = function(model, dataset, prefix="PARAFACmodel_", path="./", save
 #'
 #' @inheritParams exportPARAFAC
 #' @param numComponents Number of components in the model
+#' @param sep Separator character for the input files (default=",")
+#' @param header Expect headers in the csv files (default=TRUE)
+#' @param loadRDS Load a previously saved RDS object of the model (default=TRUE)
 #'
 #' @return List of: the PARAFAC model, the dataset used, the data as modelled
 #' @export
@@ -305,20 +318,26 @@ exportPARAFAC = function(model, dataset, prefix="PARAFACmodel_", path="./", save
 #' importedModel = importPARAFAC(path="./", prefix="Fujita_", numComponents=2)
 #' }
 #'
-importPARAFAC = function(path, prefix, numComponents){
-  mode1 = utils::read.csv(paste0(path,prefix,"_mode1.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
-  mode2 = utils::read.csv(paste0(path,prefix,"_mode2.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
-  mode3 = utils::read.csv(paste0(path,prefix,"_mode3.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
-  input = utils::read.csv(paste0(path,prefix,"_input.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
-  modelledData = utils::read.csv(paste0(path,prefix,"_model.csv", sep=",", header=FALSE)) %>% dplyr::as_tibble()
+importPARAFAC = function(path, prefix, numComponents, sep=",", loadRDS=TRUE, header=TRUE){
+  mode1 = utils::read.csv(paste0(path,prefix,"_mode1.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
+  mode2 = utils::read.csv(paste0(path,prefix,"_mode2.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
+  mode3 = utils::read.csv(paste0(path,prefix,"_mode3.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
+  input = utils::read.csv(paste0(path,prefix,"_input.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
+  modelledData = utils::read.csv(paste0(path,prefix,"_model.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
 
   components = list()
   for(i in 1:length(numComponents)){
-    component[[i]] = utils::read.csv(paste0(path,prefix,"_component_",i,".csv"), sep=",", header=FALSE) %>% dplyr::as_tibble()
+    components[[i]] = utils::read.csv(paste0(path,prefix,"_component_",i,".csv"), sep=sep, header=header) %>% dplyr::as_tibble()
   }
 
-  dataset = list("data"=input, "mode1"=mode1[,(numComponents+1):ncol(mode1)], "mode2"=mode2[,(numComponents+1):ncol(mode1)], "mode3"=mode3[,(numComponents+1):ncol(mode1)])
-  model = list("A"=mode1[,1:numComponents], "B"=mode2[,1:numComponents], "C"=mode3[,1:numComponents])
+  dataset = list("data"=input, "mode1"=mode1[,(numComponents+1):ncol(mode1)], "mode2"=mode2[,(numComponents+1):ncol(mode2)], "mode3"=mode3[,(numComponents+1):ncol(mode3)])
+
+  if(loadRDS){
+    model = readRDS(paste0(path,prefix,"_model.RDS"))
+  }
+  else{
+    model = list("A"=mode1[,1:numComponents], "B"=mode2[,1:numComponents], "C"=mode3[,1:numComponents])
+  }
 
   output = list("model"=model, "dataset"=dataset, "reconstructedData"=modelledData, "reconstructedPerComponent"=components)
 }

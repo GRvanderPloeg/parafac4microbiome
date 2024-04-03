@@ -106,7 +106,7 @@ finalModel = assessment$models[[numComponents]][[modelChoice]]
 Finally, we visualize the model using `plotPARAFACmodel()`.
 
 ```{r model plot}
-plotPARAFACmodel(finalModel, processedShao, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+plotPARAFACmodel(finalModel, processedShao, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Shao PARAFAC model")
 ```

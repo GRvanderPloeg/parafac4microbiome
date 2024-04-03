@@ -7,7 +7,7 @@
 parafac(
   X,
   nfac,
-  nstart = 10,
+  nstart = 1,
   const = NULL,
   control = NULL,
   Afixed = NULL,
@@ -40,7 +40,7 @@ parafac(
 
 \item{nfac}{Number of factors.}
 
-\item{nstart}{Number of random starts.}
+\item{nstart}{Number of random starts (default 1)}
 
 \item{const}{Character vector of length 3 or 4 giving the constraints for each mode (defaults to unconstrained). See \link[CMLS:const]{CMLS::const} for the 24 available options.}
 

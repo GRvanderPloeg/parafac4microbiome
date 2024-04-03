@@ -52,7 +52,7 @@ You can install the development version of `parafac4microbiome` from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("GRvanderPloeg/parafac4microbiome", build_vignettes = TRUE)
+devtools::install_github("GRvanderPloeg/parafac4microbiome")
 ```
 
 ## Citation
@@ -98,13 +98,14 @@ model = parafac(processedFujita$data, nfac=3, verbose=FALSE)
 
 # Plot the PARAFAC model using some metadata
 plotPARAFACmodel(model, processedFujita,
-  colourCols = c("", "Genus", ""),
-  legendTitles = c("", "Genus", ""),
-  xLabels = c("Replicate", "Feature index", "Time point"),
-  legendColNums = c(0,5,0),
-  arrangeModes = c(FALSE, TRUE, FALSE),
-  continuousModes = c(FALSE,FALSE,TRUE),
-  overallTitle = "Fujita PARAFAC model")
+                 numComponents = 3,
+                 colourCols = c("", "Genus", ""),
+                 legendTitles = c("", "Genus", ""),
+                 xLabels = c("Replicate", "Feature index", "Time point"),
+                 legendColNums = c(0,5,0),
+                 arrangeModes = c(FALSE, TRUE, FALSE),
+                 continuousModes = c(FALSE,FALSE,TRUE),
+                 overallTitle = "Fujita PARAFAC model")
 ```
 
 <img src="man/figures/README-usage-1.png" width="100%" />

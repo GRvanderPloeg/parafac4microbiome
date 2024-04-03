@@ -7,7 +7,7 @@
 exportPARAFAC(
   model,
   dataset,
-  prefix = "PARAFACmodel_",
+  prefix = "PARAFACmodel",
   path = "./",
   saveRDS = FALSE
 )
@@ -27,7 +27,7 @@ exportPARAFAC(
 
 \item{path}{Path to a folder}
 
-\item{saveRDS}{Save an RDS of the PARAFAC model object? (true/false, default=FALSE)}
+\item{saveRDS}{Save an RDS of the PARAFAC model object? (true/false, default=TRUE)}
 }
 \value{
 Saves mode1, mode2, mode3, input data, modelled data, and data as modelled per component in .csv files.
@@ -47,7 +47,7 @@ set.seed(0)
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
 \dontrun{
-exportPARAFAC(model, processedFujita, prefix="Fujita_")
+exportPARAFAC(model, processedFujita, prefix="Fujita")
 }
 
 }

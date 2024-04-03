@@ -107,7 +107,7 @@ finalModel = assessment$models[[numComponents]][[modelChoice]]
 Finally, we visualize the model using `plotPARAFACmodel()`.
 
 ```{r model plot}
-plotPARAFACmodel(finalModel, processedFujita, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+plotPARAFACmodel(finalModel, processedFujita, 3, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Fujita PARAFAC model")
 ```

@@ -138,17 +138,66 @@ test_that("reinflateBlock can deal with parafac objects", {
 test_that("Size of A is the same as the transformed version of A in transformPARAFACloadings", {
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
   model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$A), dim(transformPARAFACloadings(processedFujita, model, 1)))
+  expect_equal(dim(model$A), dim(transformPARAFACloadings(model, 1)))
 })
 
-test_that("Size of B is the same as the transformed version of A in transformPARAFACloadings", {
+test_that("transformPARAFACloadings changes A", {
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
   model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$B), dim(transformPARAFACloadings(processedFujita, model, 2)))
+
+  expect_false(identical(transformPARAFACloadings(model, 1), model$A))
 })
 
-test_that("Size of C is the same as the transformed version of A in transformPARAFACloadings", {
+test_that("Size of B is the same as the transformed version of B in transformPARAFACloadings", {
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
   model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$C), dim(transformPARAFACloadings(processedFujita, model, 3)))
+  expect_equal(dim(model$B), dim(transformPARAFACloadings(model, 2)))
+})
+
+test_that("transformPARAFACloadings changes B", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
+
+  expect_false(identical(transformPARAFACloadings(model, 2), model$B))
+})
+
+test_that("Size of C is the same as the transformed version of C in transformPARAFACloadings", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+  expect_equal(dim(model$C), dim(transformPARAFACloadings(model, 3)))
+})
+
+test_that("transformPARAFACloadings changes C", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+
+  expect_false(identical(transformPARAFACloadings(model, 3), model$C))
+})
+
+test_that("transformPARAFACloadings can deal with a PARAFAC object", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+  expect_equal(dim(model$C), dim(transformPARAFACloadings(model, 3)))
+})
+
+test_that("transformPARAFACloadings can deal with a list object", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+
+  model_as_list = list()
+  model_as_list[[1]] = model$A
+  model_as_list[[2]] = model$B
+  model_as_list[[3]] = model$C
+  expect_no_error(transformPARAFACloadings(model_as_list, 1))
+})
+
+test_that("transformPARAFACloadings can deal with a one-component model in a list", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
+
+  model_as_list = list()
+  model_as_list[[1]] = model$A
+  model_as_list[[2]] = model$B
+  model_as_list[[3]] = model$C
+  expect_no_error(transformPARAFACloadings(model_as_list, 1))
 })

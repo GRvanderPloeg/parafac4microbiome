@@ -95,6 +95,7 @@ For a full overview, please refer to the documentation of `plotPARAFACmodel()`.
 
 ```{r plotting}
 plotPARAFACmodel(model, processedFujita,
+  numComponents = 3,
   colourCols = c("", "Genus", ""),
   legendTitles = c("", "Genus", ""),
   xLabels = c("Replicate", "Feature index", "Time point"),

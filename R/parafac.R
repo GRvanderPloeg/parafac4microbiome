@@ -4,7 +4,7 @@
 #'
 #' @param X Three-way data array with dim=c(I,J,K) or four-way data array with dim=c(I,J,K,L). Missing data are allowed (see Note).
 #' @param nfac Number of factors.
-#' @param nstart Number of random starts.
+#' @param nstart Number of random starts (default 1)
 #' @param const Character vector of length 3 or 4 giving the constraints for each mode (defaults to unconstrained). See [CMLS::const] for the 24 available options.
 #' @param control List of parameters controlling options for smoothness constraints. This is passed to [multiway::const.control], which describes the available options.
 #' @param Afixed Used to fit model with fixed Mode A weights.
@@ -143,7 +143,7 @@
 #' pfac$C
 #' Cstruc
 #'
-parafac = function (X, nfac, nstart = 10, const = NULL, control = NULL,
+parafac = function (X, nfac, nstart = 1, const = NULL, control = NULL,
                     Afixed = NULL, Bfixed = NULL, Cfixed = NULL, Dfixed = NULL,
                     Astart = NULL, Bstart = NULL, Cstart = NULL, Dstart = NULL,
                     Astruc = NULL, Bstruc = NULL, Cstruc = NULL, Dstruc = NULL,
