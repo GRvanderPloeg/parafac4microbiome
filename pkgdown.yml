@@ -1,12 +1,12 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   Fujita2023_analysis: Fujita2023_analysis.html
   PARAFAC_introduction: PARAFAC_introduction.html
   Shao2019_analysis: Shao2019_analysis.html
   vanderPloeg2024_analysis: vanderPloeg2024_analysis.html
-last_built: 2024-04-03T10:52Z
+last_built: 2024-04-25T12:53Z
 urls:
   reference: https://grvanderploeg.github.io/parafac4microbiome/reference
   article: https://grvanderploeg.github.io/parafac4microbiome/articles
