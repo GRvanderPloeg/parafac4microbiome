@@ -5,10 +5,10 @@
 \title{Transform PARAFAC loadings to an orthonormal basis.
 Note: this function only works for 3-way PARAFAC models.}
 \usage{
-transformPARAFACloadings(model, modeToCorrect, moreOutput = FALSE)
+transformPARAFACloadings(Fac, modeToCorrect, moreOutput = FALSE)
 }
 \arguments{
-\item{model}{Model output from \code{\link[=parafac]{parafac()}}.}
+\item{Fac}{Fac object from a PARAFAC object, see \code{\link[=parafac]{parafac()}}.}
 
 \item{modeToCorrect}{Correct the subject (1), feature (2) or time mode (3).}
 
@@ -22,17 +22,7 @@ Transform PARAFAC loadings to an orthonormal basis.
 Note: this function only works for 3-way PARAFAC models.
 }
 \examples{
-library(multiway)
-library(dplyr)
-library(ggplot2)
-library(paramGUI)
-library(pracma)
-set.seed(0)
-
-# Make PARAFAC model
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-
-transformedA = transformPARAFACloadings(model, 1)
-plot(transformedA[,1], transformedA[,2])
+transformedA = transformPARAFACloadings(model$Fac, 1)
 }

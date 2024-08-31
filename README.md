@@ -67,27 +67,6 @@ Please use the following citation when using this package:
 
 ``` r
 library(parafac4microbiome)
-library(multiway)
-#> Loading required package: CMLS
-#> Loading required package: quadprog
-#> Loading required package: parallel
-#> 
-#> Attaching package: 'multiway'
-#> The following objects are masked from 'package:parafac4microbiome':
-#> 
-#>     corcondia, parafac
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.3.3
-library(ggpubr)
 set.seed(0) # for reproducibility
 
 # Process the data cube
@@ -97,7 +76,7 @@ processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, 
 model = parafac(processedFujita$data, nfac=3, verbose=FALSE)
 
 # Plot the PARAFAC model using some metadata
-plotPARAFACmodel(model, processedFujita,
+plotPARAFACmodel(model$Fac, processedFujita,
                  numComponents = 3,
                  colourCols = c("", "Genus", ""),
                  legendTitles = c("", "Genus", ""),

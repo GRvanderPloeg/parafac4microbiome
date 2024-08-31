@@ -53,7 +53,7 @@ maxNumComponents = 3
 numRepetitions = 5 # number of randomly initialized models
 numFolds = 5 # number of jack-knifed models
 maxit = 200
-ctol= 1e-4 # this is a really bad setting but is needed to save computational time
+ctol= 1e-6 #1e-4 this is a really bad setting but is needed to save computational time
 numCores = 1
 
 colourCols = c("Delivery_mode", "phylum", "")
@@ -106,7 +106,7 @@ finalModel = assessment$models[[numComponents]][[modelChoice]]
 Finally, we visualize the model using `plotPARAFACmodel()`.
 
 ```{r model plot}
-plotPARAFACmodel(finalModel, processedShao, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+plotPARAFACmodel(finalModel$Fac, processedShao, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Shao PARAFAC model")
 ```

@@ -2,20 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{reinflateBlock}
 \alias{reinflateBlock}
-\title{Reconstruct the data cube based on a PARAFAC model.}
+\title{Reconstruct the data cube based on a PARAFAC model.
+DEPRECATED: use \code{\link[=reinflateTensor]{reinflateTensor()}} instead.}
 \usage{
-reinflateBlock(model)
+reinflateBlock(Fac)
 }
 \arguments{
-\item{model}{Model output from \code{\link[=parafac]{parafac()}}.}
+\item{Fac}{Fac object containing the components from a PARAFAC model, see \code{\link[=parafac]{parafac()}}.}
 }
 \value{
 Multi-way array of the reconstructed data.
 }
 \description{
-Note: currently only works for three-way data.
+Reconstruct the data cube based on a PARAFAC model.
+DEPRECATED: use \code{\link[=reinflateTensor]{reinflateTensor()}} instead.
 }
 \examples{
 model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
-reinflatedData = reinflateBlock(model)
+reinflatedData = reinflateBlock(model$Fac)
 }

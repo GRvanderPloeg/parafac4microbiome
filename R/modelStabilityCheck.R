@@ -104,8 +104,8 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
     mask = 1:nrow(X) %in% samplesToRemove[[i]]
     temp = matrix(0L, nrow(X), numComponents)
     temp[mask,] = NA
-    temp[!mask,] = model$A
-    model$A = temp
+    temp[!mask,] = model$Fac[[1]]
+    model$Fac[[1]] = temp
 
     models[[i]] = model
   }
@@ -115,9 +115,9 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
   B = list()
   C = list()
   for(i in 1:numComponents){
-    A[[i]] = simplify2array(lapply(models, function(x){x$A[,i]}))
-    B[[i]] = simplify2array(lapply(models, function(x){x$B[,i]}))
-    C[[i]] = simplify2array(lapply(models, function(x){x$C[,i]}))
+    A[[i]] = simplify2array(lapply(models, function(x){x$Fac[[1]][,i]}))
+    B[[i]] = simplify2array(lapply(models, function(x){x$Fac[[2]][,i]}))
+    C[[i]] = simplify2array(lapply(models, function(x){x$Fac[[3]][,i]}))
   }
 
   # Fix the issue where randomly some components/modes have flipped signs

@@ -48,8 +48,8 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
 
     numIterations[,f] = sapply(models, function(model){model$iter})
     SSE[,f] = sapply(models, function(model){model$SSE})
-    CORCONDIA[,f] = sapply(models, function(model){corcondia(X, model)})
-    varExp[,f] = sapply(models, function(model){model$Rsq*100})
+    CORCONDIA[,f] = sapply(models, function(model){corcondia(X, model$Fac)})
+    varExp[,f] = sapply(models, function(model){model$varExp})
     allModels[[f]] = models
 
     TCC[[f]] = array(rep(0, f*f*numRepetitions*numModes), dim=c(f,f,numRepetitions,numModes))
@@ -57,9 +57,8 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
       for(j in 1:f){
         for(k in 1:f){
           for(l in 1:numRepetitions){
-            model = models[[l]]
-            convertedModel = convertModelFormat(model)
-            TCC[[f]][j,k,l,i] = multiway::congru(convertedModel[[i]][,j], convertedModel[[i]][,k])
+            model = models[[l]]$Fac
+            TCC[[f]][j,k,l,i] = multiway::congru(model[[i]][,j], model[[i]][,k])
           }
         }
       }

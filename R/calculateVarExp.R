@@ -1,7 +1,6 @@
 #' Calculate the variation explained by a PARAFAC model.
 #'
-#'
-#' @param model PARAFAC model output from the [parafac4microbiome::parafac()] function.
+#' @param Fac Fac object output from the [parafac()] function.
 #' @param X Input data of the PARAFAC model.
 #'
 #' @return The variation explained by the model, expressed as a fraction (between 0-1).
@@ -10,11 +9,11 @@
 #' @examples
 #' X = Fujita2023$data
 #' model = parafac(X, nfac=1, nstart=1, verbose=FALSE)
-#' calculateVarExp(model, X)
-calculateVarExp = function(model, X){
-  Xhat = reinflateBlock(model)
+#' calculateVarExp(model$Fac, X)
+calculateVarExp = function(Fac, X){
+  Xhat = reinflateBlock(Fac)
   # Replace imputed values with NA to avoid incorrect calculation
   Xhat[is.na(X)] = NA
-  varExp = multiway::sumsq(Xhat, na.rm=TRUE) / multiway::sumsq(X, na.rm=TRUE)
+  varExp = sumsqr(Xhat, na.rm=TRUE) / sumsqr(X, na.rm=TRUE)
   return(varExp)
 }

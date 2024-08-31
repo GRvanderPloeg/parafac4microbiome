@@ -4,10 +4,10 @@
 \alias{calculateVarExp}
 \title{Calculate the variation explained by a PARAFAC model.}
 \usage{
-calculateVarExp(model, X)
+calculateVarExp(Fac, X)
 }
 \arguments{
-\item{model}{PARAFAC model output from the \code{\link[=parafac]{parafac()}} function.}
+\item{Fac}{Fac object output from the \code{\link[=parafac]{parafac()}} function.}
 
 \item{X}{Input data of the PARAFAC model.}
 }
@@ -20,5 +20,5 @@ Calculate the variation explained by a PARAFAC model.
 \examples{
 X = Fujita2023$data
 model = parafac(X, nfac=1, nstart=1, verbose=FALSE)
-calculateVarExp(model, X)
+calculateVarExp(model$Fac, X)
 }

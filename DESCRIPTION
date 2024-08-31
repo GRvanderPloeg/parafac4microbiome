@@ -23,8 +23,10 @@ Imports:
     parallel,
     paramGUI,
     pracma,
+    rTensor,
     stats,
     tidyr,
+    utils,
     vctrs
 Depends: 
     R (>= 2.10)

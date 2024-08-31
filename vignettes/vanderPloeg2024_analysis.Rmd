@@ -106,6 +106,6 @@ finalModel = assessment$models[[numComponents]][[modelChoice]]
 Finally, we visualize the model using `plotPARAFACmodel()`.
 
 ```{r model plot}
-plotPARAFACmodel(finalModel, processedPloeg, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+plotPARAFACmodel(finalModel$Fac, processedPloeg, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
   overallTitle = "vanderPloeg2024 PARAFAC model")
 ```

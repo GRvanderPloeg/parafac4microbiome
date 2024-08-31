@@ -99,68 +99,24 @@ repairLoadings = function(A, B, C, evidenceMatrix){
 }
 
 #' Reconstruct the data cube based on a PARAFAC model.
+#' DEPRECATED: use [reinflateTensor()] instead.
 #'
-#' Note: currently only works for three-way data.
-#' @inheritParams plotPARAFACmodel
+#' @param Fac Fac object containing the components from a PARAFAC model, see [parafac()].
 #'
 #' @return Multi-way array of the reconstructed data.
 #' @export
 #'
 #' @examples
 #' model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
-#' reinflatedData = reinflateBlock(model)
-reinflateBlock = function(model){
-
-  if(methods::is(model, "parafac")){
-    loadingVectors = list()
-    numComponents = ncol(model$A)
-    numModes = length(model$const)
-
-    loadingVectors[[1]] = model$A
-    loadingVectors[[2]] = model$B
-    loadingVectors[[3]] = model$C
-    if(numModes == 4){
-      loadingVectors[[4]] = model$D
-    }
-
-    model = loadingVectors
-  }
-  stopifnot(class(model) == "list")
-  stopifnot(length(unique(unlist(lapply(model, ncol)))) == 1) # number of components should be equal in all modes
-
-  numComponents = unique(unlist(lapply(model, ncol)))
-  dimX = unlist(lapply(model, nrow))
-
-  M = array(0L, dimX)
-
-  # Two-way
-  if(length(model) == 2){
-    for(i in 1:numComponents){
-      A = matrix(model[[1]][,i])
-      B = matrix(model[[2]][,i])
-      M = M + array(tcrossprod(A, B), dimX)
-    }
-  }
-  # Three-way
-  else if(length(model) == 3){
-    for(i in 1:numComponents){
-      A = matrix(model[[1]][,i])
-      B = matrix(model[[2]][,i])
-      C = matrix(model[[3]][,i])
-      M = M + array(tcrossprod(A, multiway::krprod(C, B)), dimX)
-    }
-  }
-  else{
-    stop("reinflateBlock cannot deal with 5-way or higher order arrays.")
-  }
-
-  return(M)
+#' reinflatedData = reinflateBlock(model$Fac)
+reinflateBlock = function(Fac){
+  return(reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]]))
 }
 
 #' Transform PARAFAC loadings to an orthonormal basis.
 #' Note: this function only works for 3-way PARAFAC models.
 #'
-#' @inheritParams plotPARAFACmodel
+#' @param Fac Fac object from a PARAFAC object, see [parafac()].
 #' @param modeToCorrect Correct the subject (1), feature (2) or time mode (3).
 #' @param moreOutput Give orthonormal basis and transformation matrices as part of output (default FALSE).
 #'
@@ -168,33 +124,14 @@ reinflateBlock = function(model){
 #' @export
 #'
 #' @examples
-#' library(multiway)
-#' library(dplyr)
-#' library(ggplot2)
-#' library(paramGUI)
-#' library(pracma)
-#' set.seed(0)
-#'
-#' # Make PARAFAC model
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-#'
-#' transformedA = transformPARAFACloadings(model, 1)
-#' plot(transformedA[,1], transformedA[,2])
-transformPARAFACloadings = function(model, modeToCorrect, moreOutput=FALSE){
+#' transformedA = transformPARAFACloadings(model$Fac, 1)
+transformPARAFACloadings = function(Fac, modeToCorrect, moreOutput=FALSE){
 
-  # This function is purposefully generic about the class of model.
-  # It may be either a list of A, B, C or a parafac class object from multiway.
-  if(methods::is(model, "parafac")){
-    A = model$A
-    B = model$B
-    C = model$C
-  }
-  else{
-    A = as.matrix(model[[1]])
-    B = as.matrix(model[[2]])
-    C = as.matrix(model[[3]])
-  }
+  A = as.matrix(Fac[[1]])
+  B = as.matrix(Fac[[2]])
+  C = as.matrix(Fac[[3]])
 
   if(modeToCorrect == 1){
     F = paramGUI::kroneckercol(C, B) %>% as.matrix()
@@ -340,4 +277,57 @@ importPARAFAC = function(path, prefix, numComponents, sep=",", loadRDS=TRUE, hea
   }
 
   output = list("model"=model, "dataset"=dataset, "reconstructedData"=modelledData, "reconstructedPerComponent"=components)
+}
+
+#' Create a tensor out of a set of matrices similar to a component model.
+#'
+#' @param A I x N matrix corresponding to loadings in the first mode for N components.
+#' @param B J x N matrix corresponding to loadings in the second mode for N components.
+#' @param C K x N matrix corresponding to loadings in the third mode for N components.
+#'
+#' @return M, an I x J x K tensor.
+#' @export
+#'
+#' @examples
+#' A = rnorm(108)
+#' B = rnorm(100)
+#' C = rnorm(10)
+#' M = reinflateTensor(A,B,C)
+reinflateTensor = function(A, B, C){
+
+  # Try to cast to matrix if the input is different
+  if(!methods::is(A, "matrix")){
+    A = as.matrix(A)
+  }
+  if(!methods::is(B, "matrix")){
+    B = as.matrix(B)
+  }
+  if(!methods::is(C, "matrix")){
+    C = as.matrix(C)
+  }
+
+  M = array(tcrossprod(A, multiway::krprod(C, B)), c(nrow(A), nrow(B), nrow(C)))
+  return(M)
+}
+
+#' Sum-of-squares calculation
+#'
+#' @param X Either a list containing matrices, or a matrix of values.
+#' @param na.rm Remove NAs from calculation (default FALSE).
+#'
+#' @return sum-of-squares of the object
+#' @export
+#'
+#' @examples
+#' X = array(rnorm(108*100*10), c(108,100,10))
+#' ssq = sumsqr(X)
+sumsqr = function(X, na.rm=FALSE){
+
+  if(methods::is(X, "list")){
+    result = sum(sapply(X, sumsqr, na.rm=na.rm)) # recursive to iterate over list
+  } else{
+    result = sum(X^2, na.rm=na.rm)
+  }
+
+  return(result)
 }
