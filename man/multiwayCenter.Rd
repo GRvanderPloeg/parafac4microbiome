@@ -4,18 +4,18 @@
 \alias{multiwayCenter}
 \title{Center a multi-way array}
 \usage{
-multiwayCenter(cube, mode = 1)
+multiwayCenter(X, mode = 1)
 }
 \arguments{
-\item{cube}{Multi-way array}
+\item{X}{Multi-way array}
 
-\item{mode}{Mode to center across: 1=subjects,2=features,3=time (default 1).}
+\item{mode}{Mode to center across (default 1).}
 }
 \value{
 Centered multi-way array
 }
 \description{
-Note: this function exists because \code{\link[multiway:ncenter]{multiway::ncenter()}} cannot handle NAs.
+Center a multi-way array
 }
 \examples{
 cube_cnt = multiwayCenter(Fujita2023$data)

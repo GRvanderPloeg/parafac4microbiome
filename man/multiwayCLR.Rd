@@ -4,10 +4,12 @@
 \alias{multiwayCLR}
 \title{Perform a centered log-ratio transform over a multi-way array}
 \usage{
-multiwayCLR(cube)
+multiwayCLR(X, pseudocount = 1)
 }
 \arguments{
-\item{cube}{Multi-way array of counts}
+\item{X}{Multi-way array of counts}
+
+\item{pseudocount}{Pseudocount value to use (default 1).}
 }
 \value{
 CLRed cube

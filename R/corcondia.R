@@ -1,3 +1,15 @@
+#' Core Consistency Diagnostic (CORCONDIA) calculation
+#'
+#' @param X Input data matrix
+#' @param Fac PARAFAC model Fac object
+#'
+#' @return Scalar of the CORCONDIA value
+#' @export
+#'
+#' @examples
+#' X = Fujita2023$data
+#' model = parafac(X, 2)
+#' corcondia(X, model$Fac)
 corcondia = function (X, Fac)
 {
   numComponents = ncol(Fac[[1]])
@@ -14,7 +26,7 @@ corcondia = function (X, Fac)
   g = tcrossprod(pracma::pinv(Fac[[1]]) %*% matrix(X, nrow=nrow(Fac[[1]])), kronecker(pracma::pinv(Fac[[3]]), pracma::pinv(Fac[[2]])))
   G = array(g, dim = rep(numComponents,3))
 
-  # Make create ideal G with super-diagonal of 1
+  # Create ideal G with super-diagonal of 1
   super = array(0, dim = rep(numComponents,3))
   for(k in 1:numComponents){
     super[k,k,k] = 1

@@ -3,17 +3,17 @@ test_that("Output size is equal to input size", {
   expect_equal(dim(cube_scl), dim(Fujita2023$data))
 })
 
-test_that("Mode 1 is centered correctly", {
+test_that("Mode 1 is scaled correctly", {
   cube_scl = multiwayScale(Fujita2023$data, mode=1)
   expect_equal(sd(cube_scl[1,,]), 1)
 })
 
-test_that("Mode 2 is centered correctly", {
+test_that("Mode 2 is scaled correctly", {
   cube_scl = multiwayScale(Fujita2023$data, mode=2)
   expect_equal(sd(cube_scl[,1,]), 1)
 })
 
-test_that("Mode 3 is centered correctly", {
+test_that("Mode 3 is scaled correctly", {
   cube_scl = multiwayScale(Fujita2023$data, mode=3)
   expect_equal(sd(cube_scl[,,1]), 1)
 })

@@ -1,51 +1,3 @@
-convertModelFormat = function(model, metadataPerMode=list()){
-  stopifnot(class(model) == "parafac")
-  stopifnot(class(metadataPerMode) == "list")
-
-  numModes = length(model$const)
-  numComponents = ncol(model$A)
-
-  # Convert model object to list for easy iterative access
-  if(numModes == 3){
-    listedModel = list(model$A, model$B, model$C)
-  }
-  if(numModes == 4){
-    listedModel = list(model$A, model$B, model$C, model$D)
-  }
-
-  # Check if the metadata per mode makes sense
-  useMetadata = rep(FALSE, numModes)
-  if(length(metadataPerMode) != 0){
-    for(i in 1:numModes){
-      loadings = listedModel[[i]]
-      metadata = metadataPerMode[[i]]
-
-      if(is.null(nrow(metadata))){
-        warning(paste0("Metadata table of mode ", i, " does not match the model."))
-      } else if(nrow(loadings) != nrow(metadata)){
-        warning(paste0("Metadata table of mode ", i, " does not match the model."))
-      } else{
-        useMetadata[i] = TRUE
-      }
-    }
-  }
-
-  # Convert format
-  result = list()
-  for(i in 1:numModes){
-    if(useMetadata[i] == TRUE){
-      result[[i]] = cbind(listedModel[[i]], metadataPerMode[[i]]) %>% dplyr::as_tibble()
-      colnames(result[[i]]) = c(paste0("Component_", 1:numComponents), colnames(metadataPerMode[[i]]))
-    }
-    else{
-      result[[i]] = listedModel[[i]] %>% dplyr::as_tibble(.name_repair = ~ vctrs::vec_as_names(..., repair = "unique", quiet=TRUE))
-      colnames(result[[i]]) = paste0("Component_", 1:numComponents)
-    }
-  }
-
-  return(result)
-}
-
 checkForFlippedLoadings = function(loadingMatrix){
 
   numRepetitions = ncol(loadingMatrix)
@@ -70,7 +22,7 @@ checkForFlippedLoadings = function(loadingMatrix){
 }
 
 repairLoadings = function(A, B, C, evidenceMatrix){
-  # TODO: not robust towards 4 modes
+
   loadingsList = list(A, B, C)
   numRepetitions = ncol(A)
   numModes = length(loadingsList)
@@ -96,21 +48,6 @@ repairLoadings = function(A, B, C, evidenceMatrix){
   }
 
   return(repairedLoadingsList)
-}
-
-#' Reconstruct the data cube based on a PARAFAC model.
-#' DEPRECATED: use [reinflateTensor()] instead.
-#'
-#' @param Fac Fac object containing the components from a PARAFAC model, see [parafac()].
-#'
-#' @return Multi-way array of the reconstructed data.
-#' @export
-#'
-#' @examples
-#' model = parafac(Fujita2023$data, nfac=1, nstart=1, verbose=FALSE)
-#' reinflatedData = reinflateBlock(model$Fac)
-reinflateBlock = function(Fac){
-  return(reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]]))
 }
 
 #' Transform PARAFAC loadings to an orthonormal basis.
@@ -202,7 +139,7 @@ exportPARAFAC = function(model, dataset, prefix="PARAFACmodel", path="./", saveR
   mode2 = cbind(B, dataset$mode2) %>% dplyr::as_tibble()
   mode3 = cbind(C, dataset$mode3) %>% dplyr::as_tibble()
   input = dataset$data
-  modelledData = reinflateBlock(model)
+  modelledData = reinflateTensor(model$Fac[[1]], model$Fac[[2]], model$Fac[[3]])
 
   components = list()
   for(f in 1:numComponents){
@@ -210,7 +147,7 @@ exportPARAFAC = function(model, dataset, prefix="PARAFACmodel", path="./", saveR
     fakeB = matrix(B[,f])
     fakeC = matrix(C[,f])
     fakeModel = list(fakeA, fakeB, fakeC)
-    components[[f]] = reinflateBlock(fakeModel)
+    components[[f]] = reinflateTensor(fakeModel[[1]], fakeModel[[2]], fakeModel[[3]])
   }
 
   utils::write.table(mode1, paste0(path,prefix,"_mode1.csv"), sep=",", row.names=FALSE, col.names=TRUE)
@@ -342,4 +279,37 @@ sumsqr = function(X, na.rm=FALSE){
   }
 
   return(result)
+}
+
+calcVarExpPerComponent = function(Fac, X){
+  if(methods::is(X, "Tensor")){
+    X = X@data
+  }
+
+  Fac = lapply(Fac, as.matrix) # protection from the 1-component case
+  numComponents = ncol(Fac[[1]])
+  numModes = length(Fac)
+
+  varExpsPerComp = rep(0, numComponents)
+  for(i in 1:numComponents){
+    compFac = list()
+    for(j in 1:numModes){
+      compFac[[j]] = Fac[[j]][,i]
+    }
+    varExpsPerComp[i] = calculateVarExp(compFac, X) * 100
+  }
+
+  return(varExpsPerComp)
+}
+
+sortComponents = function(Fac, X){
+  numModes = length(Fac)
+  varExpsPerComp = calcVarExpPerComponent(Fac, X)
+  sorting = sort(varExpsPerComp, decreasing=TRUE, index.return=TRUE)$ix
+
+  for(i in 1:numModes){
+    Fac[[i]] = Fac[[i]][,sorting]
+  }
+
+  return(Fac)
 }

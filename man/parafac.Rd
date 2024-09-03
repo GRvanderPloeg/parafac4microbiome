@@ -12,7 +12,8 @@ parafac(
   ctol = 1e-04,
   initialization = "random",
   verbose = FALSE,
-  output = "best"
+  output = "best",
+  sortComponents = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ parafac(
 \item{verbose}{DEPRECATED: verbose output}
 
 \item{output}{String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").}
+
+\item{sortComponents}{Boolean to sort the components based on their variance explained (default FALSE)}
 }
 \value{
 List object of the PARAFAC model or models.

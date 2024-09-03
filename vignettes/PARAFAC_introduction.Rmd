@@ -23,7 +23,6 @@ Welcome to the `parafac4microbiome` R package! In this vignette we explain the d
 
 ```{r setup}
 library(parafac4microbiome)
-library(multiway)
 library(dplyr)
 library(ggplot2)
 ```
@@ -72,13 +71,13 @@ The processed data is ready to be modelled using Parallel Factor Analysis. Here 
 set.seed(0) # for reproducibility
 model = parafac(processedFujita$data, nfac=3, verbose=FALSE)
 
-head(model$A)
-head(model$B)
-head(model$C)
-model$Rsq
+head(model$Fac[[1]])
+head(model$Fac[[2]])
+head(model$Fac[[3]])
+model$varExp
 ```
 
-This model explains `r model$Rsq*100` percent of the variation in the processed data cube.
+This model explains `r model$varExp` percent of the variation in the processed data cube.
 
 ## Plotting a PARAFAC model
 We have implemented the `plotPARAFACmodel()` function to allow the user full control over how they want to visualize their model. As such, there are a lot of plotting options that can be used, which you can see below. A brief overview:
@@ -94,7 +93,7 @@ We have implemented the `plotPARAFACmodel()` function to allow the user full con
 For a full overview, please refer to the documentation of `plotPARAFACmodel()`.
 
 ```{r plotting}
-plotPARAFACmodel(model, processedFujita,
+plotPARAFACmodel(model$Fac, processedFujita,
   numComponents = 3,
   colourCols = c("", "Genus", ""),
   legendTitles = c("", "Genus", ""),

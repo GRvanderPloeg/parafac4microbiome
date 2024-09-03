@@ -1,8 +1,6 @@
 #' Scale a multi-way array
 #'
-#' Note: this function exists because [multiway::nscale()] cannot handle NAs.
-#'
-#' @param cube Multi-way array
+#' @param X Multi-way array
 #' @param mode Mode to scale within: 1=subjects,2=features,3=time (default 2).
 #'
 #' @return Scaled multi-way array
@@ -10,28 +8,15 @@
 #'
 #' @examples
 #' cube_scl = multiwayCenter(Fujita2023$data)
-multiwayScale = function(cube, mode=2){
-  I = dim(cube)[1]
-  J = dim(cube)[2]
-  K = dim(cube)[3]
+multiwayScale = function(X, mode=2){
 
-  cube_scl = array(0L, dim=c(I,J,K))
-
-  if(mode == 1){      # Scale within subject mode
-    for(i in 1:I){
-        cube_scl[i,,] = cube[i,,] / stats::sd(cube[i,,], na.rm=TRUE)
-    }
-  }
-  else if(mode == 2){ # Scale within feature mode
-    for(j in 1:J){
-      cube_scl[,j,] = cube[,j,] / stats::sd(cube[,j,], na.rm=TRUE)
-    }
-  }
-  else if(mode == 3){ # Scale within "time" mode
-    for(k in 1:K){
-        cube_scl[,,k] = cube[,,k] / stats::sd(cube[,,k], na.rm=TRUE)
-    }
+  if(!methods::is(X, "Tensor")){
+    X = rTensor::as.tensor(X)
   }
 
-  return(cube_scl)
+  unfoldedX = rTensor::k_unfold(X, mode)@data
+  stds = apply(unfoldedX, 1, function(x){stats::sd(x, na.rm=TRUE)})
+  unfoldedX_scl = sweep(unfoldedX, 1, stds, FUN="/")
+  X_scl = rTensor::k_fold(unfoldedX_scl, m=mode, modes=X@modes)
+  return(X_scl@data)
 }

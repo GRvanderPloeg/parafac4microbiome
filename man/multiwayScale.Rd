@@ -4,10 +4,10 @@
 \alias{multiwayScale}
 \title{Scale a multi-way array}
 \usage{
-multiwayScale(cube, mode = 2)
+multiwayScale(X, mode = 2)
 }
 \arguments{
-\item{cube}{Multi-way array}
+\item{X}{Multi-way array}
 
 \item{mode}{Mode to scale within: 1=subjects,2=features,3=time (default 2).}
 }
@@ -15,7 +15,7 @@ multiwayScale(cube, mode = 2)
 Scaled multi-way array
 }
 \description{
-Note: this function exists because \code{\link[multiway:nscale]{multiway::nscale()}} cannot handle NAs.
+Scale a multi-way array
 }
 \examples{
 cube_scl = multiwayCenter(Fujita2023$data)

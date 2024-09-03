@@ -43,19 +43,14 @@
 #'
 plotPARAFACmodel = function(model, dataset, numComponents, colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
 
-  if(methods::is(model, "parafac")){
-    model = convertModelFormat(model, list(dataset$mode1, dataset$mode2, dataset$mode3))
-  }
-  else{
-    A = cbind(model[[1]], dataset$mode1)
-    colnames(A) = c(paste0("Component_", 1:ncol(model[[1]])), colnames(dataset$mode1))
-    B = cbind(model[[2]], dataset$mode2)
-    colnames(B) = c(paste0("Component_", 1:ncol(model[[2]])), colnames(dataset$mode2))
-    C = cbind(model[[3]], dataset$mode3)
-    colnames(C) = c(paste0("Component_", 1:ncol(model[[3]])), colnames(dataset$mode3))
+  A = cbind(model[[1]], dataset$mode1)
+  colnames(A) = c(paste0("Component_", 1:ncol(model[[1]])), colnames(dataset$mode1))
+  B = cbind(model[[2]], dataset$mode2)
+  colnames(B) = c(paste0("Component_", 1:ncol(model[[2]])), colnames(dataset$mode2))
+  C = cbind(model[[3]], dataset$mode3)
+  colnames(C) = c(paste0("Component_", 1:ncol(model[[3]])), colnames(dataset$mode3))
 
-    model = list(A,B,C)
-  }
+  model = list(A,B,C)
 
   stopifnot(methods::is(model,"list"))
   numModes = length(model)

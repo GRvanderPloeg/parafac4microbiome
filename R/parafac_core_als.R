@@ -55,8 +55,6 @@ parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
     Fac[[1]][,n] = Fac[[1]][,n] * lambdas[n]
   }
 
-  # Prepare output: fac and loss
   model = list("Fac" = Fac, "fs" = fs[1:(iteration-1)])
-
   return(model)
 }

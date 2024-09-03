@@ -8,6 +8,7 @@
 #' @param initialization "Random" for randomly initialized input vectors or "nvec" for svd-based best guess.
 #' @param verbose DEPRECATED: verbose output
 #' @param output String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").
+#' @param sortComponents Boolean to sort the components based on their variance explained (default FALSE)
 #'
 #' @return List object of the PARAFAC model or models.
 #' @export
@@ -15,7 +16,7 @@
 #' @examples
 #' X = array(rnorm(108*100*10), c(108,100,10))
 #' model = parafac(X, 2)
-parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, initialization="random", verbose=FALSE, output="best"){
+parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, initialization="random", verbose=FALSE, output="best", sortComponents=FALSE){
 
   if(methods::is(Tensor,"Tensor")){
     Tensor = Tensor@data
@@ -48,6 +49,10 @@ parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, initialization=
     models[[i]]$SSE = sumsqr((Tensor - Xhat)@data)
     models[[i]]$varExp = (sumsqr(Xhat@data) / sumsqr(Tensor@data)) * 100
     models[[i]]$init = inits[[i]]
+
+    if(sortComponents == TRUE){
+      models[[i]]$Fac = sortComponents(models[[i]]$Fac, Tensor)
+    }
   }
 
   # Return all models if specified, otherwise return only the best model
