@@ -14,7 +14,8 @@
 #' B = array(rnorm(100*2), c(100,2))
 #' C = array(rnorm(10*2), c(10,2))
 #' Tensor = reinflateTensor(A, B, C)
-#' model = parafac_core_als(Tensor,2)
+#' init = initializePARAFAC(Tensor, 2)
+#' model = parafac_core_als(Tensor, 2, init)
 parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
 
   if(!methods::is(Tensor,"Tensor")){

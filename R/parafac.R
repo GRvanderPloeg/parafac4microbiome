@@ -5,6 +5,7 @@
 #' @param nstart Number of models to randomly initialize (default 1).
 #' @param maxit Maximum number of iterations allowed without convergence (default 500).
 #' @param ctol Relative change in loss tolerated to call the algorithm converged (default 1e-4).
+#' @param initialization "Random" for randomly initialized input vectors or "nvec" for svd-based best guess.
 #' @param verbose DEPRECATED: verbose output
 #' @param output String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").
 #'

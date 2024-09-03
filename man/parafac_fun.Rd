@@ -21,7 +21,7 @@ PARAFAC loss function calculation
 A = array(rnorm(108*2), c(108,2))
 B = array(rnorm(100*2), c(100,2))
 C = array(rnorm(10*2), c(10,2))
-Tensor = reinflateTensor(A, B, C)
-Fac = initializePARAFAC(Tensor, 2)
-f = parafac_fun(Tensor, Fac)
+X = reinflateTensor(A, B, C)
+model = parafac(X, 2)
+f = parafac_fun(X, model$Fac)
 }

@@ -26,6 +26,8 @@ parafac(
 
 \item{ctol}{Relative change in loss tolerated to call the algorithm converged (default 1e-4).}
 
+\item{initialization}{"Random" for randomly initialized input vectors or "nvec" for svd-based best guess.}
+
 \item{verbose}{DEPRECATED: verbose output}
 
 \item{output}{String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").}

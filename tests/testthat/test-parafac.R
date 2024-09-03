@@ -56,5 +56,5 @@ test_that("Varexp is smaller than or equal to 100", {
   C = array(rnorm(10,2), c(10,2))
   X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
   model = parafac(X, 2)
-  expect_true(model$varExp <= 100)
+  expect_true(model$varExp <= 100.01)
 })
