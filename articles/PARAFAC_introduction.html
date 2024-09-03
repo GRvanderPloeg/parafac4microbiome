@@ -74,15 +74,6 @@ model them using PARAFAC and how to plot the outcome. We require the
 following packages and dependencies.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.github.io/parafac4microbiome/">parafac4microbiome</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">multiway</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: CMLS</span></span>
-<span><span class="co">#&gt; Loading required package: quadprog</span></span>
-<span><span class="co">#&gt; Loading required package: parallel</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'multiway'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:parafac4microbiome':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     parafac</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
@@ -259,33 +250,33 @@ some statistics like R-squared and the sum of squared error.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> <span class="co"># for reproducibility</span></span>
 <span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">A</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        [,1]   [,2]   [,3]</span></span>
-<span><span class="co">#&gt; [1,] -0.258  0.788 -0.616</span></span>
-<span><span class="co">#&gt; [2,] -0.376  0.787 -0.175</span></span>
-<span><span class="co">#&gt; [3,] -0.363  0.956  2.617</span></span>
-<span><span class="co">#&gt; [4,]  2.620 -1.851 -0.487</span></span>
-<span><span class="co">#&gt; [5,] -0.283  0.237 -0.229</span></span>
-<span><span class="co">#&gt; [6,] -0.191  0.231 -0.206</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">B</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        [,1]   [,2]   [,3]</span></span>
-<span><span class="co">#&gt; [1,]  1.097 -1.078 -0.872</span></span>
-<span><span class="co">#&gt; [2,]  0.511  2.368 -0.244</span></span>
-<span><span class="co">#&gt; [3,] -2.141  0.364 -0.161</span></span>
-<span><span class="co">#&gt; [4,] -2.305  0.162 -0.181</span></span>
-<span><span class="co">#&gt; [5,] -0.579 -2.175 -0.232</span></span>
-<span><span class="co">#&gt; [6,]  0.346  2.306 -0.421</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">C</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          [,1]     [,2]  [,3]</span></span>
-<span><span class="co">#&gt; [1,] -0.02121 -0.00863 0.316</span></span>
-<span><span class="co">#&gt; [2,] -0.02601  0.05998 0.364</span></span>
-<span><span class="co">#&gt; [3,] -0.05666  0.00198 0.346</span></span>
-<span><span class="co">#&gt; [4,] -0.01825  0.04829 0.336</span></span>
-<span><span class="co">#&gt; [5,] -0.00123  0.01621 0.314</span></span>
-<span><span class="co">#&gt; [6,] -0.00424  0.02141 0.318</span></span>
-<span><span class="va">model</span><span class="op">$</span><span class="va">Rsq</span></span>
-<span><span class="co">#&gt; [1] 0.39</span></span></code></pre></div>
-<p>This model explains 39.029 percent of the variation in the processed
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1]  [,2]    [,3]</span></span>
+<span><span class="co">#&gt; [1,]  149  37.5  1052.0</span></span>
+<span><span class="co">#&gt; [2,]  603 108.3    91.9</span></span>
+<span><span class="co">#&gt; [3,]  602 100.8   106.0</span></span>
+<span><span class="co">#&gt; [4,] -665  84.6 -1121.4</span></span>
+<span><span class="co">#&gt; [5,] -101  49.6   295.9</span></span>
+<span><span class="co">#&gt; [6,] -200  80.1  -106.5</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          [,1]     [,2]    [,3]</span></span>
+<span><span class="co">#&gt; [1,]  0.08738 -0.01648  0.0463</span></span>
+<span><span class="co">#&gt; [2,] -0.10934  0.02950 -0.0339</span></span>
+<span><span class="co">#&gt; [3,]  0.00750  0.00213 -0.0711</span></span>
+<span><span class="co">#&gt; [4,]  0.00476 -0.01221 -0.0704</span></span>
+<span><span class="co">#&gt; [5,]  0.03576 -0.04671  0.0451</span></span>
+<span><span class="co">#&gt; [6,] -0.03879  0.05494 -0.0399</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          [,1]     [,2]    [,3]</span></span>
+<span><span class="co">#&gt; [1,] -0.00661 0.001116 0.01209</span></span>
+<span><span class="co">#&gt; [2,] -0.00599 0.032457 0.00972</span></span>
+<span><span class="co">#&gt; [3,] -0.00742 0.003485 0.01392</span></span>
+<span><span class="co">#&gt; [4,] -0.00428 0.028577 0.00620</span></span>
+<span><span class="co">#&gt; [5,] -0.00649 0.000374 0.00523</span></span>
+<span><span class="co">#&gt; [6,] -0.00687 0.000212 0.00338</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">varExp</span></span>
+<span><span class="co">#&gt; [1] 19.3</span></span></code></pre></div>
+<p>This model explains 19.293 percent of the variation in the processed
 data cube.</p>
 </div>
 <div class="section level3">
@@ -314,7 +305,7 @@ bar plot.</li>
 <p>For a full overview, please refer to the documentation of
 <code><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">processedFujita</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedFujita</span>,</span>
 <span>  numComponents <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  colourCols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span>
 <span>  legendTitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">"Genus"</span>, <span class="st">""</span><span class="op">)</span>,</span>

@@ -14,6 +14,7 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/assessNumComponents.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateSparsity.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateVarExp.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/corcondia.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/exportPARAFAC.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/importPARAFAC.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/index.html</loc></url>
@@ -28,7 +29,6 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/pipe.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/plotPARAFACmodel.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/processDataCube.html</loc></url>
-<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/reinflateBlock.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/reinflateTensor.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/sumsqr.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/transformPARAFACloadings.html</loc></url>
