@@ -1,11 +1,60 @@
-test_that("The norm of B is always 1", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=3, nstart=1, ctol=1e-6, maxit=2500, verbose=FALSE)
-  expect_equal(apply(model$Fac[[2]], 2, function(x){norm(as.matrix(x))}), c(1,1,1))
+test_that("Array input throws no errors", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=FALSE)
+  expect_no_error(parafac(X, 2))
 })
 
-test_that("The norm of C is always 1", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=3, nstart=1, ctol=1e-6, maxit=2500, verbose=FALSE)
-  expect_equal(apply(model$Fac[[3]], 2, function(x){norm(as.matrix(x))}), c(1,1,1))
+test_that("Tensor input throws no errors", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
+  expect_no_error(parafac(X, 2))
+})
+
+test_that("Xhat has the right dimensions", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
+  model = parafac(X, 2)
+  expect_equal(dim(model$Xhat), c(108,100,10))
+})
+
+test_that("Number of iterations is more than 1", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
+  model = parafac(X, 2)
+  expect_gt(model$iter, 1)
+})
+
+test_that("SSE is larger than 0", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
+  model = parafac(X, 2)
+  expect_gt(model$SSE, 0)
+})
+
+test_that("Varexp is greater than 0", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
+  model = parafac(X, 2)
+  expect_gt(model$varExp, 0)
+})
+
+test_that("Varexp is smaller than or equal to 100", {
+  A = array(rnorm(108,2), c(108,2))
+  B = array(rnorm(100,2), c(100,2))
+  C = array(rnorm(10,2), c(10,2))
+  X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
+  model = parafac(X, 2)
+  expect_true(model$varExp <= 100)
 })

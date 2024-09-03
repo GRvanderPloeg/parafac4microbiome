@@ -4,7 +4,7 @@
 \alias{reinflateTensor}
 \title{Create a tensor out of a set of matrices similar to a component model.}
 \usage{
-reinflateTensor(A, B, C)
+reinflateTensor(A, B, C, returnAsTensor = FALSE)
 }
 \arguments{
 \item{A}{I x N matrix corresponding to loadings in the first mode for N components.}
@@ -12,6 +12,8 @@ reinflateTensor(A, B, C)
 \item{B}{J x N matrix corresponding to loadings in the second mode for N components.}
 
 \item{C}{K x N matrix corresponding to loadings in the third mode for N components.}
+
+\item{returnAsTensor}{Boolean return as \link{rTensor} S4 tensor object (default FALSE).}
 }
 \value{
 M, an I x J x K tensor.

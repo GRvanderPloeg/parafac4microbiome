@@ -284,6 +284,7 @@ importPARAFAC = function(path, prefix, numComponents, sep=",", loadRDS=TRUE, hea
 #' @param A I x N matrix corresponding to loadings in the first mode for N components.
 #' @param B J x N matrix corresponding to loadings in the second mode for N components.
 #' @param C K x N matrix corresponding to loadings in the third mode for N components.
+#' @param returnAsTensor Boolean return as [rTensor] S4 tensor object (default FALSE).
 #'
 #' @return M, an I x J x K tensor.
 #' @export
@@ -293,7 +294,7 @@ importPARAFAC = function(path, prefix, numComponents, sep=",", loadRDS=TRUE, hea
 #' B = rnorm(100)
 #' C = rnorm(10)
 #' M = reinflateTensor(A,B,C)
-reinflateTensor = function(A, B, C){
+reinflateTensor = function(A, B, C, returnAsTensor=FALSE){
 
   # Try to cast to matrix if the input is different
   if(!methods::is(A, "matrix")){
@@ -306,8 +307,19 @@ reinflateTensor = function(A, B, C){
     C = as.matrix(C)
   }
 
-  M = array(tcrossprod(A, multiway::krprod(C, B)), c(nrow(A), nrow(B), nrow(C)))
-  return(M)
+  I = nrow(A)
+  J = nrow(B)
+  K = nrow(C)
+  reinflatedTensor = array(tcrossprod(A, multiway::krprod(C, B)), c(I,J,K))
+
+  if(returnAsTensor == TRUE){
+    reinflatedTensor = rTensor::as.tensor(reinflatedTensor)
+  }
+  else{
+    reinflatedTensor = reinflatedTensor
+  }
+
+  return(reinflatedTensor)
 }
 
 #' Sum-of-squares calculation

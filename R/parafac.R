@@ -14,7 +14,7 @@
 #' @examples
 #' X = array(rnorm(108*100*10), c(108,100,10))
 #' model = parafac(X, 2)
-parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, verbose=FALSE, output="best"){
+parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, initialization="random", verbose=FALSE, output="best"){
 
   if(methods::is(Tensor,"Tensor")){
     Tensor = Tensor@data
@@ -26,84 +26,27 @@ parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, verbose=FALSE, 
   # Coerce to rTensor Tensor S4 object
   Tensor = rTensor::as.tensor(Tensor)
 
-  # Prepare model input
-  numModes = Tensor@num_modes
-  modes = Tensor@modes
-  tnsr_norm = rTensor::fnorm(Tensor)
-
-  models = list()
+  # Prepare input
+  inits = list()
   for(i in 1:nstart){
-    Xhat = Tensor
-    iteration = 1
-    converged = FALSE
-    fOld = 0
-    fNew = Inf
-
-    # Initialize input vectors
-    Fac = list()
-    unfolded_X = list()
-    for(m in 1:numModes){
-      unfolded_X[[m]] = rTensor::k_unfold(Tensor, m)@data
-      Fac[[m]] = array(stats::rnorm(modes[m] * nfac), c(modes[m], nfac))
-    }
-
-    # Main CP loop
-    while ((iteration < maxit) && (!converged)) {
-
-      for (m in 1:numModes) {
-        V = rTensor::hadamard_list(lapply(Fac[-m], function(x) {t(x) %*% x}))
-        V_inv = solve(V)
-        tmp = unfolded_X[[m]] %*% rTensor::khatri_rao_list(Fac[-m], reverse = TRUE) %*% V_inv
-        lambdas = apply(tmp, 2, function(x){norm(as.matrix(x))})
-        Fac[[m]] = sweep(tmp, 2, lambdas, "/")
-        Xhat = reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]])
-      }
-
-      fNew = rTensor::fnorm(Xhat - Tensor)
-      fChange = abs(fNew-fOld)/tnsr_norm
-
-      if(iteration == 1){
-        iteration = iteration + 1
-        fOld = fNew
-      } else if(fChange < ctol){
-        converged = TRUE
-      } else{
-        iteration = iteration + 1
-        fOld = fNew
-      }
-
-    norm_percent <- (1 - (utils::tail(fNew, 1)/tnsr_norm)) * 100
-    models[[i]] = list(lambdas = lambdas,
-                  U = Fac,
-                  conv = converged,
-                  est = rTensor::as.tensor(Xhat),
-                  norm_percent = norm_percent,
-                  f = fNew,
-                  iter = iteration)
-    }
+    inits[[i]] = initializePARAFAC(Tensor, nfac, initialization=initialization)
   }
 
-
-  # Run CP algorithm
-  # models = list()
-  # for(i in 1:nstart){
-  #   utils::capture.output(models[[i]] <- rTensor::cp(Tensor, num_components=nfac, max_iter=maxit, tol=ctol))
-  # }
+  # Run core algorithm
+  models = list()
+  for(i in 1:nstart){
+    models[[i]] = parafac_core_als(Tensor, nfac, inits[[i]])
+  }
 
   # Attach extra model info
   for(i in 1:nstart){
-    models[[i]]$Fac = models[[i]]$U
-
-    # Put variance (stored in lambda) into mode 1.
-    for(n in 1:nfac){
-      models[[i]]$Fac[[1]][,n] = models[[i]]$Fac[[1]][,n] * models[[i]]$lambdas[n]
-    }
-
-    models[[i]]$U = NULL
-    models[[i]]$lambdas = NULL
-
-    models[[i]]$SSE = sumsqr((Tensor - models[[i]]$est)@data)
-    models[[i]]$varExp = sumsqr(models[[i]]$est@data) / sumsqr(Tensor@data) * 100
+    Fac = models[[i]]$Fac
+    Xhat = reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]], returnAsTensor=TRUE)
+    models[[i]]$Xhat = Xhat@data
+    models[[i]]$iter = length(models[[i]]$fs)
+    models[[i]]$SSE = sumsqr((Tensor - Xhat)@data)
+    models[[i]]$varExp = (sumsqr(Xhat@data) / sumsqr(Tensor@data)) * 100
+    models[[i]]$init = inits[[i]]
   }
 
   # Return all models if specified, otherwise return only the best model
@@ -115,9 +58,11 @@ parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, verbose=FALSE, 
     bestObjective = Inf
     for(i in 1:nstart){
       model = models[[i]]
-      if(model$f <= bestObjective){
+      fs = model$fs
+      f = fs[length(fs)]
+      if(f <= bestObjective){
         bestModel = model
-        bestObjective = model$f
+        bestObjective = f
       }
     }
     return(bestModel)

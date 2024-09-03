@@ -10,6 +10,7 @@ parafac(
   nstart = 1,
   maxit = 500,
   ctol = 1e-04,
+  initialization = "random",
   verbose = FALSE,
   output = "best"
 )
