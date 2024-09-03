@@ -17,11 +17,14 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/exportPARAFAC.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/importPARAFAC.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/index.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/initializePARAFAC.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/modelStabilityCheck.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/multiwayCLR.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/multiwayCenter.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/multiwayScale.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac_core_als.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac_fun.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/pipe.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/plotPARAFACmodel.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/processDataCube.html</loc></url>
