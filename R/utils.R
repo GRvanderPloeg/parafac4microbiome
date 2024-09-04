@@ -259,6 +259,43 @@ reinflateTensor = function(A, B, C, returnAsTensor=FALSE){
   return(reinflatedTensor)
 }
 
+#' Calculate Xhat from a model Fac object
+#'
+#' @param Fac Fac object from parafac
+#' @param X Input data X
+#' @param returnAsTensor Boolean to return Xhat as rTensor tensor (TRUE) or matrix (default, FALSE).
+#'
+#' @return Xhat
+#' @export
+#'
+#' @examples
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
+#' Xhat = reinflateFac(model$Fac, processedFujita$data)
+reinflateFac = function(Fac, X, returnAsTensor=FALSE){
+  Fac = lapply(Fac, as.matrix) # Cast to matrix for correct indexation in the one-component case.
+  numModes = length(dim(X))
+  numComponents = ncol(Fac[[1]])
+
+  # Check for lambdas i.e. kruskal tensors
+  kruskal = FALSE
+  if(length(Fac) > numModes){
+    kruskal = TRUE
+  }
+
+  # Calculate reinflated data
+  Xhat = array(0L, dim(X))
+  for(i in 1:numComponents){
+    lambda = ifelse(kruskal, Fac[[numModes+1]][i], 1) # Check for ACMTF model lambdas, otherwise lambda=1
+    Xhat = Xhat + lambda * reinflateTensor(Fac[[1]][,i], Fac[[2]][,i], Fac[[3]][,i])
+  }
+
+  if(returnAsTensor == TRUE){
+    Xhat = rTensor::as.tensor(Xhat)
+  }
+  return(Xhat)
+}
+
 #' Sum-of-squares calculation
 #'
 #' @param X Either a list containing matrices, or a matrix of values.

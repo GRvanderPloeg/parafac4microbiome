@@ -68,7 +68,7 @@ test_that("nstart larger than 1 returns nstart models if output is all", {
   expect_equal(length(models), 10)
 })
 
-test_that("ALS and multiway yield similar models", {
+test_that("ALS and multiway yield similar models in the easy case", {
   A = array(rnorm(108,2), c(108,2))
   B = array(rnorm(100,2), c(100,2))
   C = array(rnorm(10,2), c(10,2))
@@ -76,7 +76,42 @@ test_that("ALS and multiway yield similar models", {
   model_als = parafac(X, 2, nstart=10)
   model_mw = multiway::parafac(X, 2, nstart=10, verbose=FALSE)
 
-  Xhat_als = reinflateTensor(model_als$Fac[[1]], model_als$Fac[[2]], model_als$Fac[[3]])
-  Xhat_mw = reinflateTensor(model_mw$A, model_mw$B, model_mw$C)
-  expect_equal(Xhat_als, Xhat_mw)
+  Xhat_als = reinflateTensor(model_als$Fac[[1]], model_als$Fac[[2]], model_als$Fac[[3]], returnAsTensor=TRUE)
+  Xhat_mw = reinflateTensor(model_mw$A, model_mw$B, model_mw$C, returnAsTensor=TRUE)
+  expect_equal(rTensor::fnorm(Xhat_als), rTensor::fnorm(Xhat_mw))
+})
+
+test_that("ALS and multiway yield similar models in the fujita case", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
+  X = processedFujita$data
+  model_als = parafac(X, 3, nstart=10)
+  model_mw = multiway::parafac(X, 3, nstart=10, verbose=FALSE)
+
+  Xhat_als = reinflateTensor(model_als$Fac[[1]], model_als$Fac[[2]], model_als$Fac[[3]], returnAsTensor=TRUE)
+  Xhat_mw = reinflateTensor(model_mw$A, model_mw$B, model_mw$C, returnAsTensor=TRUE)
+  expect_equal(rTensor::fnorm(Xhat_als), rTensor::fnorm(Xhat_mw), tolerance=0.1)
+})
+
+test_that("ALS and multiway yield similar models in the shao case", {
+  processedShao = processDataCube(Shao2019, sparsityThreshold=0.9, considerGroups=TRUE, groupVariable="Delivery_mode", CLR=TRUE, centerMode=1, scaleMode=2)
+  X = processedShao$data
+  X[is.na(X)] = 0 # force NAs to zero otherwise discrepancies occur
+  model_als = parafac(X, 3, nstart=10)
+  model_mw = multiway::parafac(X, 3, nstart=10, verbose=FALSE)
+
+  Xhat_als = reinflateTensor(model_als$Fac[[1]], model_als$Fac[[2]], model_als$Fac[[3]], returnAsTensor=TRUE)
+  Xhat_mw = reinflateTensor(model_mw$A, model_mw$B, model_mw$C, returnAsTensor=TRUE)
+  expect_equal(rTensor::fnorm(Xhat_als), rTensor::fnorm(Xhat_mw), tolerance=0.1)
+})
+
+test_that("ALS and multiway yield similar models in the ploeg case", {
+  processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+  X = processedPloeg$data
+  X[is.na(X)] = 0 # force NAs to zero otherwise discrepancies occur
+  model_als = parafac(X, 3, nstart=10)
+  model_mw = multiway::parafac(X, 3, nstart=10, verbose=FALSE)
+
+  Xhat_als = reinflateTensor(model_als$Fac[[1]], model_als$Fac[[2]], model_als$Fac[[3]], returnAsTensor=TRUE)
+  Xhat_mw = reinflateTensor(model_mw$A, model_mw$B, model_mw$C, returnAsTensor=TRUE)
+  expect_equal(rTensor::fnorm(Xhat_als), rTensor::fnorm(Xhat_mw), tolerance=0.1)
 })

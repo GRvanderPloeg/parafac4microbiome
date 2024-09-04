@@ -33,6 +33,5 @@ initializePARAFAC = function(Tensor, nfac, initialization="random"){
       init[[i]] = svd(df, nfac)$u
     }
   }
-
   return(init)
 }

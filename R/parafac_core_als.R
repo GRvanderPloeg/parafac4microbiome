@@ -38,13 +38,13 @@ parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
 
     for (m in 1:numModes) {
       V = rTensor::hadamard_list(lapply(Fac[-m], function(x) {t(x) %*% x}))
-      V_inv = pracma::pinv(V) #solve(V) throws errors when very near convergence
+      V_inv = pracma::pinv(V) #solve(V) throws errors when very near convergence, pseudoinverse is suggested by Kolda and Bader 2009
       tmp = rTensor::k_unfold(Tensor, m)@data %*% rTensor::khatri_rao_list(Fac[-m], reverse = TRUE) %*% V_inv
       lambdas = apply(tmp, 2, function(x){norm(as.matrix(x))})
       Fac[[m]] = sweep(tmp, 2, lambdas, "/")
     }
 
-    fs[iteration] = parafac_fun(Tensor, Fac)
+    fs[iteration] = parafac_fun(Tensor, Fac, lambdas)
     rel_f = abs(fs[iteration]-fs[iteration-1])/tnsr_norm
     iteration = iteration + 1
   }
@@ -54,6 +54,7 @@ parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
   for(n in 1:nfac){
     Fac[[1]][,n] = Fac[[1]][,n] * lambdas[n]
   }
+  Fac[[numModes+1]] = NULL # remove lambdas afterwards
 
   model = list("Fac" = Fac, "fs" = fs[1:(iteration-1)])
   return(model)
