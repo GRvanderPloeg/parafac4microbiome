@@ -51,7 +51,7 @@ modelStabilityCheck(
 \item{numCores}{Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)}
 }
 \value{
-List of all As, Bs, Cs of the PARAFAC models as well as a plot of the median model with error bars.
+Stabilized sign-flipped jack-knifed PARAFAC models as well as a plot of the median model with error bars.
 }
 \description{
 Jack-knifing procedure to determine PARAFAC model stability.

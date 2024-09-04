@@ -8,7 +8,7 @@
 #' @param maxit Maximum number of iterations (default 2500).
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
-#' @return List of all As, Bs, Cs of the PARAFAC models as well as a plot of the median model with error bars.
+#' @return Stabilized sign-flipped jack-knifed PARAFAC models as well as a plot of the median model with error bars.
 #' @export
 #' @importFrom foreach %dopar%
 #'
@@ -94,7 +94,7 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
   } else{
     models = list()
     for(i in 1:numFolds){
-      models[[i]] = parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+      models[[i]] = parafac4microbiome::parafac(X[-samplesToRemove[[i]],,], nfac=numComponents, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
     }
   }
 
@@ -110,36 +110,12 @@ modelStabilityCheck = function(dataset, numComponents=1, numFolds=nrow(X), consi
     models[[i]] = model
   }
 
-  # Store the output
-  A = list()
-  B = list()
-  C = list()
-  for(i in 1:numComponents){
-    A[[i]] = simplify2array(lapply(models, function(x){x$Fac[[1]][,i]}))
-    B[[i]] = simplify2array(lapply(models, function(x){x$Fac[[2]][,i]}))
-    C[[i]] = simplify2array(lapply(models, function(x){x$Fac[[3]][,i]}))
-  }
-
-  # Fix the issue where randomly some components/modes have flipped signs
-  # Uses non-exported helper functions in utils.R
-  stabilizedA = list()
-  stabilizedB = list()
-  stabilizedC = list()
-  for(i in 1:numComponents){
-    evidenceA = checkForFlippedLoadings(A[[i]])
-    evidenceB = checkForFlippedLoadings(B[[i]])
-    evidenceC = checkForFlippedLoadings(C[[i]])
-    evidenceMatrix = rbind(evidenceA, evidenceB, evidenceC)
-
-    repairedLoadings = repairLoadings(A[[i]], B[[i]], C[[i]], evidenceMatrix)
-    stabilizedA[[i]] = repairedLoadings[[1]]
-    stabilizedB[[i]] = repairedLoadings[[2]]
-    stabilizedC[[i]] = repairedLoadings[[3]]
-  }
+  # Fix sign flipping of components
+  models = flipLoadings(models, X)
 
   # Add a plot of the loadings to the output
   overallTitle = paste0("Jack-knifed models, numFolds=", numFolds)
-  plot = plotModelStability(stabilizedA, stabilizedB, stabilizedC, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
+  plot = plotModelStability(models, dataset, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes, overallTitle)
 
-  return(list("As"=stabilizedA, "Bs"=stabilizedB, "Cs"=stabilizedC, "plot"=plot))
+  return(list("models"=models, "plot"=plot))
 }

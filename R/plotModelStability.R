@@ -1,11 +1,22 @@
-plotModelStability = function(As, Bs, Cs, dataset, colourCols=NULL,
+plotModelStability = function(models, dataset, colourCols=NULL,
                               legendTitles=NULL, xLabels=NULL, legendColNums=NULL,
                               arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
 
+  numComponents = ncol(models[[1]]$Fac[[1]])
+  numModes = length(models[[1]]$Fac)
+
+  # Separate out all A, B, C loadings per component into one matrix per combination for easy plotting
+  As = list()
+  Bs = list()
+  Cs = list()
+  for(i in 1:numComponents){
+    As[[i]] = simplify2array(lapply(models, function(x){x$Fac[[1]][,i]}))
+    Bs[[i]] = simplify2array(lapply(models, function(x){x$Fac[[2]][,i]}))
+    Cs[[i]] = simplify2array(lapply(models, function(x){x$Fac[[3]][,i]}))
+  }
+
   # Test the length of metadata against the model we're gonna make
   modelStabilityOutput = list(As, Bs, Cs)
-  numComponents = length(modelStabilityOutput[[1]])
-  numModes = length(modelStabilityOutput)
   metaData = list(dataset$mode1, dataset$mode2, dataset$mode3)
 
   # Convert default settings to usable content.

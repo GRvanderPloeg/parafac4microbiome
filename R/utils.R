@@ -1,219 +1,66 @@
-checkForFlippedLoadings = function(loadingMatrix){
+#' Sign flip the loadings of many randomly initialized models to make consistent overview plots.
+#'
+#' @param models Output of [parafac].
+#' @param X Input dataset of parafac modelling procedure.
+#'
+#' @return models with sign flipped components where applicable.
+#' @export
+#'
+#' @examples
+#' A = array(rnorm(108*2), c(108,2))
+#' B = array(rnorm(100*2), c(100,2))
+#' C = array(rnorm(10*2), c(10,2))
+#' X = reinflateTensor(A, B, C)
+#' models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)
+#' flippedModels = flipLoadings(models, X)
+flipLoadings = function(models, X){
+  numModels = length(models)
+  numModes = length(models[[1]]$Fac)
+  numComponents = ncol(models[[1]]$Fac[[1]])
 
-  numRepetitions = ncol(loadingMatrix)
-
-  # Arbitrarily define the "correct loadings" as the median of all folds
-  correctLoadings = apply(loadingMatrix, 1, function(x){stats::median(x, na.rm=TRUE)})
-  evidence = rep(FALSE, numRepetitions)
-
-  # Check every repetition
-  for(j in 1:numRepetitions){
-    loading = loadingMatrix[,j]
-    flippedLoading = -1*loading
-
-    diff = sum((correctLoadings-loading)^2, na.rm=TRUE)
-    flippedDiff = sum((correctLoadings-flippedLoading)^2, na.rm=TRUE)
-
-    if(flippedDiff < diff){
-      evidence[j] = TRUE
-    }
+  # Make sure all models have sorted components for consistency
+  for(i in 1:numModels){
+    models[[i]]$Fac = sortComponents(models[[i]]$Fac, X)
   }
-  return(evidence)
-}
 
-repairLoadings = function(A, B, C, evidenceMatrix){
+  # Check for flipping evidence per mode and component
+  flipEvidencePerComponent = list()
+  for(i in 1:numComponents){
+    evidence = array(0L, c(numModes, numModels))
 
-  loadingsList = list(A, B, C)
-  numRepetitions = ncol(A)
-  numModes = length(loadingsList)
-
-  repairedA = array(0L, dim=dim(A))
-  repairedB = array(0L, dim=dim(B))
-  repairedC = array(0L, dim=dim(C))
-  repairedLoadingsList = list(repairedA, repairedB, repairedC)
-
-  flipped = which(colSums(evidenceMatrix) >= 2) # exactly 2 modes need to be flipped to cancel out
-
-  for(i in 1:numRepetitions){
-    numFlipped = 0
     for(j in 1:numModes){
-      if(i %in% flipped & evidenceMatrix[j,i] & numFlipped < 2){
-        repairedLoadingsList[[j]][,i] = -1*loadingsList[[j]][,i]
-        numFlipped = numFlipped + 1
-      }
-      else{
-        repairedLoadingsList[[j]][,i] = loadingsList[[j]][,i]
+
+      # Collect all loadings corresponding to one mode and one component
+      df = simplify2array(lapply(models, function(model){model$Fac[[j]][,i]}))
+
+      # Arbitrarily define the "correct loadings" as the median of all folds
+      medianLoadings = apply(df, 1, function(x){stats::median(x, na.rm=TRUE)})
+
+      # Check if SSQ goes down by flipping sign
+      unflippedSSQ = apply(df-medianLoadings, 2, function(x){sumsqr(x,na.rm=TRUE)})
+      flippedSSQ = apply((-1*df)-medianLoadings, 2, function(x){sumsqr(x,na.rm=TRUE)})
+      evidence[j,] = flippedSSQ <= unflippedSSQ
+    }
+    flipEvidencePerComponent[[i]] = evidence
+  }
+
+  # Flip relevant loadings
+  for(i in 1:numModels){
+    Fac = models[[i]]$Fac
+
+    for(j in 1:numComponents){
+      if(sum(flipEvidencePerComponent[[j]][,i]) == 2){
+        for(k in 1:numModes){
+          if(flipEvidencePerComponent[[j]][k,i] == 1){
+            Fac[[k]][,j] = -1 * Fac[[k]][,j]
+          }
+        }
       }
     }
+    models[[i]]$Fac = Fac
   }
 
-  return(repairedLoadingsList)
-}
-
-#' Transform PARAFAC loadings to an orthonormal basis.
-#' Note: this function only works for 3-way PARAFAC models.
-#'
-#' @param Fac Fac object from a PARAFAC object, see [parafac()].
-#' @param modeToCorrect Correct the subject (1), feature (2) or time mode (3).
-#' @param moreOutput Give orthonormal basis and transformation matrices as part of output (default FALSE).
-#'
-#' @return Corrected loadings of the specified mode.
-#' @export
-#'
-#' @examples
-#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-#' transformedA = transformPARAFACloadings(model$Fac, 1)
-transformPARAFACloadings = function(Fac, modeToCorrect, moreOutput=FALSE){
-
-  A = as.matrix(Fac[[1]])
-  B = as.matrix(Fac[[2]])
-  C = as.matrix(Fac[[3]])
-
-  if(modeToCorrect == 1){
-    F = paramGUI::kroneckercol(C, B) %>% as.matrix()
-    Ftilde = pracma::gramSchmidt(F)$Q
-    T = pracma::pinv(F) %*% Ftilde
-    Atilde = A %*% pracma::pinv(t(T))
-    result = Atilde
-  }
-  else if(modeToCorrect == 2){
-    F = paramGUI::kroneckercol(A, C) %>% as.matrix()
-    Ftilde = pracma::gramSchmidt(F)$Q
-    T = pracma::pinv(F) %*% Ftilde
-    Btilde = B %*% pracma::pinv(t(T))
-    result = Btilde
-  }
-  else if(modeToCorrect == 3){
-    F = paramGUI::kroneckercol(B, A) %>% as.matrix()
-    Ftilde = pracma::gramSchmidt(F)$Q
-    T = pracma::pinv(F) %*% Ftilde
-    Ctilde = C %*% pracma::pinv(t(T))
-    result = Ctilde
-  }
-
-  if(!moreOutput){
-    return(result)
-  } else{
-    return(list("correctedLoading"=result, "T"=T, "Ftilde"=Ftilde, "F"=F))
-  }
-
-}
-
-#' Export the PARAFAC model
-#'
-#' Currently only supports 3-mode models.
-#'
-#' @inheritParams plotPARAFACmodel
-#' @param prefix Prefix file name
-#' @param path Path to a folder
-#' @param saveRDS Save an RDS of the PARAFAC model object? (true/false, default=TRUE)
-#'
-#' @return Saves mode1, mode2, mode3, input data, modelled data, and data as modelled per component in .csv files.
-#' @export
-#'
-#' @examples
-#' library(multiway)
-#' library(dplyr)
-#' library(ggplot2)
-#' library(paramGUI)
-#' library(pracma)
-#' set.seed(0)
-#'
-#' # Make PARAFAC model
-#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-#' \dontrun{
-#' exportPARAFAC(model, processedFujita, prefix="Fujita")
-#' }
-#'
-exportPARAFAC = function(model, dataset, prefix="PARAFACmodel", path="./", saveRDS=FALSE){
-  stopifnot(methods::is(model, "parafac"))
-
-  A = model$A
-  B = model$B
-  C = model$C
-  numComponents = ncol(A)
-
-  mode1 = cbind(A, dataset$mode1) %>% dplyr::as_tibble()
-  mode2 = cbind(B, dataset$mode2) %>% dplyr::as_tibble()
-  mode3 = cbind(C, dataset$mode3) %>% dplyr::as_tibble()
-  input = dataset$data
-  modelledData = reinflateTensor(model$Fac[[1]], model$Fac[[2]], model$Fac[[3]])
-
-  components = list()
-  for(f in 1:numComponents){
-    fakeA = matrix(A[,f])
-    fakeB = matrix(B[,f])
-    fakeC = matrix(C[,f])
-    fakeModel = list(fakeA, fakeB, fakeC)
-    components[[f]] = reinflateTensor(fakeModel[[1]], fakeModel[[2]], fakeModel[[3]])
-  }
-
-  utils::write.table(mode1, paste0(path,prefix,"_mode1.csv"), sep=",", row.names=FALSE, col.names=TRUE)
-  utils::write.table(mode2, paste0(path,prefix,"_mode2.csv"), sep=",", row.names=FALSE, col.names=TRUE)
-  utils::write.table(mode3, paste0(path,prefix,"_mode3.csv"), sep=",", row.names=FALSE, col.names=TRUE)
-  utils::write.table(input, paste0(path,prefix,"_input.csv"), sep=",", row.names=FALSE, col.names=TRUE)
-  utils::write.table(modelledData, paste0(path,prefix,"_modelledData.csv"), sep=",", row.names=FALSE, col.names=TRUE)
-
-  for(i in 1:length(components)){
-    utils::write.table(components[[i]], paste0(path,prefix,"_component_",i,".csv"), sep=",", row.names=FALSE, col.names=TRUE)
-  }
-
-  if(saveRDS == TRUE){
-    saveRDS(model, paste0(path,prefix,"_model.RDS"))
-  }
-}
-
-#' Import PARAFAC model
-#'
-#' @inheritParams exportPARAFAC
-#' @param numComponents Number of components in the model
-#' @param sep Separator character for the input files (default=",")
-#' @param header Expect headers in the csv files (default=TRUE)
-#' @param loadRDS Load a previously saved RDS object of the model (default=TRUE)
-#'
-#' @return List of: the PARAFAC model, the dataset used, the data as modelled
-#' @export
-#'
-#' @examples
-#' library(multiway)
-#' library(dplyr)
-#' library(ggplot2)
-#' library(paramGUI)
-#' library(pracma)
-#' set.seed(0)
-#'
-#' # Make PARAFAC model
-#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-#' \dontrun{
-#' exportPARAFAC(model, processedFujita, prefix="Fujita_")
-#' importedModel = importPARAFAC(path="./", prefix="Fujita_", numComponents=2)
-#' }
-#'
-importPARAFAC = function(path, prefix, numComponents, sep=",", loadRDS=TRUE, header=TRUE){
-  mode1 = utils::read.csv(paste0(path,prefix,"_mode1.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
-  mode2 = utils::read.csv(paste0(path,prefix,"_mode2.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
-  mode3 = utils::read.csv(paste0(path,prefix,"_mode3.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
-  input = utils::read.csv(paste0(path,prefix,"_input.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
-  modelledData = utils::read.csv(paste0(path,prefix,"_model.csv"), sep=sep, header=header) %>% dplyr::as_tibble()
-
-  components = list()
-  for(i in 1:length(numComponents)){
-    components[[i]] = utils::read.csv(paste0(path,prefix,"_component_",i,".csv"), sep=sep, header=header) %>% dplyr::as_tibble()
-  }
-
-  dataset = list("data"=input, "mode1"=mode1[,(numComponents+1):ncol(mode1)], "mode2"=mode2[,(numComponents+1):ncol(mode2)], "mode3"=mode3[,(numComponents+1):ncol(mode3)])
-
-  if(loadRDS){
-    model = readRDS(paste0(path,prefix,"_model.RDS"))
-  }
-  else{
-    model = list("A"=mode1[,1:numComponents], "B"=mode2[,1:numComponents], "C"=mode3[,1:numComponents])
-  }
-
-  output = list("model"=model, "dataset"=dataset, "reconstructedData"=modelledData, "reconstructedPerComponent"=components)
+  return(models)
 }
 
 #' Create a tensor out of a set of matrices similar to a component model.
@@ -233,29 +80,14 @@ importPARAFAC = function(path, prefix, numComponents, sep=",", loadRDS=TRUE, hea
 #' M = reinflateTensor(A,B,C)
 reinflateTensor = function(A, B, C, returnAsTensor=FALSE){
 
-  # Try to cast to matrix if the input is different
-  if(!methods::is(A, "matrix")){
-    A = as.matrix(A)
-  }
-  if(!methods::is(B, "matrix")){
-    B = as.matrix(B)
-  }
-  if(!methods::is(C, "matrix")){
-    C = as.matrix(C)
-  }
-
-  I = nrow(A)
-  J = nrow(B)
-  K = nrow(C)
-  reinflatedTensor = array(tcrossprod(A, multiway::krprod(C, B)), c(I,J,K))
+  A = as.matrix(A)
+  B = as.matrix(B)
+  C = as.matrix(C)
+  reinflatedTensor = array(tcrossprod(A, multiway::krprod(C, B)), c(nrow(A),nrow(B),nrow(C)))
 
   if(returnAsTensor == TRUE){
     reinflatedTensor = rTensor::as.tensor(reinflatedTensor)
   }
-  else{
-    reinflatedTensor = reinflatedTensor
-  }
-
   return(reinflatedTensor)
 }
 
@@ -318,6 +150,18 @@ sumsqr = function(X, na.rm=FALSE){
   return(result)
 }
 
+#' Calculate the variance explained of a PARAFAC model, per component
+#'
+#' @param Fac Fac object output of a model
+#' @param X Input dataset
+#'
+#' @return Vector of scalars of the percentage of variation explained per component
+#' @export
+#'
+#' @examples
+#' X = array(rnorm(108*100*10), c(108,100,10))
+#' model = parafac(X, 2)
+#' calcVarExpPerComponent(model$Fac, X)
 calcVarExpPerComponent = function(Fac, X){
   if(methods::is(X, "Tensor")){
     X = X@data
@@ -339,6 +183,18 @@ calcVarExpPerComponent = function(Fac, X){
   return(varExpsPerComp)
 }
 
+#' Sort PARAFAC components based on variance explained per component.
+#'
+#' @param Fac Fac object output of a PARAFAC model
+#' @param X Input data
+#'
+#' @return Fac object of sorted components
+#' @export
+#'
+#' @examples
+#' X = array(rnorm(108*100*10), c(108,100,10))
+#' model = parafac(X, 2)
+#' sortedFac = sortComponents(model$Fac, X)
 sortComponents = function(Fac, X){
   numModes = length(Fac)
   varExpsPerComp = calcVarExpPerComponent(Fac, X)
@@ -348,5 +204,7 @@ sortComponents = function(Fac, X){
     Fac[[i]] = Fac[[i]][,sorting]
   }
 
+  # Put Fac in matrix form to avoid problems with 1-component case
+  Fac = lapply(Fac, as.matrix)
   return(Fac)
 }

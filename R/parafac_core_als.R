@@ -49,12 +49,14 @@ parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
     iteration = iteration + 1
   }
 
-
   # Put variation (the lambdas) in mode 1 (as described by Bro et al.)
   for(n in 1:nfac){
     Fac[[1]][,n] = Fac[[1]][,n] * lambdas[n]
   }
   Fac[[numModes+1]] = NULL # remove lambdas afterwards
+
+  # Put Fac in matrix form to avoid problems with 1-component case
+  Fac = lapply(Fac, as.matrix)
 
   model = list("Fac" = Fac, "fs" = fs[1:(iteration-1)])
   return(model)

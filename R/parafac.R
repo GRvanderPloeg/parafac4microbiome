@@ -42,7 +42,7 @@ parafac = function(Tensor, nfac, nstart=1, maxit=500, ctol=1e-4, initialization=
 
   # Attach extra model info
   for(i in 1:nstart){
-    Fac = models[[i]]$Fac
+    Fac = models[[i]]$Fac # for 1-component corner case
     Xhat = reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]], returnAsTensor=TRUE)
     models[[i]]$Xhat = Xhat@data
     models[[i]]$iter = length(models[[i]]$fs)

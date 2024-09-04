@@ -1,54 +1,39 @@
-test_that("Size of A is the same as the transformed version of A in transformPARAFACloadings", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$Fac[[1]]), dim(transformPARAFACloadings(model$Fac, 1)))
+test_that("flipLoadings throws no errors", {
+  A = array(rnorm(108*2), c(108,2))
+  B = array(rnorm(100*2), c(100,2))
+  C = array(rnorm(10*2), c(10,2))
+  X = reinflateTensor(A, B, C)
+  models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)
+  expect_no_error(flipLoadings(models, X))
 })
 
-test_that("transformPARAFACloadings changes A", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-
-  expect_false(identical(transformPARAFACloadings(model$Fac, 1), model$Fac[[1]]))
+test_that("flipLoadings produces a same length list as models input", {
+  A = array(rnorm(108*2), c(108,2))
+  B = array(rnorm(100*2), c(100,2))
+  C = array(rnorm(10*2), c(10,2))
+  X = reinflateTensor(A, B, C)
+  models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)
+  flippedModels = flipLoadings(models, X)
+  expect_equal(length(models), length(flippedModels))
 })
 
-test_that("Size of B is the same as the transformed version of B in transformPARAFACloadings", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$Fac[[2]]), dim(transformPARAFACloadings(model$Fac, 2)))
+test_that("flipLoadings Fac is not the same as models fac", {
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
+  X = processedFujita$data
+  models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)
+  flippedModels = flipLoadings(models, X)
+
+  allFacs1 = lapply(models, function(x){x$Fac})
+  allFacs2 = lapply(flippedModels, function(x){x$Fac})
+
+  expect_false(isTRUE(all.equal(allFacs1, allFacs2)))
 })
 
-test_that("transformPARAFACloadings changes B", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
-
-  expect_false(identical(transformPARAFACloadings(model$Fac, 2), model$Fac[[2]]))
+test_that("calcVarExpPerComponent throws no errors", {
+  X = array(rnorm(108*100*10), c(108,100,10))
+  model = parafac(X, 2)
+  expect_no_error(calcVarExpPerComponent(model$Fac, X))
 })
-
-test_that("Size of C is the same as the transformed version of C in transformPARAFACloadings", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_equal(dim(model$Fac[[3]]), dim(transformPARAFACloadings(model$Fac, 3)))
-})
-
-test_that("transformPARAFACloadings changes C", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-
-  expect_false(identical(transformPARAFACloadings(model$Fac, 3), model$C))
-})
-
-test_that("transformPARAFACloadings can deal with a list object", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
-  expect_no_error(transformPARAFACloadings(model$Fac, 1))
-})
-
-test_that("transformPARAFACloadings can deal with a one-component model in a list", {
-  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-  model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
-  expect_no_error(transformPARAFACloadings(model$Fac, 1))
-})
-
 test_that("sortComponents resorts components", {
   set.seed(456)
   A = array(rnorm(108*5), c(108, 5))
