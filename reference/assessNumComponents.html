@@ -88,7 +88,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list object of the following:</p><ul><li><p>plot: Plots of all assessed metrics and an overview plot showing a summary of all of them.</p></li>
+    <p>A list object of the following:</p><ul><li><p>metricPlots: Plots of all assessed metrics and an overview plot showing a summary of all of them.</p></li>
 <li><p>metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).</p></li>
 <li><p>models: all created models.</p></li>
 </ul></div>
@@ -98,7 +98,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">X</span> <span class="op">=</span> <span class="va">Fujita2023</span><span class="op">$</span><span class="va">data</span></span></span>
 <span class="r-in"><span><span class="va">assessment</span> <span class="op">=</span> <span class="fu">assessNumComponents</span><span class="op">(</span><span class="va">X</span>, minNumComponents<span class="op">=</span><span class="fl">1</span>, maxNumComponents<span class="op">=</span><span class="fl">3</span>, numRepetitions<span class="op">=</span><span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></span>
-<span class="r-plt img"><img src="assessNumComponents-1.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

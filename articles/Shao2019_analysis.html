@@ -152,18 +152,17 @@ not ideal for real datasets. Please refer to the documentation of
 <p>We will now inspect the output plots of interest for
 <code>Shao2019</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="Shao2019_analysis_files/figure-html/overview%20plot-1.png" width="1152">
-The overview plots shows that we can explain ~17% of the variation in a
-three-component model. That is quite low. The CORCONDIA for that number
-of components is ~99.8 or higher, which is well above the minimum
+<code class="sourceCode R"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
+<p>The overview plots shows that we can explain ~17% of the variation in
+a three-component model. That is quite low. The CORCONDIA for that
+number of components is ~99.8 or higher, which is well above the minimum
 requirement of 60.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">TCC</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="Shao2019_analysis_files/figure-html/TCC-1.png" width="1152"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">TCC</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="Shao2019_analysis_files/figure-html/TCC-2.png" width="1152"></p>
+<code class="sourceCode R"><span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">TCC</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span><span class="va">assessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">TCC</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; NULL</span></span></code></pre></div>
 <p>The Tucker Congruence Coefficients show us how similar the loading
 vectors in the same mode are to each other, between the various
 components. A value &gt;=0.85 has been described as problematic in the
@@ -176,12 +175,12 @@ three-component model are the loadings very similar to each other.</p>
 <p>Next, we investigate the stability of the models when jack-knifing
 out samples. This will give us more information to choose between 2 or 3
 components.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelStabilityCheck.html">modelStabilityCheck</a></span><span class="op">(</span><span class="va">processedShao</span>, numComponents<span class="op">=</span><span class="fl">2</span>, numFolds<span class="op">=</span><span class="va">numFolds</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>                               groupVariable<span class="op">=</span><span class="st">"Delivery_mode"</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
 <span>                               <span class="va">continuousModes</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
 <p><img src="Shao2019_analysis_files/figure-html/model%20stability-1.png" width="1152"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/modelStabilityCheck.html">modelStabilityCheck</a></span><span class="op">(</span><span class="va">processedShao</span>, numComponents<span class="op">=</span><span class="fl">3</span>, numFolds<span class="op">=</span><span class="va">numFolds</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>                               groupVariable<span class="op">=</span><span class="st">"Delivery_mode"</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
 <span>                               <span class="va">continuousModes</span>, ctol<span class="op">=</span><span class="va">ctol</span>, maxit<span class="op">=</span><span class="va">maxit</span>, numCores<span class="op">=</span><span class="va">numCores</span><span class="op">)</span><span class="op">$</span><span class="va">plot</span></span></code></pre></div>
@@ -202,13 +201,13 @@ random initializations from the <code><a href="../reference/assessNumComponents.
 output as our final model. We’re going to select the random
 initialisation that corresponded the maximum amount of variation
 explained for two components.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">numComponents</span> <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="va">modelChoice</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">assessment</span><span class="op">$</span><span class="va">metrics</span><span class="op">$</span><span class="va">varExp</span><span class="op">[</span>,<span class="va">numComponents</span><span class="op">]</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">assessment</span><span class="op">$</span><span class="va">metrics</span><span class="op">$</span><span class="va">varExp</span><span class="op">[</span>,<span class="va">numComponents</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">finalModel</span> <span class="op">=</span> <span class="va">assessment</span><span class="op">$</span><span class="va">models</span><span class="op">[[</span><span class="va">numComponents</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">modelChoice</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p>Finally, we visualize the model using
 <code><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel()</a></code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">finalModel</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedShao</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
 <span>  continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  overallTitle <span class="op">=</span> <span class="st">"Shao PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
