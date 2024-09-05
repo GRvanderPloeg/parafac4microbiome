@@ -32,7 +32,7 @@ assessNumComponents(
 \value{
 A list object of the following:
 \itemize{
-\item plot: Plots of all assessed metrics and an overview plot showing a summary of all of them.
+\item metricPlots: Plots of all assessed metrics and an overview plot showing a summary of all of them.
 \item metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
 \item models: all created models.
 }

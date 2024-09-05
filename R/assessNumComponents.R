@@ -9,7 +9,7 @@
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
 #' @return A list object of the following:
-#' * plot: Plots of all assessed metrics and an overview plot showing a summary of all of them.
+#' * metricPlots: Plots of all assessed metrics and an overview plot showing a summary of all of them.
 #' * metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
 #' * models: all created models.
 #'
@@ -29,11 +29,14 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
   numIterations = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
   SSE = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
   CORCONDIA = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
-  TCC = list()
   varExp = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
+
+  metricPlots = list()
+  metricPlots$TCC = list()
 
   for(f in minNumComponents:maxNumComponents){
 
+    # Run PARAFAC models
     if(numCores > 1){
       cl = parallel::makeCluster(numCores)
       doParallel::registerDoParallel(cl)
@@ -45,31 +48,32 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
       models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
     }
 
+    # Store output
     numIterations[,f] = sapply(models, function(model){model$iter})
     SSE[,f] = sapply(models, function(model){model$SSE})
     CORCONDIA[,f] = sapply(models, function(model){corcondia(X, model$Fac)})
     varExp[,f] = sapply(models, function(model){model$varExp})
     allModels[[f]] = models
 
-    TCC[[f]] = array(rep(0, f*f*numRepetitions*numModes), dim=c(f,f,numRepetitions,numModes))
-    for(i in 1:numModes){
-      for(j in 1:f){
-        for(k in 1:f){
-          for(l in 1:numRepetitions){
-            model = models[[l]]$Fac
-            TCC[[f]][j,k,l,i] = multiway::congru(model[[i]][,j], model[[i]][,k])
-          }
-        }
-      }
-    }
+    # Plot TCC for this number of components
+    metricPlots$TCC[[f]] = plotModelTCCs(models)
   }
+
+  # Plot the other metrics
+  metricPlots$numIterations = plotModelMetric(numIterations, plottingMode="bar", ylabel="Number of iterations")
+  metricPlots$SSE = plotModelMetric(SSE, plottingMode="bar", ylabel="SSE")
+  metricPlots$CORCONDIA = plotModelMetric(CORCONDIA, plottingMode="bar", ylabel="CORCONDIA")
+  metricPlots$varExp = plotModelMetric(varExp, plottingMode="bar", ylabel="Variation explained (%)")
+  metricPlots$overview = ggpubr::ggarrange(plotModelMetric(numIterations, ylabel="Number of iterations"),
+                                           plotModelMetric(SSE, ylabel="SSE"),
+                                           plotModelMetric(CORCONDIA, ylabel="CORCONDIA"),
+                                           plotModelMetric(varExp, ylabel="Variation explained (%)"))
+
 
   metrics = list("numIterations"=numIterations,
                  "SSE"=SSE,
                  "CORCONDIA"=CORCONDIA,
-                 "varExp"=varExp,
-                 "TCC"=TCC)
+                 "varExp"=varExp)
 
-  plots = plotModelMetric(numIterations, SSE, CORCONDIA, varExp, TCC)
-  return(list("plots"=plots, "metrics"=metrics, "models"=allModels))
+  return(list("metricPlots"=metricPlots, "metrics"=metrics, "models"=allModels))
 }

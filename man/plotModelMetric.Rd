@@ -2,37 +2,31 @@
 % Please edit documentation in R/plotModelMetric.R
 \name{plotModelMetric}
 \alias{plotModelMetric}
-\title{Plots diagnostics for selecting the number of components of a parafac model.}
+\title{Plot diagnostics of many initialized PARAFAC models.}
 \usage{
-plotModelMetric(numIterations, SSE, CORCONDIA, varExp, TCC)
+plotModelMetric(
+  metric,
+  plottingMode = "box",
+  ylabel = "metric",
+  titleString = ""
+)
 }
 \arguments{
-\item{numIterations}{Matrix of number of iterations needed per initialized model (number of models x number of components).}
+\item{metric}{Matrix of metrics per initialized model (number of models x number of components).}
 
-\item{SSE}{Sum of squared errors of the initialized models (number of models x number of components).}
+\item{plottingMode}{Plot the metrics as a box plot ("box", default) or as a bar plot ("bar").}
 
-\item{CORCONDIA}{CORCONDIA scores of the initialized models (see \link{corcondia}) (number of models x number of components).}
+\item{ylabel}{String of the y axis label (default "metric").}
 
-\item{varExp}{Variation explained by the initialized models (number of models x number of components).}
-
-\item{TCC}{Cube of Tucker Congruence Coefficients comparing the loadings between two components within a mode (mode x component x component x model).}
+\item{titleString}{String of the plot title (default "").}
 }
 \value{
-An overview plot as well as plots of the individual metrics.
+A plot of the metrics
 }
 \description{
-Plots diagnostics for selecting the number of components of a parafac model.
+Plot diagnostics of many initialized PARAFAC models.
 }
 \examples{
-numIterations = array(round(runif(100*2)*100), c(100, 2))
-SSE = array(rnorm(100*2, mean=1e4, sd=100), c(100, 2))
-CORCONDIA = array(runif(100*2, min=90, max=100), c(100,2))
 varExp = array(runif(100*2, min=50, max=100), c(100,2))
-TCC = list(NULL, array(rnorm(3*2*2*100), c(3,2,2,100)))
-plots = plotModelMetric(numIterations, SSE, CORCONDIA, varExp, TCC)
-plots$overview
-plots$numIterations
-plots$SSE
-plots$CORCONDIA
-plots$varExp
+plotModelMetric(varExp, plottingMode="box", ylabel="Variation explained (\%)")
 }

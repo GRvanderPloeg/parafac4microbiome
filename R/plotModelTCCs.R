@@ -1,34 +1,54 @@
-plotModelTCCs = function(TCC_cube){
-  I = dim(TCC_cube)[1]
-  J = dim(TCC_cube)[2]
-  K = dim(TCC_cube)[3]
-  L = dim(TCC_cube)[4]
+#' Plots Tucker Congruence Coefficients of randomly initialized models.
+#'
+#' @param models Models list output of [parafac()] using output="all".
+#'
+#' @return Plot of TCCs
+#' @export
+#'
+#' @examples
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' models = parafac(processedFujita$data, 3, nstart=10, output="all")
+#' plotModelTCCs(models)
+plotModelTCCs = function(models){
 
+  numComponents = ncol(models[[1]]$Fac[[1]])
+  numModels = length(models)
+  numModes = length(models[[1]]$Fac)
   plotlist = list()
   plotIterator = 1
 
-  for(i in 1:I){
-    for(j in 1:J){
-      for(l in 1:L){
+  if(numComponents == 1)
+    return(NULL)
 
-        if(i != j && i < j){
-          plotlist[[plotIterator]] = TCC_cube[i,j,,l] %>%
-            dplyr::as_tibble() %>%
-            dplyr::mutate(index=dplyr::row_number()) %>%
-            ggplot2::ggplot(ggplot2::aes(x=index,y=value)) +
-            ggplot2::geom_bar(stat="identity") +
-            ggplot2::xlab("Model number") +
-            ggplot2::ylab("Tucker congruence coefficient") +
-            ggplot2::ggtitle(paste0("Mode ", l, ", Components ", i, " vs. ", j))
-          plotIterator = plotIterator + 1
+  for(i in 1:(numComponents-1)){
+    for(j in (i+1):numComponents){
+
+      # Calculate TCC
+      overallTCC = rep(1, numModels)
+      for(k in 1:numModes){
+        TCC = rep(0, numModels)
+        for(l in 1:numModels){
+          TCC[l] = multiway::congru(models[[l]]$Fac[[k]][,i], models[[l]]$Fac[[k]][,j])
         }
+
+        # Plot TCC
+        title = paste0("Mode ", k, ", Components ", i, " vs. ", j)
+        plotlist[[plotIterator]] = plotModelMetric(TCC, plottingMode="bar", ylabel="TCC", titleString=title) +
+          ggplot2::theme(strip.background=ggplot2::element_blank(), strip.text.x = ggplot2::element_blank())
+        plotIterator = plotIterator + 1
+        overallTCC = overallTCC * TCC
       }
+
+      # Plot overall TCC
+      title = paste0("Overall TCC ", "Components ", i, " vs. ", j)
+      plotlist[[plotIterator]] = plotModelMetric(overallTCC, plottingMode="bar", ylabel="TCC", titleString=title) +
+        ggplot2::theme(strip.background=ggplot2::element_blank(), strip.text.x = ggplot2::element_blank())
+      plotIterator = plotIterator + 1
     }
   }
 
   plot = ggpubr::ggarrange(plotlist=plotlist)
-  result = ggpubr::annotate_figure(plot, top=ggpubr::text_grob("Tucker Congruence Coefficients"))
-  return(result)
+  return(plot)
 }
 
 # Ugly solution to namespace issues caused by dplyr

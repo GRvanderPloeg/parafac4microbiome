@@ -1,3 +1,15 @@
+#' Plot a summary of the loadings of many initialized parafac models.
+#'
+#' @inheritParams plotPARAFACmodel
+#' @param models Models list output from [parafac()] using output="all".
+#'
+#' @return Plot of loadings with error bars
+#' @export
+#'
+#' @examples
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+#' models = parafac(processedFujita$data, 2, nstart=10, output="all")
+#' plotModelStability(models, processedFujita)
 plotModelStability = function(models, dataset, colourCols=NULL,
                               legendTitles=NULL, xLabels=NULL, legendColNums=NULL,
                               arrangeModes=NULL, continuousModes=NULL, overallTitle=""){
