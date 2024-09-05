@@ -70,6 +70,6 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
                  "varExp"=varExp,
                  "TCC"=TCC)
 
-  plots = plotModelMetric(metrics)
+  plots = plotModelMetric(numIterations, SSE, CORCONDIA, varExp, TCC)
   return(list("plots"=plots, "metrics"=metrics, "models"=allModels))
 }

@@ -26,24 +26,20 @@
 #' }
 #'
 exportPARAFAC = function(model, dataset, prefix="PARAFACmodel", path="./", saveRDS=FALSE){
-  stopifnot(methods::is(model, "parafac"))
 
-  A = model$A
-  B = model$B
-  C = model$C
-  numComponents = ncol(A)
+  numComponents = ncol(model$Fac[[1]])
 
-  mode1 = cbind(A, dataset$mode1) %>% dplyr::as_tibble()
-  mode2 = cbind(B, dataset$mode2) %>% dplyr::as_tibble()
-  mode3 = cbind(C, dataset$mode3) %>% dplyr::as_tibble()
+  mode1 = cbind(model$Fac[[1]], dataset$mode1) %>% dplyr::as_tibble()
+  mode2 = cbind(model$Fac[[2]], dataset$mode2) %>% dplyr::as_tibble()
+  mode3 = cbind(model$Fac[[3]], dataset$mode3) %>% dplyr::as_tibble()
   input = dataset$data
-  modelledData = reinflateTensor(model$Fac[[1]], model$Fac[[2]], model$Fac[[3]])
+  modelledData = model$Xhat
 
   components = list()
   for(f in 1:numComponents){
-    fakeA = matrix(A[,f])
-    fakeB = matrix(B[,f])
-    fakeC = matrix(C[,f])
+    fakeA = matrix(model$Fac[[1]][,f])
+    fakeB = matrix(model$Fac[[2]][,f])
+    fakeC = matrix(model$Fac[[3]][,f])
     fakeModel = list(fakeA, fakeB, fakeC)
     components[[f]] = reinflateTensor(fakeModel[[1]], fakeModel[[2]], fakeModel[[3]])
   }
