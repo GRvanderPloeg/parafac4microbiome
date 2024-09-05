@@ -18,6 +18,7 @@ test_that("flipLoadings produces a same length list as models input", {
 })
 
 test_that("flipLoadings Fac is not the same as models fac", {
+  set.seed(123)
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
   X = processedFujita$data
   models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)
