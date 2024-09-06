@@ -62,7 +62,6 @@
 </div>
 <!-- badges: start -->
 
-<!-- badges: end -->
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -73,9 +72,9 @@
 <li>
 <code><a href="reference/parafac.html">parafac()</a></code> allows the user to create a Parallel Factor Analysis model of the multi-way data array.</li>
 <li>
-<code>assessNumComponents()</code> helps the user select the appropriate number of components for the PARAFAC model.</li>
+<code><a href="reference/assessModelQuality.html">assessModelQuality()</a></code> helps the user select the appropriate number of components by randomly initializing many PARAFAC models and inspecting various metrics of interest.</li>
 <li>
-<code>modelStabilityCheck()</code> performs jack-knifing of samples to inspect the stability of the PARAFAC model.</li>
+<code><a href="reference/assessModelStability.html">assessModelStability()</a></code> helps the user select the appropriate number of components by bootstrapping or jack-knifing samples and inspecting if the model outcome is similar.</li>
 <li>
 <code><a href="reference/plotPARAFACmodel.html">plotPARAFACmodel()</a></code> helps visually inspect the PARAFAC model.</li>
 </ul>
@@ -88,7 +87,12 @@
 <li>
 <code>vanderPloeg2024</code>: a small gingivitis intervention dataset with specific response groups (<a href="https://doi.org/10.1101/2024.03.18.585469" class="external-link uri">https://doi.org/10.1101/2024.03.18.585469</a>).</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
 <p>A basic introduction to the package is given in <code><a href="articles/PARAFAC_introduction.html">vignette("PARAFAC_introduction")</a></code> and modelling the example datasets are elaborated in their respective vignettes <code><a href="articles/Fujita2023_analysis.html">vignette("Fujita2023_analysis")</a></code>, <code><a href="articles/Shao2019_analysis.html">vignette("Shao2019_analysis")</a></code> and <code><a href="articles/vanderPloeg2024_analysis.html">vignette("vanderPloeg2024_analysis")</a></code>.</p>
+<p>These vignettes and all function documentation can be found on the GitHub pages website <a href="https://grvanderploeg.github.io/parafac4microbiome/">here</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -103,7 +107,7 @@
 </h2>
 <p>Please use the following citation when using this package:</p>
 <ul>
-<li>van der Ploeg, G. R., et al. (2024). Exploratory analysis of longitudinal microbiome data using Parallel Factor Analysis: opportunities and challenges [Manuscript in preparation].</li>
+<li>van der Ploeg, G.R., et al. (2024). parafac4microbiome: Exploratory analysis of longitudinal microbiome data using Parallel Factor Analysis [Manuscript in preparation].</li>
 </ul>
 </div>
 <div class="section level2">
