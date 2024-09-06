@@ -8,7 +8,6 @@
 [![Codecov test
 coverage](https://codecov.io/gh/GRvanderPloeg/parafac4microbiome/branch/master/graph/badge.svg)](https://app.codecov.io/gh/GRvanderPloeg/parafac4microbiome?branch=master)
 [![R-CMD-check](https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml)
-
 <!-- badges: end -->
 
 ## Overview
@@ -21,10 +20,12 @@ microbiome data.
   appropriately for a multi-way data array.
 - `parafac()` allows the user to create a Parallel Factor Analysis model
   of the multi-way data array.
-- `assessNumComponents()` helps the user select the appropriate number
-  of components for the PARAFAC model.
-- `modelStabilityCheck()` performs jack-knifing of samples to inspect
-  the stability of the PARAFAC model.
+- `assessModelQuality()` helps the user select the appropriate number of
+  components by randomly initializing many PARAFAC models and inspecting
+  various metrics of interest.
+- `assessModelStability()` helps the user select the appropriate number
+  of components by bootstrapping or jack-knifing samples and inspecting
+  if the model outcome is similar.
 - `plotPARAFACmodel()` helps visually inspect the PARAFAC model.
 
 This package also comes with three example datasets.
@@ -39,11 +40,17 @@ This package also comes with three example datasets.
   specific response groups
   (<https://doi.org/10.1101/2024.03.18.585469>).
 
+## Documentation
+
 A basic introduction to the package is given in
 `vignette("PARAFAC_introduction")` and modelling the example datasets
 are elaborated in their respective vignettes
 `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and
 `vignette("vanderPloeg2024_analysis")`.
+
+These vignettes and all function documentation can be found on the
+GitHub pages website
+[here](https://grvanderploeg.github.io/parafac4microbiome/).
 
 ## Installation
 
@@ -59,9 +66,9 @@ devtools::install_github("GRvanderPloeg/parafac4microbiome")
 
 Please use the following citation when using this package:
 
-- van der Ploeg, G. R., et al. (2024). Exploratory analysis of
-  longitudinal microbiome data using Parallel Factor Analysis:
-  opportunities and challenges \[Manuscript in preparation\].
+- van der Ploeg, G.R., et al. (2024). parafac4microbiome: Exploratory
+  analysis of longitudinal microbiome data using Parallel Factor
+  Analysis \[Manuscript in preparation\].
 
 ## Usage
 
