@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,10 +38,39 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.0.2" id="parafac4microbiome-002">parafac4microbiome 0.0.2<a class="anchor" aria-label="anchor" href="#parafac4microbiome-002"></a></h2>
-<ul><li>Added NEWS.md</li>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="parafac4microbiome-010">parafac4microbiome 0.1.0<a class="anchor" aria-label="anchor" href="#parafac4microbiome-010"></a></h2>
+<ul><li>
+<code>parafac</code> is now a custom function based on an ALS algorithm allowing for much more output (see documentation).</li>
+<li>
+<code>initializePARAFAC</code> initializes the input vectors either randomly on based on a best-guess SVD model of the unfolded array.</li>
+<li>
+<code>parafac_core_als</code> contains this ALS algorithm.</li>
+<li>
+<code>parafac_fun</code> calculates the loss of a parafac model in anticipation of an all-at-once optimization implementation.</li>
+<li>
+<code>assessNumComponents</code> and <code>checkModelStability</code> have been renamed into <code>assessModelQuality</code> and <code>assessModelStability</code> respectively to clarify their use.</li>
+<li>
+<code>checkModelStability</code> now works with a minimum and maximum number of components.</li>
+<li>
+<code>checkModelStability</code> reports Factor Match Score in a plot.</li>
+<li>
+<code>calculateFMS</code> calculates pairwise Factor Match Scores for a list of model objects.</li>
+<li>
+<code>parafac</code>, <code>multiwayCenter</code>, <code>multiwayScale</code> and <code>multiwayCLR</code> are now based on the new rTensor dependency for tensor unfolding</li>
+<li>
+<code>plotOverallTCCs</code> has been merged with <code>plotModelTCCs</code>.</li>
+<li>Many bugfixes. PARAFAC model solutions should be more stable as a result.</li>
+<li>Many documentation changes across the board. Overall, the use case per function should be much clearer.</li>
+<li>Vignettes are updated to reflect and utilize the new changes.</li>
+<li>Removed dependency: paramGUI</li>
 </ul></div>
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.2" id="parafac4microbiome-002">parafac4microbiome 0.0.2<a class="anchor" aria-label="anchor" href="#parafac4microbiome-002"></a></h2>
+<ul><li>Added <code>NEWS.md</code>
+</li>
+</ul></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
