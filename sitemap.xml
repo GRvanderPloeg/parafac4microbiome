@@ -11,8 +11,10 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/index.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/Fujita2023.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/Shao2019.html</loc></url>
-<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/assessNumComponents.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/assessModelQuality.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/assessModelStability.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calcVarExpPerComponent.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateFMS.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateSparsity.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateVarExp.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/corcondia.html</loc></url>
@@ -21,7 +23,6 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/importPARAFAC.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/index.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/initializePARAFAC.html</loc></url>
-<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/modelStabilityCheck.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/multiwayCLR.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/multiwayCenter.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/multiwayScale.html</loc></url>
