@@ -8,7 +8,7 @@ assessModelStability(
   dataset,
   minNumComponents = 1,
   maxNumComponents = 5,
-  numFolds = nrow(X),
+  numFolds = dim(dataset$data)[1],
   considerGroups = FALSE,
   groupVariable = "",
   colourCols = NULL,

@@ -19,21 +19,21 @@ transformPARAFACloadings = function(Fac, modeToCorrect, moreOutput=FALSE){
   C = Fac[[3]]
 
   if(modeToCorrect == 1){
-    F = paramGUI::kroneckercol(C, B) %>% as.matrix()
+    F = multiway::krprod(C, B) %>% as.matrix()
     Ftilde = pracma::gramSchmidt(F)$Q
     T = pracma::pinv(F) %*% Ftilde
     Atilde = A %*% pracma::pinv(t(T))
     result = Atilde
   }
   else if(modeToCorrect == 2){
-    F = paramGUI::kroneckercol(A, C) %>% as.matrix()
+    F = multiway::krprod(A, C) %>% as.matrix()
     Ftilde = pracma::gramSchmidt(F)$Q
     T = pracma::pinv(F) %*% Ftilde
     Btilde = B %*% pracma::pinv(t(T))
     result = Btilde
   }
   else if(modeToCorrect == 3){
-    F = paramGUI::kroneckercol(B, A) %>% as.matrix()
+    F = multiway::krprod(B, A) %>% as.matrix()
     Ftilde = pracma::gramSchmidt(F)$Q
     T = pracma::pinv(F) %*% Ftilde
     Ctilde = C %*% pracma::pinv(t(T))

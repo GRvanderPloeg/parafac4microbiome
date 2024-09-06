@@ -23,3 +23,9 @@ test_that("A nonsensical minNumComponents throws an error", {
 test_that("A nonsensical numRepetitions throws an error", {
   expect_error(assessModelQuality(Fujita2023$data, minNumComponents=-3, maxNumComponents=3, numRepetitions=-5))
 })
+
+test_that("assessModelQuality can run in parallel", {
+  skip_on_cran()
+  processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+  expect_no_error(assessModelQuality(processedFujita$data, minNumComponents=1, maxNumComponents=3, numRepetitions=5, numCores=2))
+})

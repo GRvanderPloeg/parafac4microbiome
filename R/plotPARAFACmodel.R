@@ -203,7 +203,12 @@ plotPARAFACmodel = function(model, dataset, numComponents, colourCols=NULL, lege
     plotIterator = plotIterator + 1
   }
 
-  outputPlot = ggpubr::ggarrange(plotlist = plotList, ncol=3, nrow=numComponents+1)
+  if(all(colourCols == "")){
+    numPlots = length(plotList)
+    outputPlot = ggpubr::ggarrange(plotlist = plotList[-c((numPlots-2):numPlots)], ncol=3, nrow=numComponents)
+  } else{
+    outputPlot = ggpubr::ggarrange(plotlist = plotList, ncol=3, nrow=numComponents+1)
+  }
 
   if(overallTitle != ""){
     print(ggpubr::annotate_figure(outputPlot, top=ggpubr::text_grob(overallTitle)))
