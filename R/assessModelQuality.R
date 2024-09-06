@@ -1,4 +1,4 @@
-#' Create randomly initialized models for determining the correct number of components.
+#' Create randomly initialized models to determine the correct number of components by assessing model quality metrics.
 #'
 #' @param X Input data
 #' @param minNumComponents Minimum number of components (default 1).
@@ -9,7 +9,7 @@
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
 #' @return A list object of the following:
-#' * metricPlots: Plots of all assessed metrics and an overview plot showing a summary of all of them.
+#' * plots: Plots of all assessed metrics and an overview plot showing a summary of all of them.
 #' * metrics: metrics of every created model (number of iterations, sum of squared errors, CORCONDIA score and variance explained).
 #' * models: all created models.
 #'
@@ -17,9 +17,9 @@
 #'
 #' @examples
 #' X = Fujita2023$data
-#' assessment = assessNumComponents(X, minNumComponents=1, maxNumComponents=3, numRepetitions=5)
+#' assessment = assessModelQuality(X, minNumComponents=1, maxNumComponents=3, numRepetitions=5)
 #' assessment$plots$overview
-assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-6, maxit=2500, numCores=1){
+assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-6, maxit=2500, numCores=1){
 
   metrics = list()
   allModels = list()
@@ -31,8 +31,8 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
   CORCONDIA = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
   varExp = matrix(0L, nrow=numRepetitions, ncol=length(minNumComponents:maxNumComponents), dimnames=names)
 
-  metricPlots = list()
-  metricPlots$TCC = list()
+  plots = list()
+  plots$TCC = list()
 
   for(f in minNumComponents:maxNumComponents){
 
@@ -56,24 +56,23 @@ assessNumComponents = function(X, minNumComponents=1, maxNumComponents=5, numRep
     allModels[[f]] = models
 
     # Plot TCC for this number of components
-    metricPlots$TCC[[f]] = plotModelTCCs(models)
+    plots$TCC[[f]] = plotModelTCCs(models)
   }
 
   # Plot the other metrics
-  metricPlots$numIterations = plotModelMetric(numIterations, plottingMode="bar", ylabel="Number of iterations")
-  metricPlots$SSE = plotModelMetric(SSE, plottingMode="bar", ylabel="SSE")
-  metricPlots$CORCONDIA = plotModelMetric(CORCONDIA, plottingMode="bar", ylabel="CORCONDIA")
-  metricPlots$varExp = plotModelMetric(varExp, plottingMode="bar", ylabel="Variation explained (%)")
-  metricPlots$overview = ggpubr::ggarrange(plotModelMetric(numIterations, ylabel="Number of iterations"),
-                                           plotModelMetric(SSE, ylabel="SSE"),
-                                           plotModelMetric(CORCONDIA, ylabel="CORCONDIA"),
-                                           plotModelMetric(varExp, ylabel="Variation explained (%)"))
-
+  plots$numIterations = plotModelMetric(numIterations, plottingMode="bar", ylabel="Number of iterations")
+  plots$SSE = plotModelMetric(SSE, plottingMode="bar", ylabel="SSE")
+  plots$CORCONDIA = plotModelMetric(CORCONDIA, plottingMode="bar", ylabel="CORCONDIA")
+  plots$varExp = plotModelMetric(varExp, plottingMode="bar", ylabel="Variation explained (%)")
+  plots$overview = ggpubr::ggarrange(plotModelMetric(numIterations, ylabel="Number of iterations"),
+                                     plotModelMetric(SSE, ylabel="SSE"),
+                                     plotModelMetric(CORCONDIA, ylabel="CORCONDIA"),
+                                     plotModelMetric(varExp, ylabel="Variation explained (%)"))
 
   metrics = list("numIterations"=numIterations,
                  "SSE"=SSE,
                  "CORCONDIA"=CORCONDIA,
                  "varExp"=varExp)
 
-  return(list("metricPlots"=metricPlots, "metrics"=metrics, "models"=allModels))
+  return(list("plots"=plots, "metrics"=metrics, "models"=allModels))
 }

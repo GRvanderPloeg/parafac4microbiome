@@ -64,21 +64,19 @@ arrangeModes = c(FALSE, TRUE, FALSE)
 continuousModes = c(FALSE,FALSE,TRUE)
 
 # Assess the metrics to determine the correct number of components
-assessment = assessNumComponents(processedFujita$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+qualityAssessment = assessModelQuality(processedFujita$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
 ```
 
 We will now inspect the output plots of interest for `Fujita2023`.
 
 ```{r overview plot}
-assessment$plots$overview
+qualityAssessment$plots$overview
 ```
 The overview plots show that we can reach ~35% explained variation if we take 3 components. The CORCONDIA for those models are ~98.5, which is well above the minimum requirement of 60. Based on this overview, either 2 or 3 components seems fine.
 
 ```{r TCC}
-assessment$plots$TCC[[2]]
-assessment$plots$TCCoverall[[2]]
-assessment$plots$TCC[[3]]
-assessment$plots$TCCoverall[[3]]
+qualityAssessment$plots$TCC[[2]]
+qualityAssessment$plots$TCC[[3]]
 ```
 
 The Tucker Congruence Coefficients show us how similar the loading vectors in the same mode are to each other, between the various components. A value >=0.85 has been described as problematic in the literature. Neither in the two-component model, nor in the three-component model are the loadings overly similar to each other.
@@ -87,12 +85,13 @@ The Tucker Congruence Coefficients show us how similar the loading vectors in th
 Next, we investigate the stability of the models when jack-knifing out samples. This will give us more information to choose between 2 or 3 components.
 
 ```{r model stability}
-modelStabilityCheck(processedFujita, numComponents=2, numFolds=numFolds, considerGroups=FALSE,
-                    groupVariable="", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                    continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
-modelStabilityCheck(processedFujita, numComponents=3, numFolds=numFolds, considerGroups=FALSE,
-                    groupVariable="", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                    continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
+stabilityAssessment = assessModelStability(processedFujita, minNumComponents=1, maxNumComponents=3, numFolds=numFolds, considerGroups=FALSE,
+                                           groupVariable="", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                                           ctol=ctol, maxit=maxit, numCores=numCores)
+stabilityAssessment$modelPlots[[1]]
+stabilityAssessment$modelPlots[[2]]
+stabilityAssessment$modelPlots[[3]]
+stabilityAssessment$FMSplot
 ```
 In the two-component jack-knifed models, there seems to be some instability in the second component, mainly in the time mode. In the three-component models there is more stability overall.
 
@@ -100,8 +99,8 @@ In the two-component jack-knifed models, there seems to be some instability in t
 We have decided that a three-component model is the most appropriate for the `Fujita2023` dataset. We can now select one of the random initializations from the `assessNumComponents()` output as our final model. We're going to select the random initialisation that corresponded the maximum amount of variation explained for three components.
 ```{r model selection}
 numComponents = 3
-modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
-finalModel = assessment$models[[numComponents]][[modelChoice]]
+modelChoice = which(qualityAssessment$metrics$varExp[,numComponents] == max(qualityAssessment$metrics$varExp[,numComponents]))
+finalModel = qualityAssessment$models[[numComponents]][[modelChoice]]
 ```
 
 Finally, we visualize the model using `plotPARAFACmodel()`.

@@ -31,6 +31,7 @@ test_that("flipLoadings Fac is not the same as models fac", {
 })
 
 test_that("reinflateTensor throws no errors", {
+  set.seed(123)
   A = array(rnorm(108*2), c(108,2))
   B = array(rnorm(100*2), c(100,2))
   C = array(rnorm(10*2), c(10,2))
@@ -38,6 +39,7 @@ test_that("reinflateTensor throws no errors", {
 })
 
 test_that("reinflateTensor throws no errors in the one-component case", {
+  set.seed(123)
   A = rnorm(108)
   B = rnorm(100)
   C = rnorm(10)

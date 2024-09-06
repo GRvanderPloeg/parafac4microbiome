@@ -55,6 +55,7 @@ plotModelStability = function(models, dataset, colourCols=NULL,
   model = list()
   ymins = list()
   ymaxs = list()
+  metadata = list(dataset$mode1, dataset$mode2, dataset$mode3)
 
   for(m in 1:numModes){
     medians = array(0L, dim=c(nrow(metaData[[m]]), numComponents))
@@ -79,11 +80,17 @@ plotModelStability = function(models, dataset, colourCols=NULL,
       model[[m]] = model[[m]] %>% dplyr::arrange(!!dplyr::sym(colourCols[[m]]))
       ymins[[m]] = ymins[[m]] %>% dplyr::arrange(!!dplyr::sym(colourCols[[m]]))
       ymaxs[[m]] = ymaxs[[m]] %>% dplyr::arrange(!!dplyr::sym(colourCols[[m]]))
+
+      # Change dataset mode metadata order to fit with the fake model
+      metadata[[m]] = metadata[[m]] %>% dplyr::arrange(!!dplyr::sym(colourCols[[m]]))
     }
   }
 
   # Make a regular model plot as if the medians are the loadings
   # No support for continuousModes because we need bar plots with error bars
+  dataset$mode1 = metadata[[1]]
+  dataset$mode2 = metadata[[2]]
+  dataset$mode3 = metadata[[3]]
   plotlist = plotPARAFACmodel(model, dataset, numComponents, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes)
 
   # Iterate over the plots and add error bars

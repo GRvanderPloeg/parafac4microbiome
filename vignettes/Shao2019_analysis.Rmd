@@ -64,19 +64,19 @@ arrangeModes = c(TRUE, TRUE, FALSE)
 continuousModes = c(FALSE,FALSE,TRUE)
 
 # Assess the metrics to determine the correct number of components
-assessment = assessNumComponents(processedShao$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+qualityAssessment = assessModelQuality(processedShao$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
 ```
 
 We will now inspect the output plots of interest for `Shao2019`.
 
 ```{r overview plot}
-assessment$plots$overview
+qualityAssessment$plots$overview
 ```
 The overview plots shows that we can explain ~17% of the variation in a three-component model. That is quite low. The CORCONDIA for that number of components is ~99.8 or higher, which is well above the minimum requirement of 60. 
 
 ```{r TCC}
-assessment$plots$TCC[[2]]
-assessment$plots$TCC[[3]]
+qualityAssessment$plots$TCC[[2]]
+qualityAssessment$plots$TCC[[3]]
 ```
 
 The Tucker Congruence Coefficients show us how similar the loading vectors in the same mode are to each other, between the various components. A value >=0.85 has been described as problematic in the literature. Neither in the two-component model, nor in the three-component model are the loadings very similar to each other.
@@ -85,12 +85,14 @@ The Tucker Congruence Coefficients show us how similar the loading vectors in th
 Next, we investigate the stability of the models when jack-knifing out samples. This will give us more information to choose between 2 or 3 components.
 
 ```{r model stability}
-modelStabilityCheck(processedShao, numComponents=2, numFolds=numFolds, considerGroups=TRUE,
-                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
-modelStabilityCheck(processedShao, numComponents=3, numFolds=numFolds, considerGroups=TRUE,
-                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
+stabilityAssessment = assessModelStability(processedShao, minNumComponents=1, maxNumComponents=3, numFolds=numFolds, considerGroups=TRUE,
+                                           groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                                           ctol=ctol, maxit=maxit, numCores=numCores)
+
+stabilityAssessment$modelPlots[[1]]
+stabilityAssessment$modelPlots[[2]]
+stabilityAssessment$modelPlots[[3]]
+stabilityAssessment$FMSplot
 ```
 Both models are quite unstable. The models likely need more iterations or a more strict tolerance to converge properly (see documentation of `assessNumComponents()` and `modelStabilityCheck()` for more info). For simplicity's sake we select two components here, but refer to the parafac4microbiome paper for outcome when a more rigorous check is performed.
 
@@ -99,8 +101,8 @@ We have decided that a two-component model is the most appropriate for the `Shao
 
 ```{r model selection}
 numComponents = 2
-modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
-finalModel = assessment$models[[numComponents]][[modelChoice]]
+modelChoice = which(qualityAssessment$metrics$varExp[,numComponents] == max(qualityAssessment$metrics$varExp[,numComponents]))
+finalModel = qualityAssessment$models[[numComponents]][[modelChoice]]
 ```
 
 Finally, we visualize the model using `plotPARAFACmodel()`.

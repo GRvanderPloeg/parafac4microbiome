@@ -64,19 +64,19 @@ arrangeModes = c(TRUE, TRUE, FALSE)
 continuousModes = c(FALSE,FALSE,TRUE)
 
 # Assess the metrics to determine the correct number of components
-assessment = assessNumComponents(processedPloeg$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
+qualityAssessment = assessModelQuality(processedPloeg$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
 ```
 
 We will now inspect the output plots of interest for `vanderPloeg2024`.
 
 ```{r overview plot}
-assessment$plots$overview
+qualityAssessment$plots$overview
 ```
 This seems a clear-cut case for a two-component model, as the three-component models have a CORCONDIA of -600. The maximum amount of variation we can describe is ~20%.
 
 ```{r TCC}
-assessment$plots$TCC[[2]]
-assessment$plots$TCC[[3]]
+qualityAssessment$plots$TCC[[2]]
+qualityAssessment$plots$TCC[[3]]
 ```
 The Tucker Congruence Coefficients show us how similar the loading vectors in the same mode are to each other, between the various components. A value >=0.85 has been described as problematic in the literature. They confirm what we already observed with the CORCONDIA metric: the loadings in the feature and time mode in the three-component model are highly similar to each other. Hence we must select a two-component model.
 
@@ -84,12 +84,14 @@ The Tucker Congruence Coefficients show us how similar the loading vectors in th
 Next, we investigate the stability of the models when jack-knifing out samples. We briefly inspect the two-component and three-component cases although we already know which will be more appropriate for this data.
 
 ```{r model stability}
-modelStabilityCheck(processedPloeg, numComponents=2, numFolds=numFolds, considerGroups=TRUE,
-                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
-modelStabilityCheck(processedPloeg, numComponents=3, numFolds=numFolds, considerGroups=TRUE,
-                               groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
-                               continuousModes, ctol=ctol, maxit=maxit, numCores=numCores)$plot
+stabilityAssessment = assessModelStability(processedPloeg, minNumComponents=1, maxNumComponents=3, numFolds=numFolds, considerGroups=TRUE,
+                                           groupVariable="Delivery_mode", colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+                                           ctol=ctol, maxit=maxit, numCores=numCores)
+
+stabilityAssessment$modelPlots[[1]]
+stabilityAssessment$modelPlots[[2]]
+stabilityAssessment$modelPlots[[3]]
+stabilityAssessment$FMSplot
 ```
 
 The two-component models are very stable. The three-component models indeed show very similar time profiles and also some instability.
@@ -99,8 +101,8 @@ We have decided that a two-component model is the most appropriate for the `vand
 
 ```{r model selection}
 numComponents = 2
-modelChoice = which(assessment$metrics$varExp[,numComponents] == max(assessment$metrics$varExp[,numComponents]))
-finalModel = assessment$models[[numComponents]][[modelChoice]]
+modelChoice = which(qualityAssessment$metrics$varExp[,numComponents] == max(qualityAssessment$metrics$varExp[,numComponents]))
+finalModel = qualityAssessment$models[[numComponents]][[modelChoice]]
 ```
 
 Finally, we visualize the model using `plotPARAFACmodel()`.
