@@ -19,6 +19,7 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateSparsity.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/calculateVarExp.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/corcondia.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/fac_to_vect.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/flipLoadings.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/index.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/initializePARAFAC.html</loc></url>
@@ -28,6 +29,7 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac_core_als.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac_fun.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/parafac_gradient.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/pipe.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/plotModelMetric.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/plotModelStability.html</loc></url>
@@ -40,5 +42,6 @@
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/sumsqr.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/transformPARAFACloadings.html</loc></url>
 <url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/vanderPloeg2024.html</loc></url>
+<url><loc>https://grvanderploeg.github.io/parafac4microbiome/reference/vect_to_fac.html</loc></url>
 </urlset>
 

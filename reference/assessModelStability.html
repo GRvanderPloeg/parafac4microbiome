@@ -56,8 +56,13 @@
 <span>  xLabels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  legendColNums <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  arrangeModes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"als"</span>,</span>
 <span>  ctol <span class="op">=</span> <span class="fl">1e-06</span>,</span>
 <span>  maxit <span class="op">=</span> <span class="fl">2500</span>,</span>
+<span>  max_fn <span class="op">=</span> <span class="fl">10000</span>,</span>
+<span>  rel_tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
+<span>  abs_tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
+<span>  grad_tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
 <span>  numCores <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -110,12 +115,32 @@
 <dd><p>Vector of boolean values per mode, stating if the loadings should be arranged according to colourCols (TRUE) or not (FALSE).</p></dd>
 
 
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
+<dd><p>Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.</p></dd>
+
+
 <dt id="arg-ctol">ctol<a class="anchor" aria-label="anchor" href="#arg-ctol"></a></dt>
-<dd><p>Relative change in loss tolerated to call the algorithm converged (default 1e-4).</p></dd>
+<dd><p>Relative change in loss tolerated to call the algorithm converged in the ALS case (default 1e-4).</p></dd>
 
 
 <dt id="arg-maxit">maxit<a class="anchor" aria-label="anchor" href="#arg-maxit"></a></dt>
-<dd><p>Maximum number of iterations allowed without convergence (default 500).</p></dd>
+<dd><p>Maximum number of iterations allowed without convergence in the ALS case (default 500).</p></dd>
+
+
+<dt id="arg-max-fn">max_fn<a class="anchor" aria-label="anchor" href="#arg-max-fn"></a></dt>
+<dd><p>Maximum number of function evaluations allowed without convergence in the OPT case (default 10000).</p></dd>
+
+
+<dt id="arg-rel-tol">rel_tol<a class="anchor" aria-label="anchor" href="#arg-rel-tol"></a></dt>
+<dd><p>Relative change in loss tolerated to call the algorithm converged in the OPT case (default 1e-8).</p></dd>
+
+
+<dt id="arg-abs-tol">abs_tol<a class="anchor" aria-label="anchor" href="#arg-abs-tol"></a></dt>
+<dd><p>Absolute loss tolerated to call the algorithm converged in the OPT case (default 1e-8).</p></dd>
+
+
+<dt id="arg-grad-tol">grad_tol<a class="anchor" aria-label="anchor" href="#arg-grad-tol"></a></dt>
+<dd><p>Tolerance on the two-norm of the gradient divided over the number of elements in the gradient in the OPT case (default 1e-8).</p></dd>
 
 
 <dt id="arg-numcores">numCores<a class="anchor" aria-label="anchor" href="#arg-numcores"></a></dt>

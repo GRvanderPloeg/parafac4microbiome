@@ -252,32 +252,32 @@ some statistics like R-squared and the sum of squared error.</p>
 <span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        [,1] [,2] [,3]</span></span>
-<span><span class="co">#&gt; [1,] -264.3 -116  363</span></span>
-<span><span class="co">#&gt; [2,]  -85.3 -223  350</span></span>
-<span><span class="co">#&gt; [3,] 1151.4 -196  431</span></span>
-<span><span class="co">#&gt; [4,] -207.6 1549 -935</span></span>
-<span><span class="co">#&gt; [5,] -101.9 -165  115</span></span>
-<span><span class="co">#&gt; [6,]  -91.9  -98  111</span></span>
+<span><span class="co">#&gt;        [,1]   [,2]  [,3]</span></span>
+<span><span class="co">#&gt; [1,] -258.9  255.0   434</span></span>
+<span><span class="co">#&gt; [2,]  -89.8 -224.2   380</span></span>
+<span><span class="co">#&gt; [3,] 1163.1   30.1   471</span></span>
+<span><span class="co">#&gt; [4,] -194.3  765.0 -1767</span></span>
+<span><span class="co">#&gt; [5,] -102.8  -60.4   205</span></span>
+<span><span class="co">#&gt; [6,]  -85.8  119.7   198</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         [,1]    [,2]    [,3]</span></span>
-<span><span class="co">#&gt; [1,] 0.05013  0.0538  0.0659</span></span>
-<span><span class="co">#&gt; [2,] 0.01393  0.0375 -0.1227</span></span>
-<span><span class="co">#&gt; [3,] 0.00925 -0.1197 -0.0283</span></span>
-<span><span class="co">#&gt; [4,] 0.01035 -0.1292 -0.0192</span></span>
-<span><span class="co">#&gt; [5,] 0.01339 -0.0419  0.1130</span></span>
-<span><span class="co">#&gt; [6,] 0.02418  0.0308 -0.1232</span></span>
+<span><span class="co">#&gt;        [,1]    [,2]    [,3]</span></span>
+<span><span class="co">#&gt; [1,] 0.0497 -0.0128  0.0854</span></span>
+<span><span class="co">#&gt; [2,] 0.0114  0.0406 -0.0601</span></span>
+<span><span class="co">#&gt; [3,] 0.0112 -0.0626 -0.0880</span></span>
+<span><span class="co">#&gt; [4,] 0.0125 -0.0719 -0.0877</span></span>
+<span><span class="co">#&gt; [5,] 0.0156 -0.0637  0.0562</span></span>
+<span><span class="co">#&gt; [6,] 0.0216  0.0443 -0.0689</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         [,1]      [,2]      [,3]</span></span>
-<span><span class="co">#&gt; [1,] -0.0123 -5.16e-04  4.42e-04</span></span>
-<span><span class="co">#&gt; [2,] -0.0142 -7.40e-04 -2.10e-03</span></span>
-<span><span class="co">#&gt; [3,] -0.0134 -1.63e-03  7.54e-05</span></span>
-<span><span class="co">#&gt; [4,] -0.0131 -5.58e-04 -1.70e-03</span></span>
-<span><span class="co">#&gt; [5,] -0.0122 -6.15e-05 -7.12e-04</span></span>
-<span><span class="co">#&gt; [6,] -0.0124 -1.47e-04 -8.95e-04</span></span>
+<span><span class="co">#&gt; [1,] -0.0122 -0.000354  0.000903</span></span>
+<span><span class="co">#&gt; [2,] -0.0142 -0.000753 -0.000156</span></span>
+<span><span class="co">#&gt; [3,] -0.0133 -0.002270  0.001130</span></span>
+<span><span class="co">#&gt; [4,] -0.0132 -0.001346 -0.000257</span></span>
+<span><span class="co">#&gt; [5,] -0.0121 -0.000251 -0.000366</span></span>
+<span><span class="co">#&gt; [6,] -0.0123 -0.000259 -0.000421</span></span>
 <span><span class="va">model</span><span class="op">$</span><span class="va">varExp</span></span>
-<span><span class="co">#&gt; [1] 39</span></span></code></pre></div>
-<p>This model explains 38.991 percent of the variation in the processed
+<span><span class="co">#&gt; [1] 38.1</span></span></code></pre></div>
+<p>This model explains 38.113 percent of the variation in the processed
 data cube.</p>
 </div>
 <div class="section level3">
