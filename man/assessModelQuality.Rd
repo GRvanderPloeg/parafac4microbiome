@@ -9,8 +9,13 @@ assessModelQuality(
   minNumComponents = 1,
   maxNumComponents = 5,
   numRepetitions = 100,
+  method = "als",
   ctol = 1e-06,
   maxit = 2500,
+  max_fn = 10000,
+  rel_tol = 1e-08,
+  abs_tol = 1e-08,
+  grad_tol = 1e-08,
   numCores = 1
 )
 }
@@ -23,9 +28,19 @@ assessModelQuality(
 
 \item{numRepetitions}{Number of randomly initialized models to create (default 100).}
 
+\item{method}{Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.}
+
 \item{ctol}{Change in SSQ needed for model to be converged (default 1e-6).}
 
 \item{maxit}{Maximum number of iterations (default 2500).}
+
+\item{max_fn}{Maximum number of function evaluations allowed without convergence in the OPT case (default 10000).}
+
+\item{rel_tol}{Relative change in loss tolerated to call the algorithm converged in the OPT case (default 1e-8).}
+
+\item{abs_tol}{Absolute loss tolerated to call the algorithm converged in the OPT case (default 1e-8).}
+
+\item{grad_tol}{Tolerance on the two-norm of the gradient divided over the number of elements in the gradient in the OPT case (default 1e-8).}
 
 \item{numCores}{Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)}
 }

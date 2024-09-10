@@ -19,7 +19,8 @@
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' modelStability = assessModelStability(processedFujita, minNumComponents=1, maxNumComponents=3)
 assessModelStability = function(dataset, minNumComponents=1, maxNumComponents=5, numFolds=dim(dataset$data)[1], considerGroups=FALSE, groupVariable="",
-                               colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, ctol=1e-6, maxit=2500, numCores=1){
+                               colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, method="als", ctol=1e-6,
+                               maxit=2500, max_fn=10000, rel_tol=1e-8, abs_tol=1e-8, grad_tol=1e-8, numCores=1){
 
   if(considerGroups == TRUE & groupVariable == ""){
     warning("When setting considerGroups to TRUE, please also specify a groupVariable.")

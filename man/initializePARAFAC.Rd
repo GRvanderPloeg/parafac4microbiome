@@ -4,7 +4,7 @@
 \alias{initializePARAFAC}
 \title{Initialize PARAFAC algorithm input vectors}
 \usage{
-initializePARAFAC(Tensor, nfac, initialization = "random")
+initializePARAFAC(Tensor, nfac, initialization = "random", output = "Fac")
 }
 \arguments{
 \item{Tensor}{Input dataset matrix or tensor}
@@ -12,9 +12,11 @@ initializePARAFAC(Tensor, nfac, initialization = "random")
 \item{nfac}{Number of components to initialize.}
 
 \item{initialization}{Either "random" for random initialization or "svd" for svd based.}
+
+\item{output}{Output the initialized components as a Fac object ("Fac", default) or as a vector ("vect").}
 }
 \value{
-Fac object of initialized components.
+Fac or vector with initialized components.
 }
 \description{
 Initialize PARAFAC algorithm input vectors

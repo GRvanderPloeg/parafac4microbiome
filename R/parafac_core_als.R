@@ -29,11 +29,12 @@ parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
   rel_f = Inf
   tnsr_norm = rTensor::fnorm(Tensor)
 
-  fs[1] = parafac_fun(Tensor, init) # store initial loss value
+  fs[1] = parafac_fun(init, Tensor) # store initial loss value
 
   # Main ALS loop
   Fac = init
   iteration = 2
+  lambdas = rep(1, nfac)
   while ((iteration < maxit) && (rel_f > ctol)) {
 
     for (m in 1:numModes) {
@@ -44,7 +45,7 @@ parafac_core_als = function(Tensor, nfac, init, maxit=500, ctol=1e-4){
       Fac[[m]] = sweep(tmp, 2, lambdas, "/")
     }
 
-    fs[iteration] = parafac_fun(Tensor, Fac, lambdas)
+    fs[iteration] = parafac_fun(Fac, Tensor, lambdas)
     rel_f = abs(fs[iteration]-fs[iteration-1])/tnsr_norm
     iteration = iteration + 1
   }

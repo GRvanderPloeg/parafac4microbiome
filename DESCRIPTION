@@ -19,6 +19,7 @@ Imports:
     ggpubr,
     magrittr,
     methods,
+    mize,
     multiway,
     parallel,
     pracma,

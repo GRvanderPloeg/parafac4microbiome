@@ -208,3 +208,81 @@ sortComponents = function(Fac, X){
   Fac = lapply(Fac, as.matrix)
   return(Fac)
 }
+
+#' Vectorize Fac object
+#'
+#' @param Fac Fac object from CMTF and ACMTF
+#'
+#' @return Vectorized Fac object
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' A = array(rnorm(108*2), c(108, 2))
+#' B = array(rnorm(100*2), c(100, 2))
+#' C = array(rnorm(10*2), c(10, 2))
+
+#' Fac = list(A, B, C)
+#' v = fac_to_vect(Fac)
+fac_to_vect = function(Fac){
+  return(unlist(Fac))
+}
+
+#' Convert vectorized output of PARAFAC to a Fac list object with all loadings per mode.
+#'
+#' @param vect Vectorized output of PARAFAC modelling
+#' @param X Input data
+#' @param sortComponents Sort the order of the components by variation explained (default FALSE).
+#'
+#' @return Fac: list object with all loadings in all components per mode, ordered the same way as Z$modes.
+#' @export
+#'
+#' @examples
+#' set.seed(123)
+#' A = array(rnorm(108*2), c(108, 2))
+#' B = array(rnorm(100*2), c(100, 2))
+#' C = array(rnorm(10*2), c(10, 2))
+#'
+#' X = reinflateTensor(A, B, C)
+#' result = initializePARAFAC(X, 2, initialization="random", output="vect")
+#' Fac = vect_to_fac(result, X)
+vect_to_fac = function(vect, X, sortComponents=FALSE){
+
+  numModes = length(dim(X))
+  numComponents = length(vect) / sum(dim(X))
+  sizes = dim(X)
+
+  Fac = list()
+  startIdx = 1
+  for(i in 1:numModes){
+    Fac[[i]] = array(0L, c(sizes[i], numComponents))
+
+    for(r in 1:numComponents){
+      endIdx = startIdx + sizes[i] - 1
+      Fac[[i]][,r] = vect[startIdx:endIdx]
+      startIdx = endIdx + 1
+    }
+  }
+
+  # If there are values leftover, you must have an ACMTF model
+  ACMTFcase = FALSE
+  if(endIdx < length(vect)){
+    ACMTFcase = TRUE
+  }
+
+  # If you have an ACMTF model, add the remaining values as lambdas
+  if(ACMTFcase){
+    Fac[[numModes+1]] = array(0L, c(1, numComponents))
+    for(r in 1:numComponents){
+      endIdx = startIdx
+      Fac[[numModes+1]][,r] = vect[startIdx:endIdx]
+      startIdx = endIdx + 1
+    }
+  }
+
+  if(sortComponents == TRUE){
+    Fac = sortComponents(Fac, X)
+  }
+
+  return(Fac)
+}

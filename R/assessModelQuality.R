@@ -1,5 +1,6 @@
 #' Create randomly initialized models to determine the correct number of components by assessing model quality metrics.
 #'
+#' @inheritParams parafac
 #' @param X Input data
 #' @param minNumComponents Minimum number of components (default 1).
 #' @param maxNumComponents Maximum number of components (default 5).
@@ -19,7 +20,7 @@
 #' X = Fujita2023$data
 #' assessment = assessModelQuality(X, minNumComponents=1, maxNumComponents=3, numRepetitions=5)
 #' assessment$plots$overview
-assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-6, maxit=2500, numCores=1){
+assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, method="als", ctol=1e-6, maxit=2500, max_fn=10000, rel_tol=1e-8, abs_tol=1e-8, grad_tol=1e-8, numCores=1){
 
   metrics = list()
   allModels = list()
@@ -41,11 +42,11 @@ assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepe
       cl = parallel::makeCluster(numCores)
       doParallel::registerDoParallel(cl)
       models = foreach::foreach(i=1:numRepetitions) %dopar% {
-        model=parafac4microbiome::parafac(X, nfac=f, nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+        model=parafac4microbiome::parafac(X, nfac=f, nstart=1, method=method, ctol=ctol, rel_tol=rel_tol, abs_tol=abs_tol, grad_tol=grad_tol, maxit=maxit, max_fn=max_fn, verbose=FALSE)
       }
       parallel::stopCluster(cl)
     } else{
-      models = parafac(X, nfac=f, nstart=numRepetitions, maxit=maxit, ctol=ctol, output ="all", verbose=FALSE)
+      models = parafac(X, nfac=f, nstart=numRepetitions, method=method, ctol=ctol, rel_tol=rel_tol, abs_tol=abs_tol, grad_tol=grad_tol, maxit=maxit, max_fn=max_fn, output ="all", verbose=FALSE)
     }
 
     # Store output
