@@ -116,13 +116,13 @@
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.github.io/parafac4microbiome/">parafac4microbiome</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> <span class="co"># for reproducibility</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">456</span><span class="op">)</span> <span class="co"># for reproducibility</span></span>
 <span></span>
 <span><span class="co"># Process the data cube</span></span>
 <span><span class="va">processedFujita</span> <span class="op">=</span> <span class="fu"><a href="reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">Fujita2023</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.99</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Make a PARAFAC model</span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, nstart<span class="op">=</span><span class="fl">10</span>, output<span class="op">=</span><span class="st">"best"</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plot the PARAFAC model using some metadata</span></span>
 <span><span class="fu"><a href="reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedFujita</span>,</span>
