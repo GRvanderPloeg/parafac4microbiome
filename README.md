@@ -74,13 +74,13 @@ Please use the following citation when using this package:
 
 ``` r
 library(parafac4microbiome)
-set.seed(0) # for reproducibility
+set.seed(456) # for reproducibility
 
 # Process the data cube
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
 
 # Make a PARAFAC model
-model = parafac(processedFujita$data, nfac=3, verbose=FALSE)
+model = parafac(processedFujita$data, nfac=3, nstart=10, output="best", verbose=FALSE)
 
 # Plot the PARAFAC model using some metadata
 plotPARAFACmodel(model$Fac, processedFujita,
