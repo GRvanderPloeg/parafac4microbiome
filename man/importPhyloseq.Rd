@@ -7,7 +7,7 @@
 importPhyloseq(phyloseqObject, subjectIDs, thirdMode)
 }
 \arguments{
-\item{phyloseqObject}{Phyloseq object}
+\item{phyloseqObject}{Phyloseq object containing at least an otu table and sample data, preferably also taxonomic information.}
 
 \item{subjectIDs}{Column name in sam_data corresponding to the subject IDs.}
 
@@ -19,7 +19,7 @@ List object containing:
 \item 'data': data cube
 \item 'mode1': metadata of the subject mode
 \item 'mode2': taxonomy information
-\item 'mode3': metadata of the third mdoe
+\item 'mode3': metadata of the third mode
 }
 }
 \description{

@@ -33,7 +33,9 @@ Suggests:
     knitr,
     phyloseq,
     rmarkdown,
+    SummarizedExperiment,
     testthat (>= 3.0.0),
+    TreeSummarizedExperiment,
     withr
 Config/testthat/edition: 3
 VignetteBuilder: knitr

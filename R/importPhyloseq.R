@@ -1,6 +1,6 @@
 #' Import Phyloseq object for PARAFAC modelling
 #'
-#' @param phyloseqObject Phyloseq object
+#' @param phyloseqObject Phyloseq object containing at least an otu table and sample data, preferably also taxonomic information.
 #' @param subjectIDs Column name in sam_data corresponding to the subject IDs.
 #' @param thirdMode Column name in sam_data corresponding to the study design aspect to put in the third mode of the data cube.
 #'
