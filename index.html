@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Parallel Factor Analysis modelling for longitudinal microbiome data • parafac4microbiome</title>
+<title>Parallel Factor Analysis Modelling for Longitudinal Microbiome Data • parafac4microbiome</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Parallel Factor Analysis modelling for longitudinal microbiome data">
-<meta name="description" content="Creation and selection of Parallel Factor Analysis models for longitudinal microbiome data.">
-<meta property="og:description" content="Creation and selection of Parallel Factor Analysis models for longitudinal microbiome data.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Parallel Factor Analysis Modelling for Longitudinal Microbiome Data">
+<meta name="description" content="Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and assessModelStability giving you various metrics to select the optimal model. The selected model can then be plotted using plotPARAFACmodel which offers a ggplot2-based overview of the loadings.">
+<meta property="og:description" content="Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and assessModelStability giving you various metrics to select the optimal model. The selected model can then be plotted using plotPARAFACmodel which offers a ggplot2-based overview of the loadings.">
 <meta property="og:image" content="https://grvanderploeg.github.io/parafac4microbiome/logo.png">
 </head>
 <body>
@@ -98,8 +98,15 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <code>parafac4microbiome</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The <code>parafac4microbiome</code> version can be installed from CRAN using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"parafac4microbiome"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
+</h2>
+<p>You can install the development version of <code>parafac4microbiome</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"GRvanderPloeg/parafac4microbiome"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -114,15 +121,26 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.github.io/parafac4microbiome/">parafac4microbiome</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">456</span><span class="op">)</span> <span class="co"># for reproducibility</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Process the data cube</span></span>
-<span><span class="va">processedFujita</span> <span class="op">=</span> <span class="fu"><a href="reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">Fujita2023</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.99</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedFujita</span> <span class="op">=</span> <span class="fu"><a href="reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">Fujita2023</span>,</span>
+<span>                                  sparsityThreshold<span class="op">=</span><span class="fl">0.99</span>,</span>
+<span>                                  CLR<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span>                                  centerMode<span class="op">=</span><span class="fl">1</span>,</span>
+<span>                                  scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Make a PARAFAC model</span></span>
 <span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, nstart<span class="op">=</span><span class="fl">10</span>, output<span class="op">=</span><span class="st">"best"</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Sign flip components to make figure interpretable and comparable to the paper.</span></span>
+<span><span class="co"># This has no effect on the model or the fit.</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span> <span class="co"># sign flip mode 1 component 2</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="co"># sign flip mode 2 component 1</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="co"># sign flip mode 2 component 3</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span> <span class="op">*</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>         <span class="co"># sign flip all of mode 3</span></span>
 <span></span>
 <span><span class="co"># Plot the PARAFAC model using some metadata</span></span>
 <span><span class="fu"><a href="reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedFujita</span>,</span>
@@ -135,6 +153,11 @@
 <span>                 continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>                 overallTitle <span class="op">=</span> <span class="st">"Fujita PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-usage-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="getting-help">Getting help<a class="anchor" aria-label="anchor" href="#getting-help"></a>
+</h2>
+<p>If you encounter an unexpected error or a clear bug, please file an issue with a minimal reproducible example here on <a href="https://github.com/GRvanderPloeg/parafac4microbiome/issues" class="external-link">Github</a>. For questions or other types of feedback, feel free to send an email.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
@@ -156,7 +179,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Geert Roelof van der Ploeg <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0007-5204-3386" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Geert Roelof van der Ploeg <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0009-0007-5204-3386" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
