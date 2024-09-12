@@ -185,7 +185,7 @@ calcVarExpPerComponent = function(Fac, X){
 
 #' Sort PARAFAC components based on variance explained per component.
 #'
-#' @param Fac Fac object output of a PARAFAC model
+#' @param Fac Fac object output of a [parafac] model
 #' @param X Input data
 #'
 #' @return Fac object of sorted components
@@ -211,7 +211,7 @@ sortComponents = function(Fac, X){
 
 #' Vectorize Fac object
 #'
-#' @param Fac Fac object from CMTF and ACMTF
+#' @param Fac Fac object output of [parafac].
 #'
 #' @return Vectorized Fac object
 #' @export

@@ -54,6 +54,14 @@ GitHub pages website
 
 ## Installation
 
+The `parafac4microbiome` version can be installed from CRAN using:
+
+``` r
+install.packages("parafac4microbiome")
+```
+
+## Development version
+
 You can install the development version of `parafac4microbiome` from
 [GitHub](https://github.com/) with:
 
@@ -74,13 +82,24 @@ Please use the following citation when using this package:
 
 ``` r
 library(parafac4microbiome)
-set.seed(456) # for reproducibility
+set.seed(123)
 
 # Process the data cube
-processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
+processedFujita = processDataCube(Fujita2023,
+                                  sparsityThreshold=0.99,
+                                  CLR=TRUE,
+                                  centerMode=1,
+                                  scaleMode=2)
 
 # Make a PARAFAC model
 model = parafac(processedFujita$data, nfac=3, nstart=10, output="best", verbose=FALSE)
+
+# Sign flip components to make figure interpretable and comparable to the paper.
+# This has no effect on the model or the fit.
+model$Fac[[1]][,2] = -1 * model$Fac[[1]][,2] # sign flip mode 1 component 2
+model$Fac[[2]][,1] = -1 * model$Fac[[2]][,1] # sign flip mode 2 component 1
+model$Fac[[2]][,3] = -1 * model$Fac[[2]][,3] # sign flip mode 2 component 3
+model$Fac[[3]] = -1 * model$Fac[[3]]         # sign flip all of mode 3
 
 # Plot the PARAFAC model using some metadata
 plotPARAFACmodel(model$Fac, processedFujita,
@@ -95,3 +114,10 @@ plotPARAFACmodel(model$Fac, processedFujita,
 ```
 
 <img src="man/figures/README-usage-1.png" width="100%" />
+
+## Getting help
+
+If you encounter an unexpected error or a clear bug, please file an
+issue with a minimal reproducible example here on
+[Github](https://github.com/GRvanderPloeg/parafac4microbiome/issues).
+For questions or other types of feedback, feel free to send an email.

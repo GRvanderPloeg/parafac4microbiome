@@ -1,10 +1,14 @@
 Package: parafac4microbiome
-Title: Parallel Factor Analysis modelling for longitudinal microbiome data
+Title: Parallel Factor Analysis Modelling for Longitudinal Microbiome Data
 Version: 0.1.0
 Authors@R: 
-    person("Geert Roelof", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre"),
+    person("Geert Roelof", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0009-0007-5204-3386"))
-Description: Creation and selection of Parallel Factor Analysis models for longitudinal microbiome data.
+Description: Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data.
+    You can import your own data with our import functions or use one of the example datasets to create your own
+    PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and
+    assessModelStability giving you various metrics to select the optimal model. The selected model can then be
+    plotted using plotPARAFACmodel which offers a 'ggplot2'-based overview of the loadings.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
