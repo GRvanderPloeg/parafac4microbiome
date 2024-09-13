@@ -74,9 +74,10 @@ devtools::install_github("GRvanderPloeg/parafac4microbiome")
 
 Please use the following citation when using this package:
 
-- van der Ploeg, G.R., et al. (2024). parafac4microbiome: Exploratory
-  analysis of longitudinal microbiome data using Parallel Factor
-  Analysis \[Manuscript in preparation\].
+- van der Ploeg, G. R., Westerhuis, J., Heintz-Buschart, A., &
+  Smilde, A. (2024). parafac4microbiome: Exploratory analysis of
+  longitudinal microbiome data using Parallel Factor Analysis. bioRxiv,
+  2024-05.
 
 ## Usage
 

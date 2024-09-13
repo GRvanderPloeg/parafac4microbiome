@@ -1,5 +1,13 @@
 # parafac4microbiome 0.2.0
 
+* 'parafac' is now capable of running an all-at-once optimization using the methods="opt" parameter. For now, the default remains methods="als" (i.e. the ALS algorithm) because it converges faster to a similar solution.
+* `importPhyloseq` allows the user to import a phyloseq object for parafac modelling.
+* `importTreeSummarizedExperiment` allows the user to import a TreeSummarizedExperiment object for parafac modelling.
+* `importMicrobiotaProcess` allows the user to import a MicrobiotaProcess object for parafac modelling.
+* The text in the vignettes were updated to better reflect the changes per version 0.1.0.
+* The readme and vignettes figures now use sign flipping to make comparison with the paper easier.
+* Some documentation and testing changes anticipating a CRAN release.
+
 # parafac4microbiome 0.1.0
 
 * `parafac` is now a custom function based on an ALS algorithm allowing for much more output (see documentation).
