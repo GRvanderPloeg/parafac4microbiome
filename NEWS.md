@@ -1,3 +1,5 @@
+# parafac4microbiome 0.2.0
+
 # parafac4microbiome 0.1.0
 
 * `parafac` is now a custom function based on an ALS algorithm allowing for much more output (see documentation).
