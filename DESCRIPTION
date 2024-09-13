@@ -1,14 +1,22 @@
 Package: parafac4microbiome
-Title: Parallel Factor Analysis Modelling for Longitudinal Microbiome Data
+Title: Parallel Factor Analysis Modelling of Longitudinal Microbiome Data
 Version: 0.2.0
-Authors@R: 
-    person("Geert Roelof", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "0009-0007-5204-3386"))
-Description: Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data.
-    You can import your own data with our import functions or use one of the example datasets to create your own
-    PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and
-    assessModelStability giving you various metrics to select the optimal model. The selected model can then be
-    plotted using plotPARAFACmodel which offers a 'ggplot2'-based overview of the loadings. The Parallel Factor
+Authors@R: c(
+    person("Geert Roelof", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0007-5204-3386")),
+    person("Johan", "Westerhuis", , "j.a.westerhuis@uva.nl", role = "ctb",
+           comment = c(ORCID = "0000-0002-6747-9779")),
+    person("Anna", "Heintz-Buschart", , "a.u.s.heintzbuschart@uva.nl", role = "ctb",
+           comment = c(ORCID = "0000-0002-9780-1933")),
+    person("Age", "Smilde", , "a.k.smilde@uva.nl", role = "ctb",
+           comment = c(ORCID = "0000-0002-3052-4644")),
+    person("University of Amsterdam", role = c("cph", "fnd")))
+Description: Creation and selection of PARAllel FACtor Analysis (PARAFAC)
+    models of longitudinal microbiome data. You can import your own data with
+    our import functions or use one of the example datasets to create your own
+    PARAFAC models. Selection of the optimal number of components can be done
+    using assessModelQuality and assessModelStability. The selected model can
+    then be plotted using plotPARAFACmodel. The Parallel Factor
     Analysis method was originally described by Caroll & Chang (1970)
     <https://link.springer.com/article/10.1007/BF02310791> and Harshman (1970)
     <https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf>.
@@ -49,4 +57,5 @@ Suggests:
     withr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://grvanderploeg.github.io/parafac4microbiome/
+URL: https://grvanderploeg.github.io/parafac4microbiome/, https://github.com/GRvanderPloeg/parafac4microbiome
+BugReports: https://github.com/GRvanderPloeg/parafac4microbiome/issues
