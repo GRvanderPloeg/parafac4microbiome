@@ -11,7 +11,7 @@
 #' @param grad_tol Tolerance on the two-norm of the gradient divided over the number of elements in the gradient in the OPT case (default 1e-8).
 #' @param initialization "Random" for randomly initialized input vectors or "nvec" for svd-based best guess.
 #' @param method Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.
-#' @param verbose DEPRECATED: verbose output
+#' @param verbose `r lifecycle::badge('deprecated')` verbose output
 #' @param output String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").
 #' @param sortComponents Boolean to sort the components based on their variance explained (default FALSE)
 #'

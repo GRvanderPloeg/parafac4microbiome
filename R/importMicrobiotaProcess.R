@@ -12,7 +12,7 @@
 #'  * 'mode3': metadata of the third mode
 #' @export
 #'
-#' @examples
+#' @examplesIf (rlang::is_installed("phyloseq") && rlang::is_installed("MicrobiotaProcess"))
 #' library(phyloseq)
 #' library(MicrobiotaProcess)
 #'

@@ -7,7 +7,7 @@
 sortComponents(Fac, X)
 }
 \arguments{
-\item{Fac}{Fac object output of a PARAFAC model}
+\item{Fac}{Fac object output of a \link{parafac} model}
 
 \item{X}{Input data}
 }

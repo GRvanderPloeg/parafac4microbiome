@@ -28,6 +28,7 @@ List object containing:
 Import MicrobiotaProcess object for PARAFAC modelling
 }
 \examples{
+\dontshow{if ((rlang::is_installed("phyloseq") && rlang::is_installed("MicrobiotaProcess"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(phyloseq)
 library(MicrobiotaProcess)
 
@@ -42,4 +43,5 @@ fakePhyloseq = phyloseq(otu_table(fakeOTU, taxa_are_rows=FALSE),
 mpse = as.MPSE(fakePhyloseq)
 
 dataset = importMicrobiotaProcess(mpse, subjectIDs="replicate.id", thirdMode="timepoint")
+\dontshow{\}) # examplesIf}
 }

@@ -8,7 +8,10 @@ Description: Creation and selection of PARAllel FACtor Analysis (PARAFAC) models
     You can import your own data with our import functions or use one of the example datasets to create your own
     PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and
     assessModelStability giving you various metrics to select the optimal model. The selected model can then be
-    plotted using plotPARAFACmodel which offers a 'ggplot2'-based overview of the loadings.
+    plotted using plotPARAFACmodel which offers a 'ggplot2'-based overview of the loadings. The Parallel Factor
+    Analysis method was originally described by Caroll & Chang (1970)
+    <https://link.springer.com/article/10.1007/BF02310791> and Harshman (1970)
+    <https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -21,12 +24,14 @@ Imports:
     foreach,
     ggplot2,
     ggpubr,
+    lifecycle,
     magrittr,
     methods,
     mize,
     multiway,
     parallel,
     pracma,
+    rlang,
     rTensor,
     stats,
     tidyr

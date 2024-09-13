@@ -1,4 +1,5 @@
 test_that("importTreeSummarizedExperiment works without errors", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -13,6 +14,7 @@ test_that("importTreeSummarizedExperiment works without errors", {
 })
 
 test_that("importTreeSummarizedExperiment works without errors when taxa are rows", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeOTU = rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data
@@ -27,6 +29,7 @@ test_that("importTreeSummarizedExperiment works without errors when taxa are row
 })
 
 test_that("importTreeSummarizedExperiment restructuring works as expected", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -42,6 +45,7 @@ test_that("importTreeSummarizedExperiment restructuring works as expected", {
 })
 
 test_that("importTreeSummarizedExperiment restructuring works as expected when taxa are rows", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeOTU = rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data
@@ -57,10 +61,12 @@ test_that("importTreeSummarizedExperiment restructuring works as expected when t
 })
 
 test_that("importTreeSummarizedExperiment throws errors without a TreeSummarizedExperiment object", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   expect_error(importTreeSummarizedExperiment(Fujita2023, subjectIDs="replicate.id", thirdMode="timepoint", taxa_are_rows=FALSE))
 })
 
 test_that("importTreeSummarizedExperiment gives an error if OTU info is missing", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeTaxa = as.matrix(Fujita2023$mode2)
@@ -73,6 +79,7 @@ test_that("importTreeSummarizedExperiment gives an error if OTU info is missing"
 })
 
 test_that("importTreeSummarizedExperiment gives a warning if taxonomy info is missing", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -85,6 +92,7 @@ test_that("importTreeSummarizedExperiment gives a warning if taxonomy info is mi
 })
 
 test_that("importTreeSummarizedExperiment gives an error if sample info is missing", {
+  testthat::skip_if_not_installed("TreeSummarizedExperiment")
   withr::local_package("TreeSummarizedExperiment")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)

@@ -12,7 +12,7 @@
 #'  * 'mode3': metadata of the third mode
 #' @export
 #'
-#' @examples
+#' @examplesIf rlang::is_installed("TreeSummarizedExperiment")
 #' library(TreeSummarizedExperiment)
 #'
 #' fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)

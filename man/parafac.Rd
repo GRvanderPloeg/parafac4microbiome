@@ -44,7 +44,7 @@ parafac(
 
 \item{method}{Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.}
 
-\item{verbose}{DEPRECATED: verbose output}
+\item{verbose}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} verbose output}
 
 \item{output}{String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").}
 

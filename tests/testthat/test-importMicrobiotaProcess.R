@@ -1,4 +1,7 @@
 test_that("importMicrobiotaProcess works without errors", {
+  testthat::skip_if_not_installed("phyloseq")
+  testthat::skip_if_not_installed("MicrobiotaProcess")
+
   withr::local_package("phyloseq")
   withr::local_package("MicrobiotaProcess")
 
@@ -13,6 +16,9 @@ test_that("importMicrobiotaProcess works without errors", {
 })
 
 test_that("importMicrobiotaProcess works without errors when taxa are rows", {
+  testthat::skip_if_not_installed("phyloseq")
+  testthat::skip_if_not_installed("MicrobiotaProcess")
+
   withr::local_package("phyloseq")
   withr::local_package("MicrobiotaProcess")
 
@@ -27,6 +33,9 @@ test_that("importMicrobiotaProcess works without errors when taxa are rows", {
 })
 
 test_that("importMicrobiotaProcess restructuring works as expected", {
+  testthat::skip_if_not_installed("phyloseq")
+  testthat::skip_if_not_installed("MicrobiotaProcess")
+
   withr::local_package("phyloseq")
   withr::local_package("MicrobiotaProcess")
 
@@ -42,6 +51,9 @@ test_that("importMicrobiotaProcess restructuring works as expected", {
 })
 
 test_that("importMicrobiotaProcess restructuring works as expected when taxa are rows", {
+  testthat::skip_if_not_installed("phyloseq")
+  testthat::skip_if_not_installed("MicrobiotaProcess")
+
   withr::local_package("phyloseq")
   withr::local_package("MicrobiotaProcess")
 
@@ -57,10 +69,15 @@ test_that("importMicrobiotaProcess restructuring works as expected when taxa are
 })
 
 test_that("importMicrobiotaProcess throws errors without a TreeSummarizedExperiment object", {
+  testthat::skip_if_not_installed("phyloseq")
+  testthat::skip_if_not_installed("MicrobiotaProcess")
   expect_error(importMicrobiotaProcess(Fujita2023, subjectIDs="replicate.id", thirdMode="timepoint", taxa_are_rows=TRUE))
 })
 
 test_that("importMicrobiotaProcess gives an error if sample info is missing", {
+  testthat::skip_if_not_installed("phyloseq")
+  testthat::skip_if_not_installed("MicrobiotaProcess")
+
   withr::local_package("phyloseq")
   withr::local_package("MicrobiotaProcess")
 

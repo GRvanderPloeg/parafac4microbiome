@@ -31,8 +31,8 @@ library(ggpubr)
 The data cube in Fujita2023$data contains unprocessed counts. The function `processDataCube()` performs the processing of these counts with the following steps:
 
 *   It performs feature selection based on the sparsityThreshold setting. Sparsity is here defined as the fraction of samples where a microbial abundance (ASV/OTU or otherwise) is zero.
-*   It performs a centered log-ratio transformation of each sample using the `compositions::clr()` function with a pseudo-count of one (on all features, prior to selection based on sparsity).
-*   It centers and scales the three-way array. This is a complex subject, for which we refer to a [paper by Rasmus Bro and Age Smilde](https://doi.org/10.1002/cem.773). By centering across the subject mode, we make the subjects comparable to each other within each time point. Scaling within the feature mode avoids the PARAFAC model focussing on features with abnormally high variation.
+*   It performs a centered log-ratio transformation of each sample using with a pseudo-count of one (on all features, prior to selection based on sparsity).
+*   It centers and scales the three-way array. This is a complex topic that is elaborated upon in our accompanying paper. By centering across the subject mode, we make the subjects comparable to each other within each time point. Scaling within the feature mode avoids the PARAFAC model focusing on features with abnormally high variation.
 
 The outcome of processing is a new version of the dataset. Please refer to the documentation of `processDataCube()` for more information.
 
@@ -41,9 +41,9 @@ processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, 
 ```
 
 # Determining the correct number of components
-A critical aspect of PARAFAC modelling is to determine the correct number of components. We have developed the function `assessNumComponents()` for this purpose. We give the function our new dataset and specify the minimum and maximum number of components to investigate and the number of randomly initialized models to try for each number of components.
+A critical aspect of PARAFAC modelling is to determine the correct number of components. We have developed the functions `assessModelQuality()` and `assessModelStability()` for this purpose. First, we will assess the model quality and specify the minimum and maximum number of components to investigate and the number of randomly initialized models to try for each number of components.
 
-Note: this vignette reflects a minimum working example for analysing this dataset due to computational limitations in automatic vignette rendering. Hence, we only look at 1-3 components with 5 random initializations each. These settings are not ideal for real datasets. Please refer to the documentation of `assessNumComponents()` for more information.
+Note: this vignette reflects a minimum working example for analyzing this dataset due to computational limitations in automatic vignette rendering. Hence, we only look at 1-3 components with 5 random initializations each. These settings are not ideal for real datasets. Please refer to the documentation of `assessModelQuality()` for more information.
 
 ```{r Fujita num comp selection}
 # Setup
@@ -72,17 +72,10 @@ We will now inspect the output plots of interest for `Fujita2023`.
 ```{r overview plot}
 qualityAssessment$plots$overview
 ```
-The overview plots show that we can reach ~35% explained variation if we take 3 components. The CORCONDIA for those models are ~98.5, which is well above the minimum requirement of 60. Based on this overview, either 2 or 3 components seems fine.
-
-```{r TCC}
-qualityAssessment$plots$TCC[[2]]
-qualityAssessment$plots$TCC[[3]]
-```
-
-The Tucker Congruence Coefficients show us how similar the loading vectors in the same mode are to each other, between the various components. A value >=0.85 has been described as problematic in the literature. Neither in the two-component model, nor in the three-component model are the loadings overly similar to each other.
+The overview plots show that we can reach ~40% explained variation if we take 3 components. The CORCONDIA for those models are ~98, which is well above the minimum requirement of 60. Based on this overview, either 2 or 3 components seems fine.
 
 # Jack-knifed models
-Next, we investigate the stability of the models when jack-knifing out samples. This will give us more information to choose between 2 or 3 components.
+Next, we investigate the stability of the models when jack-knifing out samples using `assessModelStability()`. This will give us more information to choose between 2 or 3 components.
 
 ```{r model stability}
 stabilityAssessment = assessModelStability(processedFujita, minNumComponents=1, maxNumComponents=3, numFolds=numFolds, considerGroups=FALSE,
@@ -91,12 +84,11 @@ stabilityAssessment = assessModelStability(processedFujita, minNumComponents=1, 
 stabilityAssessment$modelPlots[[1]]
 stabilityAssessment$modelPlots[[2]]
 stabilityAssessment$modelPlots[[3]]
-stabilityAssessment$FMSplot
 ```
-In the two-component jack-knifed models, there seems to be some instability in the second component, mainly in the time mode. In the three-component models there is more stability overall.
+The three-component model is stable and can be safely chosen as the final model.
 
 # Model selection
-We have decided that a three-component model is the most appropriate for the `Fujita2023` dataset. We can now select one of the random initializations from the `assessNumComponents()` output as our final model. We're going to select the random initialisation that corresponded the maximum amount of variation explained for three components.
+We have decided that a three-component model is the most appropriate for the `Fujita2023` dataset. We can now select one of the random initializations from the `assessModelQuality()` output as our final model. We're going to select the random initialization that corresponded the maximum amount of variation explained for three components.
 ```{r model selection}
 numComponents = 3
 modelChoice = which(qualityAssessment$metrics$varExp[,numComponents] == max(qualityAssessment$metrics$varExp[,numComponents]))
@@ -106,6 +98,19 @@ finalModel = qualityAssessment$models[[numComponents]][[modelChoice]]
 Finally, we visualize the model using `plotPARAFACmodel()`.
 
 ```{r model plot}
+plotPARAFACmodel(finalModel$Fac, processedFujita, 3, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
+  continuousModes = c(FALSE,FALSE,TRUE),
+  overallTitle = "Fujita PARAFAC model")
+```
+
+You will observe that the loadings for some modes in some components are negative. This is due to sign flipping: two modes having negative loadings cancel out but describe the same subspace as two positive loadings. We can manually sign flip these loadings to obtain a more interpretable plot.
+
+```{r flip loadings}
+finalModel$Fac[[1]][,2] = -1 * finalModel$Fac[[1]][,2] # mode 1 component 2
+finalModel$Fac[[1]][,3] = -1 * finalModel$Fac[[1]][,3] # mode 1 component 3
+finalModel$Fac[[2]][,3] = -1 * finalModel$Fac[[2]][,3] # mode 2 component 3
+finalModel$Fac[[3]][,2] = -1 * finalModel$Fac[[3]][,2] # mode 3 component 2
+
 plotPARAFACmodel(finalModel$Fac, processedFujita, 3, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
   continuousModes = c(FALSE,FALSE,TRUE),
   overallTitle = "Fujita PARAFAC model")

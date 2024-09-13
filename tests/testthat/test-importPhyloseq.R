@@ -1,4 +1,5 @@
 test_that("importPhyloseq works without errors", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -11,6 +12,7 @@ test_that("importPhyloseq works without errors", {
 })
 
 test_that("importPhyloseq works without errors when taxa are rows", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
 
   fakeOTU = rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data
@@ -23,6 +25,7 @@ test_that("importPhyloseq works without errors when taxa are rows", {
 })
 
 test_that("importPhyloseq restructuring works as expected", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -36,6 +39,7 @@ test_that("importPhyloseq restructuring works as expected", {
 })
 
 test_that("importPhyloseq restructuring works as expected when taxa are rows", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
 
   fakeOTU = rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data
@@ -49,10 +53,12 @@ test_that("importPhyloseq restructuring works as expected when taxa are rows", {
 })
 
 test_that("importPhyloseq throws errors without a phyloseq object", {
+  testthat::skip_if_not_installed("phyloseq")
   expect_error(importPhyloseq(Fujita2023, subjectIDs="replicate.id", thirdMode="timepoint"))
 })
 
 test_that("importPhyloseq gives a warning if taxonomy info is missing", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -64,6 +70,7 @@ test_that("importPhyloseq gives a warning if taxonomy info is missing", {
 })
 
 test_that("importPhyloseq gives an error if sample info is missing", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
 
   fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
@@ -74,6 +81,7 @@ test_that("importPhyloseq gives an error if sample info is missing", {
 })
 
 test_that("importPhyloseq throws no errors for GlobalPatterns example dataset", {
+  testthat::skip_if_not_installed("phyloseq")
   withr::local_package("phyloseq")
   data(GlobalPatterns)
   GP = GlobalPatterns

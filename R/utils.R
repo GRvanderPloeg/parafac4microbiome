@@ -286,3 +286,7 @@ vect_to_fac = function(vect, X, sortComponents=FALSE){
 
   return(Fac)
 }
+
+ignore_unused_imports <- function() {
+  rlang::is_installed
+}

@@ -26,6 +26,7 @@ List object containing:
 Import Phyloseq object for PARAFAC modelling
 }
 \examples{
+\dontshow{if (rlang::is_installed("phyloseq")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(phyloseq)
 data(GlobalPatterns)
 GP = GlobalPatterns
@@ -37,4 +38,5 @@ df = phyloseq(otu_table(GP), tax_table(GP), alteredSampleData)
 
 # Make a data cube with SampleType (soil, feces, etc.) as the third mode.
 result = importPhyloseq(df, subjectIDs = "subjectID", thirdMode="SampleType")
+\dontshow{\}) # examplesIf}
 }

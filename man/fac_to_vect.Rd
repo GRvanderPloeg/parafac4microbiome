@@ -7,7 +7,7 @@
 fac_to_vect(Fac)
 }
 \arguments{
-\item{Fac}{Fac object from CMTF and ACMTF}
+\item{Fac}{Fac object output of \link{parafac}.}
 }
 \value{
 Vectorized Fac object
