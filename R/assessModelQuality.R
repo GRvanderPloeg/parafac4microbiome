@@ -18,7 +18,14 @@
 #'
 #' @examples
 #' X = Fujita2023$data
-#' assessment = assessModelQuality(X, minNumComponents=1, maxNumComponents=3, numRepetitions=5)
+#'
+#' # Run assessModelQuality with less strict convergence parameters as example
+#' assessment = assessModelQuality(X,
+#'                                 minNumComponents=1,
+#'                                 maxNumComponents=3,
+#'                                 numRepetitions=5,
+#'                                 ctol=1e-4,
+#'                                 maxit=250)
 #' assessment$plots$overview
 assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, method="als", ctol=1e-6, maxit=2500, max_fn=10000, rel_tol=1e-8, abs_tol=1e-8, grad_tol=1e-8, numCores=1){
 

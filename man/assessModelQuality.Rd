@@ -57,6 +57,13 @@ Create randomly initialized models to determine the correct number of components
 }
 \examples{
 X = Fujita2023$data
-assessment = assessModelQuality(X, minNumComponents=1, maxNumComponents=3, numRepetitions=5)
+
+# Run assessModelQuality with less strict convergence parameters as example
+assessment = assessModelQuality(X,
+                                minNumComponents=1,
+                                maxNumComponents=3,
+                                numRepetitions=5,
+                                ctol=1e-4,
+                                maxit=250)
 assessment$plots$overview
 }

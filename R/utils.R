@@ -37,8 +37,8 @@ flipLoadings = function(models, X){
       medianLoadings = apply(df, 1, function(x){stats::median(x, na.rm=TRUE)})
 
       # Check if SSQ goes down by flipping sign
-      unflippedSSQ = apply(df-medianLoadings, 2, function(x){sumsqr(x,na.rm=TRUE)})
-      flippedSSQ = apply((-1*df)-medianLoadings, 2, function(x){sumsqr(x,na.rm=TRUE)})
+      unflippedSSQ = apply(df-medianLoadings, 2, function(x){multiway::sumsq(x,na.rm=TRUE)})
+      flippedSSQ = apply((-1*df)-medianLoadings, 2, function(x){multiway::sumsq(x,na.rm=TRUE)})
       evidence[j,] = flippedSSQ <= unflippedSSQ
     }
     flipEvidencePerComponent[[i]] = evidence
@@ -126,28 +126,6 @@ reinflateFac = function(Fac, X, returnAsTensor=FALSE){
     Xhat = rTensor::as.tensor(Xhat)
   }
   return(Xhat)
-}
-
-#' Sum-of-squares calculation
-#'
-#' @param X Either a list containing matrices, or a matrix of values.
-#' @param na.rm Remove NAs from calculation (default FALSE).
-#'
-#' @return sum-of-squares of the object
-#' @export
-#'
-#' @examples
-#' X = array(rnorm(108*100*10), c(108,100,10))
-#' ssq = sumsqr(X)
-sumsqr = function(X, na.rm=FALSE){
-
-  if(methods::is(X, "list")){
-    result = sum(sapply(X, sumsqr, na.rm=na.rm)) # recursive to iterate over list
-  } else{
-    result = sum(X^2, na.rm=na.rm)
-  }
-
-  return(result)
 }
 
 #' Calculate the variance explained of a PARAFAC model, per component

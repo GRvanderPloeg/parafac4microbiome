@@ -18,7 +18,7 @@ A list object with three elements:
 }
 }
 \source{
-\url{https://doi.org/10.1186/s40168-023-01474-5}
+\doi{10.1186/s40168-023-01474-5}
 }
 \usage{
 Fujita2023

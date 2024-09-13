@@ -65,21 +65,6 @@ test_that("reinflateFac throws no errors when lambdas are supplied", {
   expect_no_error(reinflateFac(Fac, X))
 })
 
-test_that("sumsqr throws no errors in the vector case", {
-  X = rnorm(100)
-  expect_no_error(sumsqr(X))
-})
-
-test_that("sumsqr throws no errors in the matrix case", {
-  X = array(rnorm(100*10), c(100,10))
-  expect_no_error(sumsqr(X))
-})
-
-test_that("sumsqr throws no errors in the tensor case", {
-  X = array(rnorm(108*100*10), c(108,100,10))
-  expect_no_error(sumsqr(X))
-})
-
 test_that("calcVarExpPerComponent throws no errors", {
   X = array(rnorm(108*100*10), c(108,100,10))
   Fac = initializePARAFAC(X, 2)

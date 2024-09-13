@@ -32,9 +32,10 @@ Import MicrobiotaProcess object for PARAFAC modelling
 library(phyloseq)
 library(MicrobiotaProcess)
 
-fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)
+# Small example not using the full size of Fujita2023
+fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data[,,1:10]), 2)@data)
 fakeTaxa = as.matrix(Fujita2023$mode2)
-fakeSam = as.data.frame(cbind(rep(1:8, 110), rep(1:110, each=8)))
+fakeSam = as.data.frame(cbind(rep(1:8, 10), rep(1:10, each=8)))
 colnames(fakeSam) = c("replicate.id", "timepoint")
 
 fakePhyloseq = phyloseq(otu_table(fakeOTU, taxa_are_rows=FALSE),

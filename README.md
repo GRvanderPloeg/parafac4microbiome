@@ -32,13 +32,11 @@ This package also comes with three example datasets.
 
 - `Fujita2023`: an in-vitro experiment of ocean inocula on peptide
   medium, sampled every day for 110 days
-  (<https://doi.org/10.1186/s40168-023-01474-5>).
+  (<doi:10.1186/s40168-023-01474-5>).
 - `Shao2019`: a large cohort dataset of vaginally and caesarean-section
-  born infants from London
-  (<https://www.nature.com/articles/s41586-019-1560-1>).
+  born infants from London (<doi:10.1038/s41586-019-1560-1>).
 - `vanderPloeg2024`: a small gingivitis intervention dataset with
-  specific response groups
-  (<https://doi.org/10.1101/2024.03.18.585469>).
+  specific response groups (<doi:10.1101/2024.03.18.585469>).
 
 ## Documentation
 

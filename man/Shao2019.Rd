@@ -18,7 +18,7 @@ A list object with three elements:
 }
 }
 \source{
-\url{https://doi.org/10.1038/s41586-019-1560-1}
+\doi{10.1038/s41586-019-1560-1}
 }
 \usage{
 Shao2019

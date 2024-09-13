@@ -18,7 +18,7 @@ A list object with three elements:
 }
 }
 \source{
-<https://doi.org/10.1101/2024.03.18.585469 >
+\doi{10.1101/2024.03.18.585469}
 }
 \usage{
 vanderPloeg2024

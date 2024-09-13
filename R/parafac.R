@@ -60,8 +60,8 @@ parafac = function(Tensor, nfac, nstart=1, maxit=500, max_fn=10000, ctol=1e-4, r
     Fac = models[[i]]$Fac # for 1-component corner case
     Xhat = reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]], returnAsTensor=TRUE)
     models[[i]]$Xhat = Xhat@data
-    models[[i]]$SSE = sumsqr((Tensor - Xhat)@data)
-    models[[i]]$varExp = (sumsqr(Xhat@data) / sumsqr(Tensor@data)) * 100
+    models[[i]]$SSE = multiway::sumsq((Tensor - Xhat)@data)
+    models[[i]]$varExp = (multiway::sumsq(Xhat@data) / multiway::sumsq(Tensor@data)) * 100
     models[[i]]$init = inits[[i]]
 
     if(sortComponents == TRUE){

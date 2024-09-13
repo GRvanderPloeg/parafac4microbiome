@@ -15,6 +15,6 @@ calculateVarExp = function(Fac, X){
 
   Xhat = reinflateTensor(Fac[[1]], Fac[[2]], Fac[[3]])
   Xhat[is.na(X)] = 0 # Replace imputed values with 0 to avoid adding them to SSQ
-  varExp = sumsqr(Xhat, na.rm=TRUE) / sumsqr(X, na.rm=TRUE)
+  varExp = multiway::sumsq(Xhat, na.rm=TRUE) / multiway::sumsq(X, na.rm=TRUE)
   return(varExp)
 }

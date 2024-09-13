@@ -12,7 +12,7 @@
 #'   \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 #'   ...
 #' }
-#' @source <https://doi.org/10.1186/s40168-023-01474-5>
+#' @source \doi{10.1186/s40168-023-01474-5}
 "Fujita2023"
 
 #' Shao2019 longitudinal microbiome data
@@ -31,7 +31,7 @@
 #'   \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 #'   ...
 #' }
-#' @source <https://doi.org/10.1038/s41586-019-1560-1>
+#' @source \doi{10.1038/s41586-019-1560-1}
 "Shao2019"
 
 #' vanderPloeg2024 longitudinal microbiome data
@@ -49,5 +49,5 @@
 #'   \item{mode3}{Dataframe with the time metadata, ordered the same as the third dimension in the array.}
 #'   ...
 #' }
-#' @source <https://doi.org/10.1101/2024.03.18.585469 >
+#' @source \doi{10.1101/2024.03.18.585469}
 "vanderPloeg2024"

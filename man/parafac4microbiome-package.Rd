@@ -4,21 +4,31 @@
 \name{parafac4microbiome-package}
 \alias{parafac4microbiome}
 \alias{parafac4microbiome-package}
-\title{parafac4microbiome: Parallel Factor Analysis Modelling for Longitudinal Microbiome Data}
+\title{parafac4microbiome: Parallel Factor Analysis Modelling of Longitudinal Microbiome Data}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and assessModelStability giving you various metrics to select the optimal model. The selected model can then be plotted using plotPARAFACmodel which offers a 'ggplot2'-based overview of the loadings. The Parallel Factor Analysis method was originally described by Caroll & Chang (1970) \url{https://link.springer.com/article/10.1007/BF02310791} and Harshman (1970) \url{https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf}.
+Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the optimal number of components can be done using assessModelQuality and assessModelStability. The selected model can then be plotted using plotPARAFACmodel. The Parallel Factor Analysis method was originally described by Caroll and Chang (1970) \doi{10.1007/BF02310791} and Harshman (1970) \url{https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf}.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://grvanderploeg.github.io/parafac4microbiome/}
+  \item \url{https://github.com/GRvanderPloeg/parafac4microbiome}
+  \item Report bugs at \url{https://github.com/GRvanderPloeg/parafac4microbiome/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Geert Roelof van der Ploeg \email{g.r.ploeg@uva.nl} (\href{https://orcid.org/0009-0007-5204-3386}{ORCID}) [copyright holder]
+\strong{Maintainer}: Geert Roelof van der Ploeg \email{g.r.ploeg@uva.nl} (\href{https://orcid.org/0009-0007-5204-3386}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Johan Westerhuis \email{j.a.westerhuis@uva.nl} (\href{https://orcid.org/0000-0002-6747-9779}{ORCID}) [contributor]
+  \item Anna Heintz-Buschart \email{a.u.s.heintzbuschart@uva.nl} (\href{https://orcid.org/0000-0002-9780-1933}{ORCID}) [contributor]
+  \item Age Smilde \email{a.k.smilde@uva.nl} (\href{https://orcid.org/0000-0002-3052-4644}{ORCID}) [contributor]
+  \item University of Amsterdam [copyright holder, funder]
+}
 
 }
 \keyword{internal}

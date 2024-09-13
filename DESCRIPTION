@@ -17,8 +17,8 @@ Description: Creation and selection of PARAllel FACtor Analysis (PARAFAC)
     PARAFAC models. Selection of the optimal number of components can be done
     using assessModelQuality and assessModelStability. The selected model can
     then be plotted using plotPARAFACmodel. The Parallel Factor
-    Analysis method was originally described by Caroll & Chang (1970)
-    <https://link.springer.com/article/10.1007/BF02310791> and Harshman (1970)
+    Analysis method was originally described by Caroll and Chang (1970)
+    <doi:10.1007/BF02310791> and Harshman (1970)
     <https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf>.
 License: MIT + file LICENSE
 Encoding: UTF-8
