@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Parallel Factor Analysis Modelling for Longitudinal Microbiome Data • parafac4microbiome</title>
+<title>Parallel Factor Analysis Modelling of Longitudinal Microbiome Data • parafac4microbiome</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -16,9 +16,9 @@
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Parallel Factor Analysis Modelling for Longitudinal Microbiome Data">
-<meta name="description" content="Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and assessModelStability giving you various metrics to select the optimal model. The selected model can then be plotted using plotPARAFACmodel which offers a ggplot2-based overview of the loadings. The Parallel Factor Analysis method was originally described by Caroll &amp; Chang (1970) &lt;https://link.springer.com/article/10.1007/BF02310791&gt; and Harshman (1970) &lt;https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf&gt;.">
-<meta property="og:description" content="Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the number of components is fully handled using assessModelQuality and assessModelStability giving you various metrics to select the optimal model. The selected model can then be plotted using plotPARAFACmodel which offers a ggplot2-based overview of the loadings. The Parallel Factor Analysis method was originally described by Caroll &amp; Chang (1970) &lt;https://link.springer.com/article/10.1007/BF02310791&gt; and Harshman (1970) &lt;https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf&gt;.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Parallel Factor Analysis Modelling of Longitudinal Microbiome Data">
+<meta name="description" content="Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the optimal number of components can be done using assessModelQuality and assessModelStability. The selected model can then be plotted using plotPARAFACmodel. The Parallel Factor Analysis method was originally described by Caroll and Chang (1970) &lt;doi:10.1007/BF02310791&gt; and Harshman (1970) &lt;https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf&gt;.">
+<meta property="og:description" content="Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the optimal number of components can be done using assessModelQuality and assessModelStability. The selected model can then be plotted using plotPARAFACmodel. The Parallel Factor Analysis method was originally described by Caroll and Chang (1970) &lt;doi:10.1007/BF02310791&gt; and Harshman (1970) &lt;https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf&gt;.">
 <meta property="og:image" content="https://grvanderploeg.github.io/parafac4microbiome/logo.png">
 </head>
 <body>
@@ -54,6 +54,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/GRvanderPloeg/parafac4microbiome/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -88,11 +89,11 @@
 <p>This package also comes with three example datasets.</p>
 <ul>
 <li>
-<code>Fujita2023</code>: an in-vitro experiment of ocean inocula on peptide medium, sampled every day for 110 days (<a href="https://doi.org/10.1186/s40168-023-01474-5" class="external-link uri">https://doi.org/10.1186/s40168-023-01474-5</a>).</li>
+<code>Fujita2023</code>: an in-vitro experiment of ocean inocula on peptide medium, sampled every day for 110 days (<a href="doi:10.1186/s40168-023-01474-5" class="uri">doi:10.1186/s40168-023-01474-5</a>).</li>
 <li>
-<code>Shao2019</code>: a large cohort dataset of vaginally and caesarean-section born infants from London (<a href="https://www.nature.com/articles/s41586-019-1560-1" class="external-link uri">https://www.nature.com/articles/s41586-019-1560-1</a>).</li>
+<code>Shao2019</code>: a large cohort dataset of vaginally and caesarean-section born infants from London (<a href="doi:10.1038/s41586-019-1560-1" class="uri">doi:10.1038/s41586-019-1560-1</a>).</li>
 <li>
-<code>vanderPloeg2024</code>: a small gingivitis intervention dataset with specific response groups (<a href="https://doi.org/10.1101/2024.03.18.585469" class="external-link uri">https://doi.org/10.1101/2024.03.18.585469</a>).</li>
+<code>vanderPloeg2024</code>: a small gingivitis intervention dataset with specific response groups (<a href="doi:10.1101/2024.03.18.585469" class="uri">doi:10.1101/2024.03.18.585469</a>).</li>
 </ul>
 </div>
 <div class="section level2">
@@ -166,7 +167,15 @@
 <p>If you encounter an unexpected error or a clear bug, please file an issue with a minimal reproducible example here on <a href="https://github.com/GRvanderPloeg/parafac4microbiome/issues" class="external-link">Github</a>. For questions or other types of feedback, feel free to send an email.</p>
 </div>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/GRvanderPloeg/parafac4microbiome/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/GRvanderPloeg/parafac4microbiome/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -185,7 +194,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Geert Roelof van der Ploeg <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0009-0007-5204-3386" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Geert Roelof van der Ploeg <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0007-5204-3386" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>University of Amsterdam <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -202,7 +213,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Geert Roelof van der Ploeg.</p>
+  <p>Developed by Geert Roelof van der Ploeg, University of Amsterdam.</p>
 </div>
 
 <div class="pkgdown-footer-right">
