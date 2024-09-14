@@ -13,7 +13,7 @@ reinflateTensor(A, B, C, returnAsTensor = FALSE)
 
 \item{C}{K x N matrix corresponding to loadings in the third mode for N components.}
 
-\item{returnAsTensor}{Boolean return as \link{rTensor} S4 tensor object (default FALSE).}
+\item{returnAsTensor}{Boolean return as rTensor S4 tensor object (default FALSE).}
 }
 \value{
 M, an I x J x K tensor.

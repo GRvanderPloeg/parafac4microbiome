@@ -68,7 +68,7 @@ flipLoadings = function(models, X){
 #' @param A I x N matrix corresponding to loadings in the first mode for N components.
 #' @param B J x N matrix corresponding to loadings in the second mode for N components.
 #' @param C K x N matrix corresponding to loadings in the third mode for N components.
-#' @param returnAsTensor Boolean return as [rTensor] S4 tensor object (default FALSE).
+#' @param returnAsTensor Boolean return as rTensor S4 tensor object (default FALSE).
 #'
 #' @return M, an I x J x K tensor.
 #' @export
