@@ -30,16 +30,7 @@ Import MicrobiotaProcess object for PARAFAC modelling
 \examples{
 \dontshow{if (rlang::is_installed("MicrobiotaProcess")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(MicrobiotaProcess)
-
-# Example data taken from Introduction to MicrobiotaProcess
-seqtabfile = system.file("extdata", "seqtab.nochim.rds", package="MicrobiotaProcess")
-seqtab = readRDS(seqtabfile)
-taxafile = system.file("extdata", "taxa_tab.rds", package="MicrobiotaProcess")
-taxa = readRDS(taxafile)
-
-sampleda = system.file("extdata", "mouse.time.dada2.txt", package="MicrobiotaProcess")
-mpse1 = mp_import_dada2(seqtab=seqtab, taxatab=taxa, sampleda=sampleda)
-
-dataset = importMicrobiotaProcess(mpse1, subjectIDs="Sample", thirdMode="time", taxa_are_rows=TRUE)
+data(mouse.time.mpse)
+dataset = importMicrobiotaProcess(mouse.time.mpse, subjectIDs="Sample", thirdMode="time", taxa_are_rows=TRUE)
 \dontshow{\}) # examplesIf}
 }

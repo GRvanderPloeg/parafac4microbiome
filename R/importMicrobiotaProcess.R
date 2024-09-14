@@ -15,7 +15,10 @@
 #' @examplesIf rlang::is_installed("MicrobiotaProcess")
 #' library(MicrobiotaProcess)
 #' data(mouse.time.mpse)
-#' dataset = importMicrobiotaProcess(mouse.time.mpse, subjectIDs="Sample", thirdMode="time", taxa_are_rows=TRUE)
+#' dataset = importMicrobiotaProcess(mouse.time.mpse,
+#'                                   subjectIDs="Sample",
+#'                                   thirdMode="time",
+#'                                   taxa_are_rows=TRUE)
 importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_rows=TRUE){
   stopifnot(methods::is(MPobject, "MPSE"))
 
