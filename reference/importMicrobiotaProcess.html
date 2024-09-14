@@ -100,19 +100,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:stats’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     filter</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Example data taken from Introduction to MicrobiotaProcess</span></span></span>
-<span class="r-in"><span><span class="va">seqtabfile</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"seqtab.nochim.rds"</span>, package<span class="op">=</span><span class="st">"MicrobiotaProcess"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">seqtab</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">seqtabfile</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">taxafile</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"taxa_tab.rds"</span>, package<span class="op">=</span><span class="st">"MicrobiotaProcess"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">taxa</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="va">taxafile</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">sampleda</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"mouse.time.dada2.txt"</span>, package<span class="op">=</span><span class="st">"MicrobiotaProcess"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mpse1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/MicrobiotaProcess/man/ImportDada2.html" class="external-link">mp_import_dada2</a></span><span class="op">(</span>seqtab<span class="op">=</span><span class="va">seqtab</span>, taxatab<span class="op">=</span><span class="va">taxa</span>, sampleda<span class="op">=</span><span class="va">sampleda</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The number of samples in otu table is not equal the number of samples in sample data.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> The same samples will be extract automatically !</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dataset</span> <span class="op">=</span> <span class="fu">importMicrobiotaProcess</span><span class="op">(</span><span class="va">mpse1</span>, subjectIDs<span class="op">=</span><span class="st">"Sample"</span>, thirdMode<span class="op">=</span><span class="st">"time"</span>, taxa_are_rows<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mouse.time.mpse</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dataset</span> <span class="op">=</span> <span class="fu">importMicrobiotaProcess</span><span class="op">(</span><span class="va">mouse.time.mpse</span>, subjectIDs<span class="op">=</span><span class="st">"Sample"</span>, thirdMode<span class="op">=</span><span class="st">"time"</span>, taxa_are_rows<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
