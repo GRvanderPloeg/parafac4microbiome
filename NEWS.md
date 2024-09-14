@@ -1,3 +1,5 @@
+# parafac4microbiome 1.0.0
+
 # parafac4microbiome 0.2.0
 
 * 'parafac' is now capable of running an all-at-once optimization using the methods="opt" parameter. For now, the default remains methods="als" (i.e. the ALS algorithm) because it converges faster to a similar solution.
