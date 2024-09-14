@@ -14,17 +14,8 @@
 #'
 #' @examplesIf rlang::is_installed("MicrobiotaProcess")
 #' library(MicrobiotaProcess)
-#'
-#' # Example data taken from Introduction to MicrobiotaProcess
-#' seqtabfile = system.file("extdata", "seqtab.nochim.rds", package="MicrobiotaProcess")
-#' seqtab = readRDS(seqtabfile)
-#' taxafile = system.file("extdata", "taxa_tab.rds", package="MicrobiotaProcess")
-#' taxa = readRDS(taxafile)
-#'
-#' sampleda = system.file("extdata", "mouse.time.dada2.txt", package="MicrobiotaProcess")
-#' mpse1 = mp_import_dada2(seqtab=seqtab, taxatab=taxa, sampleda=sampleda)
-#'
-#' dataset = importMicrobiotaProcess(mpse1, subjectIDs="Sample", thirdMode="time", taxa_are_rows=TRUE)
+#' data(mouse.time.mpse)
+#' dataset = importMicrobiotaProcess(mouse.time.mpse, subjectIDs="Sample", thirdMode="time", taxa_are_rows=TRUE)
 importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_rows=TRUE){
   stopifnot(methods::is(MPobject, "MPSE"))
 
