@@ -79,5 +79,9 @@ Bootstrapping procedure to determine PARAFAC model stability for a given number 
 }
 \examples{
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-modelStability = assessModelStability(processedFujita, minNumComponents=1, maxNumComponents=3)
+modelStability = assessModelStability(processedFujita,
+                                      minNumComponents=1,
+                                      maxNumComponents=2,
+                                      ctol=1e-4,
+                                      maxit=250)
 }

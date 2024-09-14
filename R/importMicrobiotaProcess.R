@@ -12,22 +12,19 @@
 #'  * 'mode3': metadata of the third mode
 #' @export
 #'
-#' @examplesIf (rlang::is_installed("phyloseq") && rlang::is_installed("MicrobiotaProcess"))
-#' library(phyloseq)
+#' @examplesIf rlang::is_installed("MicrobiotaProcess")
 #' library(MicrobiotaProcess)
 #'
-#' # Small example not using the full size of Fujita2023
-#' fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data[1:2,,1:2]), 2)@data)
-#' fakeTaxa = as.matrix(Fujita2023$mode2)
-#' fakeSam = as.data.frame(cbind(rep(1:2, 2), rep(1:2, each=2)))
-#' colnames(fakeSam) = c("replicate.id", "timepoint")
+#' # Example data taken from Introduction to MicrobiotaProcess
+#' seqtabfile = system.file("extdata", "seqtab.nochim.rds", package="MicrobiotaProcess")
+#' seqtab = readRDS(seqtabfile)
+#' taxafile = system.file("extdata", "taxa_tab.rds", package="MicrobiotaProcess")
+#' taxa = readRDS(taxafile)
 #'
-#' fakePhyloseq = phyloseq(otu_table(fakeOTU, taxa_are_rows=FALSE),
-#'                         phyloseq::tax_table(fakeTaxa),
-#'                         sample_data(fakeSam))
-#' mpse = as.MPSE(fakePhyloseq)
+#' sampleda = system.file("extdata", "mouse.time.dada2.txt", package="MicrobiotaProcess")
+#' mpse1 = mp_import_dada2(seqtab=seqtab, taxatab=taxa, sampleda=sampleda)
 #'
-#' dataset = importMicrobiotaProcess(mpse, subjectIDs="replicate.id", thirdMode="timepoint")
+#' dataset = importMicrobiotaProcess(mpse1, subjectIDs="Sample", thirdMode="time", taxa_are_rows=TRUE)
 importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_rows=TRUE){
   stopifnot(methods::is(MPobject, "MPSE"))
 
