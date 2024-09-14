@@ -33,9 +33,9 @@ library(phyloseq)
 library(MicrobiotaProcess)
 
 # Small example not using the full size of Fujita2023
-fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data[,,1:10]), 2)@data)
+fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data[1:2,,1:2]), 2)@data)
 fakeTaxa = as.matrix(Fujita2023$mode2)
-fakeSam = as.data.frame(cbind(rep(1:8, 10), rep(1:10, each=8)))
+fakeSam = as.data.frame(cbind(rep(1:2, 2), rep(1:2, each=2)))
 colnames(fakeSam) = c("replicate.id", "timepoint")
 
 fakePhyloseq = phyloseq(otu_table(fakeOTU, taxa_are_rows=FALSE),

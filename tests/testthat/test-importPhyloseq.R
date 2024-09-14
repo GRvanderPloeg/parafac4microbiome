@@ -87,8 +87,21 @@ test_that("importPhyloseq throws no errors for GlobalPatterns example dataset", 
   GP = GlobalPatterns
 
   alteredSampleData = sample_data(GP)
-  alteredSampleData$subjectID = c(1,2,3,1,2,1,2,3,1,2,1,2,1,2,3,1,2,3,1,2,3,4,5,1,2,3)
+  alteredSampleData$subjectID = c(1,2,3,1,2,1,2,3,1,2,1,2,1,2,3,1,2,3,1,2,3,3,4,1,2,3)
   df = phyloseq(otu_table(GP), tax_table(GP), alteredSampleData)
   expect_no_error(importPhyloseq(df, subjectIDs = "subjectID", thirdMode="SampleType"))
+})
+
+test_that("importPhyloseq restructuring works as expected for the GlobalPatterns example dataset", {
+  testthat::skip_if_not_installed("phyloseq")
+  withr::local_package("phyloseq")
+  data(GlobalPatterns)
+  GP = GlobalPatterns
+
+  alteredSampleData = sample_data(GP)
+  alteredSampleData$subjectID = c(1,2,3,1,2,1,2,3,1,2,1,2,1,2,3,1,2,3,1,2,3,3,4,1,2,3)
+  df = phyloseq(otu_table(GP), tax_table(GP), alteredSampleData)
+  result = importPhyloseq(df, subjectIDs = "subjectID", thirdMode="SampleType")
+  expect_equal(result$data[1,,1], as.vector(otu_table(GP)[,4]))
 })
 

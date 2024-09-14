@@ -16,7 +16,7 @@
 #' data(GlobalPatterns)
 #' GP = GlobalPatterns
 #'
-#' # Add subject IDs to the sample data to make this example work
+#' # Add custom subject IDs to the sample data to make this example work
 #' alteredSampleData = sample_data(GP)
 #' alteredSampleData$subjectID = c(1,2,3,1,2,1,2,3,1,2,1,2,1,2,3,1,2,3,1,2,3,4,5,1,2,3)
 #' df = phyloseq(otu_table(GP), tax_table(GP), alteredSampleData)
@@ -47,25 +47,37 @@ importPhyloseq = function(phyloseqObject, subjectIDs, thirdMode){
     taxInfo = phyloseqObject@tax_table %>% as.data.frame() %>% dplyr::as_tibble()
   }
 
-  mode1 = sampleInfo %>% dplyr::select(-dplyr::all_of(thirdMode)) %>% dplyr::arrange(subjectIDs) %>% unique()
+  mode1 = sampleInfo %>%
+    dplyr::select(dplyr::all_of(subjectIDs)) %>%
+    dplyr::arrange(!!dplyr::sym(subjectIDs)) %>%
+    unique()
+
   mode2 = taxInfo
-  mode3 = sampleInfo %>% dplyr::select(dplyr::all_of(thirdMode)) %>% dplyr::arrange(thirdMode) %>% unique()
+
+  mode3 = sampleInfo %>%
+    dplyr::select(dplyr::all_of(thirdMode)) %>%
+    dplyr::arrange(!!dplyr::sym(thirdMode)) %>%
+    unique()
 
   I = nrow(mode1)
   J = nrow(mode2)
   K = nrow(mode3)
-  items = mode3 %>% dplyr::pull() %>% as.vector()
-  data = array(0L, c(I,J,K))
-  for(k in 1:K){
-    item = items[k]
-    mask = sampleInfo[thirdMode] == item
-    data[,,k] = cbind(otu[mask,], sampleInfo[mask,]) %>%
-      dplyr::as_tibble() %>%
-      dplyr::right_join(mode1, by=subjectIDs) %>%
-      dplyr::arrange(subjectIDs) %>%
-      dplyr::select(-colnames(sampleInfo)) %>%
-      as.matrix()
-  }
+
+  subjectItems = mode1 %>% dplyr::pull() %>% as.vector()
+  thirdModeItems = mode3 %>% dplyr::pull() %>% as.vector()
+  expectedMetadata = data.frame(x=rep(subjectItems, K), y=rep(thirdModeItems, each=I))
+  colnames(expectedMetadata) = c(subjectIDs, thirdMode)
+
+  completeData = cbind(otu, sampleInfo) %>%
+    dplyr::as_tibble() %>%
+    dplyr::right_join(expectedMetadata, by=c(subjectIDs, thirdMode)) %>%
+    dplyr::arrange(!!dplyr::sym(thirdMode), !!dplyr::sym(subjectIDs)) %>%
+    dplyr::select(-colnames(sampleInfo)) %>%
+    t() %>%
+    as.matrix() %>%
+    rTensor::as.tensor()
+
+  data = rTensor::k_fold(completeData, m=2, modes=c(I,J,K))@data
 
   return(list("data"=data, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3))
 }
