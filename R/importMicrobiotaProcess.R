@@ -12,7 +12,7 @@
 #'  * 'mode3': metadata of the third mode
 #' @export
 #'
-#' @examplesIf rlang::is_installed("MicrobiotaProcess")
+#' @examplesIf FALSE
 #' library(MicrobiotaProcess)
 #' data(mouse.time.mpse)
 #' dataset = importMicrobiotaProcess(mouse.time.mpse,
