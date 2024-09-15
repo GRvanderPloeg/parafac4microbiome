@@ -1,3 +1,5 @@
+# parafac4microbiome 1.0.1
+
 # parafac4microbiome 1.0.0
 
 * Edited DESCRIPTION to meet CRAN requirements.
