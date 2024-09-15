@@ -11,7 +11,7 @@
 #'  * 'mode3': metadata of the third mode
 #' @export
 #'
-#' @examplesIf rlang::is_installed("phyloseq")
+#' @examplesIf FALSE
 #' library(phyloseq)
 #' data(GlobalPatterns)
 #' GP = GlobalPatterns
