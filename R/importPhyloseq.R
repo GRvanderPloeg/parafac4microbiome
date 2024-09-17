@@ -33,9 +33,7 @@ importPhyloseq = function(phyloseqObject, subjectIDs, thirdMode){
     stop("Phyloseq object cannot be imported without sample information.")
   }
 
-  otu = phyloseqObject@otu_table %>%
-    as.data.frame() %>%
-    dplyr::as_tibble()
+  otu = phyloseqObject@otu_table
 
   sampleInfo = phyloseqObject@sam_data %>%
     as.data.frame() %>%
@@ -43,7 +41,7 @@ importPhyloseq = function(phyloseqObject, subjectIDs, thirdMode){
     dplyr::select(dplyr::all_of(c(subjectIDs,thirdMode)))
 
   if(phyloseqObject@otu_table@taxa_are_rows){
-    otu = otu %>% t() %>% as.data.frame() %>% dplyr::as_tibble()
+    otu = t(otu)
   }
 
   if(is.null(phyloseqObject@tax_table)){
@@ -53,24 +51,11 @@ importPhyloseq = function(phyloseqObject, subjectIDs, thirdMode){
     taxInfo = phyloseqObject@tax_table %>% as.data.frame() %>% dplyr::as_tibble()
   }
 
-  mode1 = sampleInfo %>%
-    dplyr::select(dplyr::all_of(subjectIDs)) %>%
-    dplyr::arrange(!!dplyr::sym(subjectIDs)) %>%
-    unique()
-
+  mode1 = unique(sampleInfo[order(sampleInfo[[subjectIDs]]), subjectIDs])
   mode2 = taxInfo
+  mode3 = unique(sampleInfo[order(sampleInfo[[thirdMode]]), thirdMode])
 
-  mode3 = sampleInfo %>%
-    dplyr::select(dplyr::all_of(thirdMode)) %>%
-    dplyr::arrange(!!dplyr::sym(thirdMode)) %>%
-    unique()
-
-  I = nrow(mode1)
-  J = nrow(mode2)
-  K = nrow(mode3)
-
-  data = array(NA, c(I,J,K))
-  otu_matrix = as.matrix(otu)
+  data = array(NA, c(nrow(mode1),nrow(mode2),nrow(mode3)))
   subjectItems = mode1 %>% dplyr::pull() %>% as.vector()
   thirdModeItems = mode3 %>% dplyr::pull() %>% as.vector()
 
@@ -79,11 +64,11 @@ importPhyloseq = function(phyloseqObject, subjectIDs, thirdMode){
   third_idx = match(sampleInfo[[thirdMode]], thirdModeItems)
 
   # Assign otu data to its proper place in the data cube
-  for (r in 1:nrow(otu_matrix)) {
+  for (r in 1:nrow(otu)) {
     i = subject_idx[r]
     k = third_idx[r]
     if (!is.na(i) && !is.na(k)) {
-      data[i,,k] = otu_matrix[r, ]
+      data[i,,k] = otu[r, ]
     }
   }
 

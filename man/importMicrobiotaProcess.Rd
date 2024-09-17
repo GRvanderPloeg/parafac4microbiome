@@ -32,7 +32,7 @@ Import MicrobiotaProcess object for PARAFAC modelling
 library(MicrobiotaProcess)
 data(mouse.time.mpse)
 
-dataset = importMicrobiotaProcess(mouse.time.mpse[1:20, 1:10],
+dataset = importMicrobiotaProcess(mouse.time.mpse[1:5, 1:3],
                                   subjectIDs="Sample",
                                   thirdMode="time",
                                   taxa_are_rows=TRUE)

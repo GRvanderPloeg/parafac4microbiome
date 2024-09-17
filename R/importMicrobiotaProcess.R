@@ -16,7 +16,7 @@
 #' library(MicrobiotaProcess)
 #' data(mouse.time.mpse)
 #'
-#' dataset = importMicrobiotaProcess(mouse.time.mpse[1:20, 1:10],
+#' dataset = importMicrobiotaProcess(mouse.time.mpse[1:5, 1:3],
 #'                                   subjectIDs="Sample",
 #'                                   thirdMode="time",
 #'                                   taxa_are_rows=TRUE)
@@ -30,11 +30,11 @@ importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_row
     stop("MicrobiotaProcess object cannot be imported without sample information.")
   }
 
-  otu = SummarizedExperiment::assays(MPobject)[[1]] %>% as.data.frame() %>% dplyr::as_tibble()
+  otu = SummarizedExperiment::assays(MPobject)[[1]]
   sampleInfo = MicrobiotaProcess::mp_extract_sample(MPobject)
 
   if(taxa_are_rows){
-    otu = otu %>% t() %>% as.data.frame() %>% dplyr::as_tibble()
+    otu = t(otu)
   }
 
   if(is.null(MicrobiotaProcess::mp_extract_taxonomy(MPobject))){
@@ -44,24 +44,11 @@ importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_row
     taxInfo = MicrobiotaProcess::mp_extract_taxonomy(MPobject)
   }
 
-  mode1 = sampleInfo %>%
-    dplyr::select(dplyr::all_of(subjectIDs)) %>%
-    dplyr::arrange(!!dplyr::sym(subjectIDs)) %>%
-    unique()
-
+  mode1 = unique(sampleInfo[order(sampleInfo[[subjectIDs]]), subjectIDs])
   mode2 = taxInfo
+  mode3 = unique(sampleInfo[order(sampleInfo[[thirdMode]]), thirdMode])
 
-  mode3 = sampleInfo %>%
-    dplyr::select(dplyr::all_of(thirdMode)) %>%
-    dplyr::arrange(!!dplyr::sym(thirdMode)) %>%
-    unique()
-
-  I = nrow(mode1)
-  J = nrow(mode2)
-  K = nrow(mode3)
-
-  data = array(NA, c(I,J,K))
-  otu_matrix = as.matrix(otu)
+  data = array(NA, c(nrow(mode1),nrow(mode2),nrow(mode3)))
   subjectItems = mode1 %>% dplyr::pull() %>% as.vector()
   thirdModeItems = mode3 %>% dplyr::pull() %>% as.vector()
 
@@ -70,11 +57,11 @@ importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_row
   third_idx = match(sampleInfo[[thirdMode]], thirdModeItems)
 
   # Assign otu data to its proper place in the data cube
-  for (r in 1:nrow(otu_matrix)) {
+  for (r in 1:nrow(otu)) {
     i = subject_idx[r]
     k = third_idx[r]
     if (!is.na(i) && !is.na(k)) {
-      data[i,,k] = otu_matrix[r, ]
+      data[i,,k] = otu[r,]
     }
   }
 

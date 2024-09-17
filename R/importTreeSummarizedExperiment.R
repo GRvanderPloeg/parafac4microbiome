@@ -41,7 +41,7 @@ importTreeSummarizedExperiment = function(treeObject, subjectIDs, thirdMode, tax
   }
 
   if(taxa_are_rows){
-    otu = SummarizedExperiment::assays(treeObject)[[1]] %>% as.data.frame() %>% dplyr::as_tibble() %>% t() %>% as.data.frame() %>% dplyr::as_tibble()
+    otu = t(SummarizedExperiment::assays(treeObject)[[1]])
     sampleInfo = SummarizedExperiment::colData(treeObject) %>% as.data.frame() %>% dplyr::as_tibble()
 
     if(min(dim(SummarizedExperiment::rowData(treeObject))) == 0){
@@ -51,7 +51,7 @@ importTreeSummarizedExperiment = function(treeObject, subjectIDs, thirdMode, tax
       taxInfo = SummarizedExperiment::rowData(treeObject) %>% as.data.frame() %>% dplyr::as_tibble()
     }
   } else{
-    otu = SummarizedExperiment::assays(treeObject)[[1]] %>% as.data.frame() %>% dplyr::as_tibble()
+    otu = SummarizedExperiment::assays(treeObject)[[1]]
     sampleInfo = SummarizedExperiment::rowData(treeObject) %>% as.data.frame() %>% dplyr::as_tibble()
 
     if(min(dim(SummarizedExperiment::colData(treeObject))) == 0){
@@ -62,24 +62,11 @@ importTreeSummarizedExperiment = function(treeObject, subjectIDs, thirdMode, tax
     }
   }
 
-  mode1 = sampleInfo %>%
-    dplyr::select(dplyr::all_of(subjectIDs)) %>%
-    dplyr::arrange(!!dplyr::sym(subjectIDs)) %>%
-    unique()
-
+  mode1 = unique(sampleInfo[order(sampleInfo[[subjectIDs]]), subjectIDs])
   mode2 = taxInfo
+  mode3 = unique(sampleInfo[order(sampleInfo[[thirdMode]]), thirdMode])
 
-  mode3 = sampleInfo %>%
-    dplyr::select(dplyr::all_of(thirdMode)) %>%
-    dplyr::arrange(!!dplyr::sym(thirdMode)) %>%
-    unique()
-
-  I = nrow(mode1)
-  J = nrow(mode2)
-  K = nrow(mode3)
-
-  data = array(NA, c(I,J,K))
-  otu_matrix = as.matrix(otu)
+  data = array(NA, c(nrow(mode1),nrow(mode2),nrow(mode3)))
   subjectItems = mode1 %>% dplyr::pull() %>% as.vector()
   thirdModeItems = mode3 %>% dplyr::pull() %>% as.vector()
 
@@ -88,11 +75,11 @@ importTreeSummarizedExperiment = function(treeObject, subjectIDs, thirdMode, tax
   third_idx = match(sampleInfo[[thirdMode]], thirdModeItems)
 
   # Assign otu data to its proper place in the data cube
-  for (r in 1:nrow(otu_matrix)) {
+  for (r in 1:nrow(otu)) {
     i = subject_idx[r]
     k = third_idx[r]
     if (!is.na(i) && !is.na(k)) {
-      data[i,,k] = otu_matrix[r, ]
+      data[i,,k] = otu[r, ]
     }
   }
 
