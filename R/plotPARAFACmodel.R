@@ -34,7 +34,7 @@
 #'
 #' # Make plot
 #' plotPARAFACmodel(model, processedFujita,
-#'   numComponents = 3,
+#'   numComponents = 2,
 #'   colourCols = c("", "Genus", ""),
 #'   legendTitles = c("", "Genus", ""),
 #'   xLabels = c("Replicate", "Feature index", "Time point"),
