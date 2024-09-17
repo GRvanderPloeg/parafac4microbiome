@@ -1,3 +1,5 @@
+# parafac4microbiome 1.0.2
+
 # parafac4microbiome 1.0.1
 
 * Streamlined examples in `importPhyloseq`, `importTreeSummarizedExperiment` and `importMicrobiotaProcess`.
