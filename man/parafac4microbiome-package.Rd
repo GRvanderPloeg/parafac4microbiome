@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the optimal number of components can be done using assessModelQuality and assessModelStability. The selected model can then be plotted using plotPARAFACmodel. The Parallel Factor Analysis method was originally described by Caroll and Chang (1970) \doi{10.1007/BF02310791} and Harshman (1970) \url{https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf}.
+Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudinal microbiome data. You can import your own data with our import functions or use one of the example datasets to create your own PARAFAC models. Selection of the optimal number of components can be done using assessModelQuality() and assessModelStability(). The selected model can then be plotted using plotPARAFACmodel(). The Parallel Factor Analysis method was originally described by Caroll and Chang (1970) \doi{10.1007/BF02310791} and Harshman (1970) \url{https://www.psychology.uwo.ca/faculty/harshman/wpppfac0.pdf}.
 }
 \seealso{
 Useful links:

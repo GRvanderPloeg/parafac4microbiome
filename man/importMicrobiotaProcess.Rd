@@ -28,7 +28,7 @@ List object containing:
 Import MicrobiotaProcess object for PARAFAC modelling
 }
 \examples{
-\dontshow{if (FALSE) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("MicrobiotaProcess")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(MicrobiotaProcess)
 data(mouse.time.mpse)
 dataset = importMicrobiotaProcess(mouse.time.mpse,

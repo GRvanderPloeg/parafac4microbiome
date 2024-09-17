@@ -1,6 +1,8 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
+* Added "()" behind all function names in DESCRIPTION.
+* Reworked importPhyloseq, importTreeSummarizedExperiment and importMicrobiotaProcess to allow their examples to be run within CRAN time limits.
 * Changed the example in importMicrobiotaProcess to meet the timing requirement.
 * Changed the example in assessModelStability to realiably meet the timing requirement.
 

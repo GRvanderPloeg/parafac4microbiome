@@ -26,7 +26,7 @@ List object containing:
 Import Phyloseq object for PARAFAC modelling
 }
 \examples{
-\dontshow{if (FALSE) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("phyloseq")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(phyloseq)
 data(GlobalPatterns)
 GP = GlobalPatterns

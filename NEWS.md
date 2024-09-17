@@ -1,5 +1,7 @@
 # parafac4microbiome 1.0.1
 
+* Streamlined examples in `importPhyloseq`, `importTreeSummarizedExperiment` and `importMicrobiotaProcess`.
+
 # parafac4microbiome 1.0.0
 
 * Edited DESCRIPTION to meet CRAN requirements.

@@ -33,7 +33,7 @@ List object containing:
 Import TreeSummarizedExperiment object for PARAFAC modelling
 }
 \examples{
-\dontshow{if (FALSE) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed("TreeSummarizedExperiment")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(TreeSummarizedExperiment)
 
 fakeOTU = t(rTensor::k_unfold(rTensor::as.tensor(Fujita2023$data), 2)@data)

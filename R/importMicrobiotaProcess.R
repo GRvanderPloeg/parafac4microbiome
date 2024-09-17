@@ -12,7 +12,7 @@
 #'  * 'mode3': metadata of the third mode
 #' @export
 #'
-#' @examplesIf FALSE
+#' @examplesIf rlang::is_installed("MicrobiotaProcess")
 #' library(MicrobiotaProcess)
 #' data(mouse.time.mpse)
 #' dataset = importMicrobiotaProcess(mouse.time.mpse,
@@ -59,21 +59,23 @@ importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_row
   J = nrow(mode2)
   K = nrow(mode3)
 
+  data = array(NA, c(I,J,K))
+  otu_matrix = as.matrix(otu)
   subjectItems = mode1 %>% dplyr::pull() %>% as.vector()
   thirdModeItems = mode3 %>% dplyr::pull() %>% as.vector()
-  expectedMetadata = data.frame(x=rep(subjectItems, K), y=rep(thirdModeItems, each=I))
-  colnames(expectedMetadata) = c(subjectIDs, thirdMode)
 
-  completeData = cbind(otu, sampleInfo) %>%
-    dplyr::as_tibble() %>%
-    dplyr::right_join(expectedMetadata, by=c(subjectIDs, thirdMode)) %>%
-    dplyr::arrange(!!dplyr::sym(thirdMode), !!dplyr::sym(subjectIDs)) %>%
-    dplyr::select(-colnames(sampleInfo)) %>%
-    t() %>%
-    as.matrix() %>%
-    rTensor::as.tensor()
+  # Create subject and thirdMode indexes as vectors
+  subject_idx = match(sampleInfo[[subjectIDs]], subjectItems)
+  third_idx = match(sampleInfo[[thirdMode]], thirdModeItems)
 
-  data = rTensor::k_fold(completeData, m=2, modes=c(I,J,K))@data
+  # Assign otu data to its proper place in the data cube
+  for (r in 1:nrow(otu_matrix)) {
+    i = subject_idx[r]
+    k = third_idx[r]
+    if (!is.na(i) && !is.na(k)) {
+      data[i,,k] = otu_matrix[r, ]
+    }
+  }
 
   return(list("data"=data, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3))
 }
