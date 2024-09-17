@@ -1,10 +1,13 @@
 ## Resubmission
+
 This is a resubmission. In this version I have:
 
 * Added "()" behind all function names in DESCRIPTION.
-* Reworked importPhyloseq, importTreeSummarizedExperiment and importMicrobiotaProcess to allow their examples to be run within CRAN time limits.
-* Changed the example in importMicrobiotaProcess to meet the timing requirement.
-* Changed the example in assessModelStability to realiably meet the timing requirement.
+* Substantially reworked the importPhyloseq(), importTreeSummarizedExperiment() and importMicrobiotaProcess() functions to speed them up.
+* Changed the importMicrobiotaProcess example to a smaller synthetic case to decrease runtime. 
+* Wrapped the importMicrobiotaProcess example in \donttest as it still violates the CRAN time limit requirement due to large overhead of the MicrobiotaProcess and SummarizedExperiment packages.
+* Changed the example in plotPARAFACmodel() to reliably meet the timing requirement.
+* Changed the example in assessModelStability() to reliably meet the timing requirement.
 
 ## R CMD check results
 

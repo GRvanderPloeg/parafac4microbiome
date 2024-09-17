@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @examplesIf rlang::is_installed("MicrobiotaProcess")
+#' \donttest{
 #' library(MicrobiotaProcess)
 #'
 #' # Generate synthetic data
@@ -42,6 +43,7 @@
 #'                                   subjectIDs = "Sample",
 #'                                   thirdMode = "time",
 #'                                   taxa_are_rows = TRUE)
+#' }
 importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_rows=TRUE){
   stopifnot(methods::is(MPobject, "MPSE"))
 

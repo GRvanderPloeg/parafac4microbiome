@@ -29,6 +29,7 @@ Import MicrobiotaProcess object for PARAFAC modelling
 }
 \examples{
 \dontshow{if (rlang::is_installed("MicrobiotaProcess")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 library(MicrobiotaProcess)
 
 # Generate synthetic data
@@ -58,5 +59,6 @@ dataset = importMicrobiotaProcess(synthetic_MPSE,
                                   subjectIDs = "Sample",
                                   thirdMode = "time",
                                   taxa_are_rows = TRUE)
+}
 \dontshow{\}) # examplesIf}
 }
