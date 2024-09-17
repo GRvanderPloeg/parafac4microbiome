@@ -14,12 +14,34 @@
 #'
 #' @examplesIf rlang::is_installed("MicrobiotaProcess")
 #' library(MicrobiotaProcess)
-#' data(mouse.time.mpse)
 #'
-#' dataset = importMicrobiotaProcess(mouse.time.mpse[1:5, 1:3],
-#'                                   subjectIDs="Sample",
-#'                                   thirdMode="time",
-#'                                   taxa_are_rows=TRUE)
+#' # Generate synthetic data
+#' sample_info = data.frame(Sample = factor(c("S1", "S2", "S3", "S4", "S5")),
+#'                          time = factor(c("T1", "T2", "T1", "T2", "T1")))
+#' otu_table = matrix(runif(25, min = 0, max = 100), nrow = 5, ncol = 5,
+#'                    dimnames = list(paste0("OTU", 1:5), sample_info$Sample))
+#'
+#' taxonomy_table = data.frame(OTU = paste0("OTU", 1:5),
+#'                             Kingdom = rep("King", 5),
+#'                             Phylum = rep("Phy", 5),
+#'                             Class = rep("Cla", 5),
+#'                             Order = rep("Ord", 5),
+#'                             Family = rep("Fam", 5),
+#'                             Genus = rep("Gen", 5))
+#'
+#' # Create Summarized Experiment
+#' synthetic_SE = SummarizedExperiment::SummarizedExperiment(
+#'                assays = list(otu = otu_table),
+#'                colData = sample_info,
+#'                rowData = taxonomy_table)
+#'
+#' # Convert to MicrobiotaProcess object
+#' synthetic_MPSE = as.MPSE(synthetic_SE)
+#'
+#' dataset = importMicrobiotaProcess(synthetic_MPSE,
+#'                                   subjectIDs = "Sample",
+#'                                   thirdMode = "time",
+#'                                   taxa_are_rows = TRUE)
 importMicrobiotaProcess = function(MPobject, subjectIDs, thirdMode, taxa_are_rows=TRUE){
   stopifnot(methods::is(MPobject, "MPSE"))
 
