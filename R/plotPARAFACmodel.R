@@ -26,9 +26,11 @@
 #' library(ggplot2)
 #' set.seed(0)
 #'
+#' # Process the data
+#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.9, centerMode=1, scaleMode=2)
+#'
 #' # Make PARAFAC model
-#' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=3, nstart=100, verbose=FALSE)
+#' model = parafac(processedFujita$data, nfac=2, nstart=10, verbose=FALSE)
 #'
 #' # Make plot
 #' plotPARAFACmodel(model, processedFujita,

@@ -15,7 +15,8 @@
 #' @examplesIf rlang::is_installed("MicrobiotaProcess")
 #' library(MicrobiotaProcess)
 #' data(mouse.time.mpse)
-#' dataset = importMicrobiotaProcess(mouse.time.mpse,
+#'
+#' dataset = importMicrobiotaProcess(mouse.time.mpse[1:20, 1:10],
 #'                                   subjectIDs="Sample",
 #'                                   thirdMode="time",
 #'                                   taxa_are_rows=TRUE)
