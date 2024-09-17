@@ -47,7 +47,7 @@ These vignettes and all function documentation can be found on the GitHub pages 
 
 ## Installation
 
-The `parafac4microbiome` version can be installed from CRAN using:
+The `parafac4microbiome` package can be installed from CRAN using:
 
 ``` r
 install.packages("parafac4microbiome")
