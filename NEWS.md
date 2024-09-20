@@ -1,4 +1,8 @@
+# parafac4microbiome (development version)
+
 # parafac4microbiome 1.0.2
+
+* Further rework of `importPhyloseq`, `importTreeSummarizedExperiment` and `importMicrobiotaProcess` to meet CRAN requirements.
 
 # parafac4microbiome 1.0.1
 
