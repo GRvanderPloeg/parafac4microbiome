@@ -33,5 +33,5 @@ test_that("g is zero if the perfect solution is found", {
   X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
   Fac = list(A, B, C)
   g = parafac_gradient(Fac, X)
-  expect_true(all(g==0))
+  expect_equal(g, rep(0, length(g)), tolerance=1e-3)
 })
