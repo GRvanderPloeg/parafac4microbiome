@@ -1,5 +1,7 @@
 # parafac4microbiome 1.0.3
 
+* Minor changes to tests for `parafac_gradient` to make them more robust towards various platforms checked by CRAN.
+
 # parafac4microbiome 1.0.2
 
 * Further rework of `importPhyloseq`, `importTreeSummarizedExperiment` and `importMicrobiotaProcess` to meet CRAN requirements.
