@@ -72,7 +72,7 @@ We will now inspect the output plots of interest for `vanderPloeg2024`.
 ```{r overview plot}
 qualityAssessment$plots$overview
 ```
-This seems a clear-cut case for a two-component model, as the three-component models have a CORCONDIA of -100. The maximum amount of variation we can describe is ~20%.
+This seems a clear-cut case for a two-component model, as the three-component models have a CORCONDIA near zero. The maximum amount of variation we can describe is ~20%.
 
 # Jack-knifed models
 Next, we investigate the stability of the models when jack-knifing out samples using `assessModelStability()`. We briefly inspect the two-component and three-component cases although we already know which will be more appropriate for this data.
