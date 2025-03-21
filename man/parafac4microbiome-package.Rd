@@ -13,8 +13,8 @@ Creation and selection of PARAllel FACtor Analysis (PARAFAC) models of longitudi
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://grvanderploeg.github.io/parafac4microbiome/}
-  \item \url{https://github.com/GRvanderPloeg/parafac4microbiome}
+  \item \url{https://grvanderploeg.com/parafac4microbiome/}
+  \item \url{https://github.com/GRvanderPloeg/parafac4microbiome/}
   \item Report bugs at \url{https://github.com/GRvanderPloeg/parafac4microbiome/issues}
 }
 
