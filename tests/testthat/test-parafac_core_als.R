@@ -24,7 +24,7 @@ test_that("The norm of B is always 1", {
   X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
   init = initializePARAFAC(X, 2)
   model = parafac_core_als(X, 2, init)
-  expect_equal(apply(model$Fac[[2]], 2, function(x){norm(as.matrix(x))}), c(1,1))
+  expect_equal(apply(model$Fac[[2]], 2, function(x){norm(as.matrix(x), "F")}), c(1,1))
 })
 
 test_that("The norm of C is always 1", {
@@ -34,7 +34,7 @@ test_that("The norm of C is always 1", {
   X = reinflateTensor(A, B, C, returnAsTensor=TRUE)
   init = initializePARAFAC(X, 2)
   model = parafac_core_als(X, 2, init)
-  expect_equal(apply(model$Fac[[3]], 2, function(x){norm(as.matrix(x))}), c(1,1))
+  expect_equal(apply(model$Fac[[3]], 2, function(x){norm(as.matrix(x), "F")}), c(1,1))
 })
 
 test_that("Input mode 1 is found", {

@@ -72,7 +72,7 @@ We will now inspect the output plots of interest for `Shao2019`.
 ```{r overview plot}
 qualityAssessment$plots$overview
 ```
-The overview plots shows that we can explain ~10% of the variation in a three-component model. That is quite low. The CORCONDIA for that number of components is ~98 or higher, which is well above the minimum requirement of 60. A four-component model yields negative CORCONDIA values.
+The overview plots shows that we can explain ~10% of the variation in a three-component model. That is quite low. The CORCONDIA for that number of components is ~50. A four-component model yields negative CORCONDIA values.
 
 # Jack-knifed models
 Next, we investigate the stability of the models when jack-knifing out samples using `assessModelStability()`. This will give us more information to choose between 2 or 3 components.
