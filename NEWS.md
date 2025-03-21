@@ -1,3 +1,5 @@
+# parafac4microbiome 1.1.2
+
 # parafac4microbiome 1.1.1
 
 * `corcondia()` is now fully based on the N-way toolbox implementation.
