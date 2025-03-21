@@ -76,12 +76,13 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette a PARAFAC model is created for the
-<code>vanderPloeg2024</code> data. This is done by first processing the
-count data. Subsequently, the appropriate number of components are
-determined. Then the PARAFAC model is created and visualized.</p>
+<p>In this vignette a PARAFAC model is created for upper jaw lingual
+data from the <code>vanderPloeg2024</code> study. This is done by first
+processing the count data. Subsequently, the appropriate number of
+components are determined. Then the PARAFAC model is created and
+visualized.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.github.io/parafac4microbiome/">parafac4microbiome</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.com/parafac4microbiome/" class="external-link">parafac4microbiome</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
@@ -97,9 +98,9 @@ determined. Then the PARAFAC model is created and visualized.</p>
 <div class="section level2">
 <h2 id="processing-the-data-cube">Processing the data cube<a class="anchor" aria-label="anchor" href="#processing-the-data-cube"></a>
 </h2>
-<p>The data cube in vanderPloeg2024$data contains unprocessed counts.
-The function <code><a href="../reference/processDataCube.html">processDataCube()</a></code> performs the processing of
-these counts with the following steps:</p>
+<p>The data cube in <code>vanderPloeg2024$upper_jaw_lingual$data</code>
+contains unprocessed counts. The function <code><a href="../reference/processDataCube.html">processDataCube()</a></code>
+performs the processing of these counts with the following steps:</p>
 <ul>
 <li>It performs feature selection based on the sparsityThreshold
 setting. Sparsity is here defined as the fraction of samples where a
@@ -123,7 +124,7 @@ abnormally high variation.</li>
 <code>processedPloeg</code>. Please refer to the documentation of
 <code><a href="../reference/processDataCube.html">processDataCube()</a></code> for more information.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">processedPloeg</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">vanderPloeg2024</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">processedPloeg</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="va">vanderPloeg2024</span><span class="op">$</span><span class="va">upper_jaw_lingual</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="determining-the-correct-number-of-components">Determining the correct number of components<a class="anchor" aria-label="anchor" href="#determining-the-correct-number-of-components"></a>
