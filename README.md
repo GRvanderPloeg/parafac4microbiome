@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# parafac4microbiome <a href="https://grvanderploeg.github.io/parafac4microbiome/"><img src="man/figures/logo.png" alt="parafac4microbiome website" align="right" height="139"/></a>
+# parafac4microbiome <a href="https://grvanderploeg.com/parafac4microbiome/"><img src="man/figures/logo.png" alt="parafac4microbiome website" align="right" height="139"/></a>
 
 <!-- badges: start -->
 

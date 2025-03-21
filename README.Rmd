@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 options(tibble.print_min = 6L, tibble.print.max = 6L, digits = 3)
 ```
 
-# parafac4microbiome <a href="https://grvanderploeg.github.io/parafac4microbiome/"><img src="man/figures/logo.png" alt="parafac4microbiome website" align="right" height="139"/></a>
+# parafac4microbiome <a href="https://grvanderploeg.com/parafac4microbiome/"><img src="man/figures/logo.png" alt="parafac4microbiome website" align="right" height="139"/></a>
 
 <!-- badges: start -->
 
