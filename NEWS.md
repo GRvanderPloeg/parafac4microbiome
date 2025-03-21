@@ -1,5 +1,7 @@
 # parafac4microbiome 1.1.2
 
+* Fixed a URL in README.md to now point towards the correct website.
+
 # parafac4microbiome 1.1.1
 
 * `corcondia()` is now fully based on the N-way toolbox implementation.
