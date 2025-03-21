@@ -14,6 +14,14 @@
 #' models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)
 #' flippedModels = flipLoadings(models, X)
 flipLoadings = function(models, X){
+
+  # Recognize one-model and multi-model case
+  if(!is.null(models$Fac)){
+    model = models
+    models = list()
+    models[[1]] = model
+  }
+
   numModels = length(models)
   numModes = length(models[[1]]$Fac)
   numComponents = ncol(models[[1]]$Fac[[1]])
@@ -62,7 +70,11 @@ flipLoadings = function(models, X){
     models[[i]]$Fac = Fac
   }
 
-  return(models)
+  if(length(models) > 1){
+    return(models)
+  } else{
+    return(models[[1]]) # deal with one-model case
+  }
 }
 
 #' Create a tensor out of a set of matrices similar to a component model.

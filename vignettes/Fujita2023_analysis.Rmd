@@ -18,7 +18,7 @@ options(tibble.print_min = 6L, tibble.print.max = 6L, digits = 3)
 ```
 
 # Introduction
-In this vignette we examine and model the `Fujita2023` data in more detail.
+In this vignette a PARAFAC model is created for the `Fujita2023` data. This is done by first processing the count data. Subsequently, the appropriate number of components are determined. Then the PARAFAC model is created and visualized.
 
 ```{r setup}
 library(parafac4microbiome)
@@ -28,20 +28,21 @@ library(ggpubr)
 ```
 
 # Processing the data cube
-The data cube in Fujita2023$data contains unprocessed counts. The function `processDataCube()` performs the processing of these counts with the following steps:
+The data cube in `Fujita2023$data` contains unprocessed counts. The function `processDataCube()` performs the processing of these counts with the following steps:
 
 *   It performs feature selection based on the sparsityThreshold setting. Sparsity is here defined as the fraction of samples where a microbial abundance (ASV/OTU or otherwise) is zero.
-*   It performs a centered log-ratio transformation of each sample using with a pseudo-count of one (on all features, prior to selection based on sparsity).
-*   It centers and scales the three-way array. This is a complex topic that is elaborated upon in our accompanying paper. By centering across the subject mode, we make the subjects comparable to each other within each time point. Scaling within the feature mode avoids the PARAFAC model focusing on features with abnormally high variation.
+*   It performs a centered log-ratio transformation of each sample using the `compositions::clr()` function with a pseudo-count of one (on all features, prior to selection based on sparsity).
+*   It centers and scales the three-way array. This is a complex subject, for which we refer to a [paper by Rasmus Bro and Age Smilde](https://doi.org/10.1002/cem.773). By centering across the subject mode, we make the subjects comparable to each other within each time point. Scaling within the feature mode avoids the PARAFAC model focusing on features with abnormally high variation.
 
-The outcome of processing is a new version of the dataset. Please refer to the documentation of `processDataCube()` for more information.
+The outcome of processing is a new version of the dataset called `processedFujita`. Please refer to the documentation of `processDataCube()` for more information.
 
 ```{r data processing}
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
 ```
 
 # Determining the correct number of components
-A critical aspect of PARAFAC modelling is to determine the correct number of components. We have developed the functions `assessModelQuality()` and `assessModelStability()` for this purpose. First, we will assess the model quality and specify the minimum and maximum number of components to investigate and the number of randomly initialized models to try for each number of components.
+
+A critical aspect of PARAFAC modelling is to determine the correct number of components. We have developed the functions `assessModelQuality()` and `assessModelStability()` for this purpose. First, we will assess the model quality and specify the minimum and maximum number of components to investigate and the number of randomly initialized models to attempt for each number of components.
 
 Note: this vignette reflects a minimum working example for analyzing this dataset due to computational limitations in automatic vignette rendering. Hence, we only look at 1-3 components with 5 random initializations each. These settings are not ideal for real datasets. Please refer to the documentation of `assessModelQuality()` for more information.
 
@@ -67,7 +68,7 @@ continuousModes = c(FALSE,FALSE,TRUE)
 qualityAssessment = assessModelQuality(processedFujita$data, minNumComponents, maxNumComponents, numRepetitions, ctol=ctol, maxit=maxit, numCores=numCores)
 ```
 
-We will now inspect the output plots of interest for `Fujita2023`.
+The overview plot showcases the number of iterations, the sum-of-squared error, the CORCONDIA and the variance explained for 1-3 components.
 
 ```{r overview plot}
 qualityAssessment$plots$overview
@@ -88,7 +89,9 @@ stabilityAssessment$modelPlots[[3]]
 The three-component model is stable and can be safely chosen as the final model.
 
 # Model selection
-We have decided that a three-component model is the most appropriate for the `Fujita2023` dataset. We can now select one of the random initializations from the `assessModelQuality()` output as our final model. We're going to select the random initialization that corresponded the maximum amount of variation explained for three components.
+
+Since a three-component model is the most appropriate for the `Fujita2023` dataset, we can now select one of the random initializations from the `assessModelQuality()` output as the final model. The selected model corresponds to the one that explained the largest amount of variation.
+
 ```{r model selection}
 numComponents = 3
 modelChoice = which(qualityAssessment$metrics$varExp[,numComponents] == max(qualityAssessment$metrics$varExp[,numComponents]))
@@ -103,13 +106,10 @@ plotPARAFACmodel(finalModel$Fac, processedFujita, 3, colourCols, legendTitles, x
   overallTitle = "Fujita PARAFAC model")
 ```
 
-You will observe that the loadings for some modes in some components are negative. This is due to sign flipping: two modes having negative loadings cancel out but describe the same subspace as two positive loadings. We can manually sign flip these loadings to obtain a more interpretable plot.
+You will observe that the loadings for some modes in some components are all negative. This is due to sign flipping: two modes having negative loadings cancel out but describe the same thing as two positive loadings. The `flipLoadings()` function automatically performs this procedure and also sorts the components by how much variation they describe.
 
 ```{r flip loadings}
-finalModel$Fac[[1]][,2] = -1 * finalModel$Fac[[1]][,2] # mode 1 component 2
-finalModel$Fac[[1]][,3] = -1 * finalModel$Fac[[1]][,3] # mode 1 component 3
-finalModel$Fac[[2]][,3] = -1 * finalModel$Fac[[2]][,3] # mode 2 component 3
-finalModel$Fac[[3]][,2] = -1 * finalModel$Fac[[3]][,2] # mode 3 component 2
+finalModel = flipLoadings(finalModel, processedFujita$data)
 
 plotPARAFACmodel(finalModel$Fac, processedFujita, 3, colourCols, legendTitles, xLabels, legendColNums, arrangeModes,
   continuousModes = c(FALSE,FALSE,TRUE),

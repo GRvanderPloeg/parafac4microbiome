@@ -9,6 +9,17 @@ test_that("flipLoadings throws no errors", {
   expect_no_error(flipLoadings(models, X))
 })
 
+test_that("flipLoadings throws no errors when only one model is provided", {
+  set.seed(123)
+
+  A = array(rnorm(108*2), c(108,2))
+  B = array(rnorm(100*2), c(100,2))
+  C = array(rnorm(10*2), c(10,2))
+  X = reinflateTensor(A, B, C)
+  model = parafac(X, 2, nstart=10, output="best", sortComponents=TRUE)
+  expect_no_error(flipLoadings(model, X))
+})
+
 test_that("flipLoadings produces a same length list as models input", {
   set.seed(123)
 
