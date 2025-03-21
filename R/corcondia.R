@@ -28,7 +28,7 @@ corcondia = function(X, Fac) {
   }
 
   # Magn holds the singular value of each component.
-  # Scale each loading vector by the cubic rood (if three-way), so
+  # Scale each loading vector by the cubic root (if three-way), so
   # all loadings of a component have the same variance.
   magn = magn^(1 / numModes)
   for (i in 1:numModes) {
@@ -73,25 +73,8 @@ corcondia = function(X, Fac) {
   # Calculate G
   vecX = c(X)
   vecX[is.na(vecX)] = 0
-  L2 = as.matrix(Fac[[numModes-1]])
-  L1 = as.matrix(Fac[[numModes-2]])
-  Z = pracma::kron(L2,L1)
+  G = c(pracma::pinv(pracma::kron(pracma::kron(Fac[[3]], Fac[[2]]), Fac[[1]])) %*% vecX) # eq 5 bro kiers 2003
 
-  L = as.matrix(Fac[[numModes]])
-
-  J = prod(DimX[1:(numModes-1)])
-  Ytx = 0
-  YtY = 0
-  for(k in 1:DimX[numModes]){
-    W = rep(1, J)
-    WW = W^2 %*% matrix(1, nrow=1, ncol=prod(rep(numComponents, numModes)))
-    Yk = pracma::kron(t(as.matrix(L[k,])), Z)
-    Ytx = Ytx + t(Yk) %*% (W * vecX[((k-1)*J+1):(k*J)])
-    YtY = YtY + t(Yk * WW) %*% Yk
-  }
-
-  G = array(pracma::pinv(YtY) %*% Ytx, dim=rep(numComponents,3))
-  G = c(G)
   Ident = c(Ident)
   ssG = sum(G^2)
 

@@ -46,9 +46,8 @@ are elaborated in their respective vignettes
 `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and
 `vignette("vanderPloeg2024_analysis")`.
 
-These vignettes and all function documentation can be found on the
-GitHub pages website
-[here](https://grvanderploeg.github.io/parafac4microbiome/).
+These vignettes and all function documentation can be found
+[here](https://grvanderploeg.com/parafac4microbiome/).
 
 ## Installation
 
