@@ -1,3 +1,5 @@
+# parafac4microbiome 1.1.1
+
 # parafac4microbiome 1.1.0
 
 * `vanderPloeg2024` now contains all datasets from the original paper.
