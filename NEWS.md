@@ -1,5 +1,13 @@
 # parafac4microbiome 1.1.0
 
+* `vanderPloeg2024` now contains all datasets from the original paper.
+* The contents in /data-raw/ are updated to better organize the studies.
+* `corcondia()` is now fully based on the N-way toolbox implementation.
+* The Frobenius norm of the tensor is now collapsed into the subject mode (was the O-norm).
+* Fixed an issue where flipLoadings() would not flip any of the modes if there was evidence that all three modes should be flipped.
+* Fixed an issue where flipLoadings() would not work when one model was provided.
+* All vignettes are updated to better reflect the updated functions for this version.
+
 # parafac4microbiome 1.0.3
 
 * Minor changes to tests for `parafac_gradient` to make them more robust towards various platforms checked by CRAN.
