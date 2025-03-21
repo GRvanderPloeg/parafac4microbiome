@@ -3,11 +3,11 @@
 \docType{data}
 \name{vanderPloeg2024}
 \alias{vanderPloeg2024}
-\title{vanderPloeg2024 longitudinal microbiome data}
+\title{vanderPloeg2024 longitudinal dataset}
 \format{
 \subsection{\code{vanderPloeg2024}}{
 
-A list object with three elements:
+Each measured dataset contains three elements:
 \describe{
 \item{data}{Array object of the data cube}
 \item{mode1}{Dataframe with all the subject metadata, ordered the same as the rows in the data cube.}
@@ -24,8 +24,7 @@ A list object with three elements:
 vanderPloeg2024
 }
 \description{
-The vanderPloeg2024 longitudinal microbiome dataset as a three-dimensional array,
-with subjects in mode 1, microbial abundances in mode 2, and time in mode 3.
-Note: all-zero microbial abundances have been removed to save disk space.
+The vanderPloeg2024 longitudinal data containing six oral microbiome niches,
+as well as salivary metabolomics.
 }
 \keyword{datasets}

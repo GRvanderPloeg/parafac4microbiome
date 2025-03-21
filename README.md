@@ -36,7 +36,7 @@ This package also comes with three example datasets.
 - `Shao2019`: a large cohort dataset of vaginally and caesarean-section
   born infants from London (<doi:10.1038/s41586-019-1560-1>).
 - `vanderPloeg2024`: a small gingivitis intervention dataset with
-  specific response groups (<doi:10.1101/2024.03.18.585469>).
+  response groups (<doi:10.1101/2024.03.18.585469>).
 
 ## Documentation
 

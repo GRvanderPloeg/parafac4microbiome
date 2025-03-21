@@ -3,9 +3,9 @@
 library(tidyverse)
 
 # Import sample info
-sample_info = readRDS("./data-raw/Fujita2023_sample_info.rds")
-Taxa_list = readRDS("./data-raw/Fujita2023_taxa_list.rds")
-matrixList = readRDS("./data-raw/Fujita2023_matrixList.rds")
+sample_info = readRDS("./data-raw/Fujita2023/Fujita2023_sample_info.rds")
+Taxa_list = readRDS("./data-raw/Fujita2023/Fujita2023_taxa_list.rds")
+matrixList = readRDS("./data-raw/Fujita2023/Fujita2023_matrixList.rds")
 
 # Prepare data - only WC samples
 WC = matrixList$`Water/Medium-C` %>% as_tibble() %>% mutate(sampleID = row.names(matrixList$`Water/Medium-C`))

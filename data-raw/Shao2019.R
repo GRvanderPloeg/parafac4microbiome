@@ -3,18 +3,18 @@
 library(tidyverse)
 
 # Import sample info
-sampleMeta = read.csv("./data-raw/Shao2019_sampleMetadata.csv", skip=2) %>% as_tibble()
-mapping = read.csv("./data-raw/Shao2019_mapping.tsv", sep="\t") %>% as_tibble()
+sampleMeta = read.csv("./data-raw/Shao2019/Shao2019_sampleMetadata.csv", skip=2) %>% as_tibble()
+mapping = read.csv("./data-raw/Shao2019/Shao2019_mapping.tsv", sep="\t") %>% as_tibble()
 sampleInfo = sampleMeta %>% left_join(mapping, by=c("Accession"="secondary_sample_accession"))
 
 # Import and fix taxonomy
-taxa = read.csv("./data-raw/Shao2019_speciesMetadata.csv") %>% as_tibble()
+taxa = read.csv("./data-raw/Shao2019/Shao2019_speciesMetadata.csv") %>% as_tibble()
 taxa = taxa %>%
   mutate(OTU = paste0("OTU", 1:nrow(.)), consensus_taxonomy = X.consensus_taxonomy) %>%
   select(OTU, consensus_taxonomy)
 
 # Fix taxonomic levels
-taxonomy = read.csv("./data-raw/db_mOTU_taxonomy_ref-mOTUs.tsv", sep="\t") %>% as_tibble()
+taxonomy = read.csv("./data-raw/Shao2019/db_mOTU_taxonomy_ref-mOTUs.tsv", sep="\t") %>% as_tibble()
 taxonomy$kingdom = str_split_fixed(taxonomy$kingdom, " ", 2)[,2]
 taxonomy$phylum = str_split_fixed(taxonomy$phylum, " ", 2)[,2]
 taxonomy$class = str_split_fixed(taxonomy$class, " ", 2)[,2]
@@ -31,7 +31,7 @@ taxa = taxa %>%
   select(-consensus_taxonomy,-fixedIDs,-specI_cluster)
 
 # Import count data and process
-df = read.csv("./data-raw/Shao2019_counts.csv") %>% as_tibble()
+df = read.csv("./data-raw/Shao2019/Shao2019_counts.csv") %>% as_tibble()
 colnames(df) = str_split_fixed(colnames(df),"_",3)[,1]
 
 sampleInfo = sampleInfo %>% filter(run_accession %in% colnames(df))

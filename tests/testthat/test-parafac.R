@@ -188,7 +188,7 @@ test_that("ALS and multiway yield similar models in the shao case", {
 })
 
 test_that("ALS and multiway yield similar models in the ploeg case", {
-  processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+  processedPloeg = processDataCube(vanderPloeg2024$upper_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
   X = processedPloeg$data
   X[is.na(X)] = 0 # force NAs to zero otherwise discrepancies occur
   model_als = parafac(X, 3, nstart=10, ctol=1e-4, method="als")

@@ -1,0 +1,61 @@
+Index;BIOCHEMICAL;SUB_PATHWAY;Keep/remove;Reason;Synonym;Note
+1;1,2,3-benzenetriol sulfate (2);Chemical;Remove;Lack of data;Pyrogallol;Plant metabolite
+2;1,3-dimethylurate;Xanthine Metabolism;Remove;Lack of data;;Conjugate acid
+3;1,7-dimethylurate;Xanthine Metabolism;Keep;;;Metabolite of caffeine
+4;1-methylurate;Xanthine Metabolism;Keep;;;Metabolite of caffeine
+5;1-methylxanthine;Xanthine Metabolism;Unsure;;;
+6;12-hydroxyoleate;Chemical;Unsure;;;
+7;2,3-dihydroxyisovalerate;Food Component/Plant;Keep;;;S. Cerevisiae metabolite
+8;2-amino-2-methyl-1-propanol;Chemical;Unsure;;Aminomethyl propanol;Component of ambuphylline and pamabrom (drugs)
+9;2-aminophenol sulfate;Chemical;Unsure;;;Moderate base
+10;2-isopropylmalate;Food Component/Plant;Keep;;Isopropylmalic acid;Intermediate of leucine biosynthesis
+11;2-oxindole-3-acetate;Food Component/Plant;Unsure;;;Plant metabolite, conjugate base
+12;2-piperidinone;Food Component/Plant;Keep;;Lactone amide;Inhibitor of some bacterial metabolites
+13;3-hydroxyhippurate;Benzoate Metabolism;Unsure;;;
+14;3-hydroxyindolin-2-one;Food Component/Plant;Keep;;Oxindale;
+15;3-hydroxypyridine;Chemical;Unsure;;;Pyridine derivate
+16;3-hydroxypyridine sulfate;Chemical;Keep;;;Pyridine derivate
+17;3-methylxanthine;Xanthine Metabolism;Unsure;;;Metabolite of theophylline
+18;4-acetamidophenol;Drug;Remove;Lack of data;Paracetamol;Pain killer
+19;4-acetamidophenylglucuronide;Drug;Remove;Lack of data;Acetaminophenglucuranide;Derivate of paracetamol
+20;4-acetaminophen sulfate;Drug;Remove;Lack of data;;Derivate of paracetamol
+21;4-methylcatechol sulfate;Benzoate Metabolism;Unsure;;;Strong acid
+22;7-methylxanthine;Xanthine Metabolism;Unsure;;;Xanthine derivate, involved in caffeine synthesis
+23;acesulfame;Food Component/Plant;Unsure;;;Synthetic sweetener
+24;aspartame;Food Component/Plant;Remove;Lack of data;;Artificial sweetener
+25;beta-guanidinopropanoate;Food Component/Plant;Keep;;;Nutritional supplement
+26;betonicine;Food Component/Plant;Unsure;;;Found in some fruits
+27;caffeine;Xanthine Metabolism;Keep;;;Coffee
+28;catechol sulfate;Benzoate Metabolism;Keep;;;Catechol derivate
+29;cotinine;Tobacco Metabolite;Remove;Lack of data;;Main metabolite to nicotine, antidepressant
+30;dexpanthenol;Chemical;Keep;;Vitamine B5;
+31;diaminopimelate;Food Component/Plant;Unsure;;;Involved in lysine biosynthesis
+32;erythritol;Food Component/Plant;Remove;This is the test factor;;Artificial sweetener
+33;erythrose;Food Component/Plant;Keep;;;Found in rhubarb, can be made by oxidative bacteria, related to erythritol
+34;gluconate;Food Component/Plant;Unsure;;Gluconic acid;Occurs in fruit, honey, wine
+35;hippurate;Benzoate Metabolism;Keep;;;Lots of literature on this. Seems to be a proxy of microbiome diversity
+36;hydroxycotinine;Tobacco Metabolite;Remove;Lack of data;;Nicotine metabolite
+37;indolin-2-one;Food Component/Plant;Unsure;;Oxindale;
+38;nicotine;Drug;Remove;Lack of data;;Smoking
+39;O-desmethylvenlafaxine;Drug;Remove;Lack of data;;Antidepressant
+40;O-sulfo-L-tyrosine;Chemical;Keep;;;Plasma biomarker of reduced kidney function, phenylalanine derivate
+41;paraxanthine;Xanthine Metabolism;Keep;;;Xanthine derivate, involved in caffeine synthesis
+42;pheophorbide A;Food Component/Plant;Remove;Lack of data;;
+43;piperine;Food Component/Plant;Keep;;;Black pepper
+44;pyrraline;Food Component/Plant;Keep;;;Present in baked bread or from pyrralysine, but is also used in NMR spectrometry and antibiotics
+45;quinate;Food Component/Plant;Unsure;;Quinic acid;Cyclicpolyol, present in coffee
+46;quinine;Drug;Remove;Lack of data;;Bitter taste, present in tonic, bitter lemon, pineapple
+47;S-(3-hydroxypropyl)mercapturic acid (HPMA);Chemical;Remove;Lack of data;;Related to smoking?
+48;S-carboxymethyl-L-cysteine;Drug;Remove;Lack of data;;Respiratory medicine
+49;saccharin;Food Component/Plant;Remove;Lack of data;;Artificial sweetener
+50;salicylate;Drug;Keep;;;Plant hormone, metabolite of aspirin
+51;stachydrine;Food Component/Plant;Keep;;Proline betaine;Proline derivate
+52;succinimide;Chemical;Unsure;;;Anticonvulsant drug?
+53;sucralose;Food Component/Plant;Remove;Lack of data;;Artificial sweetener
+54;sulfate*;Chemical;Keep;;;Present in toothpaste and hygiene products, sometimes in drinking water, also often used by bacteria
+55;theobromine;Xanthine Metabolism;Keep;;;Present in cocoa products
+56;theophylline;Xanthine Metabolism;Keep;;;Present in cocoa and tea
+57;triethanolamine;Chemical;Unsure;;;Present in lots of hygiene products
+58;trizma acetate;Chemical;Remove;Lack of data;;
+59;tyrosol;Food Component/Plant;Unsure;;;Antioxidant found in lots of products, olive oil
+60;venlafaxine;Drug;Remove;Lack of data;;Antidepressant

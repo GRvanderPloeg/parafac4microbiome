@@ -34,14 +34,14 @@
 #' @source \doi{10.1038/s41586-019-1560-1}
 "Shao2019"
 
-#' vanderPloeg2024 longitudinal microbiome data
+#' vanderPloeg2024 longitudinal dataset
 #'
-#' The vanderPloeg2024 longitudinal microbiome dataset as a three-dimensional array,
-#' with subjects in mode 1, microbial abundances in mode 2, and time in mode 3.
-#' Note: all-zero microbial abundances have been removed to save disk space.
+#' The vanderPloeg2024 longitudinal data containing six oral microbiome niches,
+#' as well as salivary metabolomics.
 #'
 #' @format ## `vanderPloeg2024`
-#' A list object with three elements:
+#'
+#' Each measured dataset contains three elements:
 #' \describe{
 #'   \item{data}{Array object of the data cube}
 #'   \item{mode1}{Dataframe with all the subject metadata, ordered the same as the rows in the data cube.}

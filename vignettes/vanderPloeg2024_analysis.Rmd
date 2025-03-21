@@ -19,7 +19,7 @@ options(tibble.print_min = 6L, tibble.print.max = 6L, digits = 3)
 
 # Introduction
 
-In this vignette a PARAFAC model is created for the `vanderPloeg2024` data. This is done by first processing the count data. Subsequently, the appropriate number of components are determined. Then the PARAFAC model is created and visualized.
+In this vignette a PARAFAC model is created for upper jaw lingual data from the `vanderPloeg2024` study. This is done by first processing the count data. Subsequently, the appropriate number of components are determined. Then the PARAFAC model is created and visualized.
 
 ```{r setup}
 library(parafac4microbiome)
@@ -29,7 +29,7 @@ library(ggpubr)
 ```
 
 # Processing the data cube
-The data cube in vanderPloeg2024$data contains unprocessed counts. The function `processDataCube()` performs the processing of these counts with the following steps:
+The data cube in `vanderPloeg2024$upper_jaw_lingual$data` contains unprocessed counts. The function `processDataCube()` performs the processing of these counts with the following steps:
 
 *   It performs feature selection based on the sparsityThreshold setting. Sparsity is here defined as the fraction of samples where a microbial abundance (ASV/OTU or otherwise) is zero. For `vanderPloeg2024` we can take the RFgroups groups into account for feature selection. We do this by calculating the sparsity for each feature in each subject group and compare those against the sparsity threshold that we set. If a feature passes the threshold in either group, it is selected.
 *   It performs a centered log-ratio transformation of each sample using the `compositions::clr()` function with a pseudo-count of one (on all features, prior to selection based on sparsity).
@@ -38,7 +38,7 @@ The data cube in vanderPloeg2024$data contains unprocessed counts. The function 
 The outcome of processing is a new version of the dataset called `processedPloeg`. Please refer to the documentation of `processDataCube()` for more information.
 
 ```{r data processing}
-processedPloeg = processDataCube(vanderPloeg2024, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedPloeg = processDataCube(vanderPloeg2024$upper_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
 ```
 
 # Determining the correct number of components

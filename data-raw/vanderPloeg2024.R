@@ -1,9 +1,18 @@
-## code to prepare `vanderPloeg2024` dataset goes here
-
 library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
+library(parafac4microbiome)
+library(CMTFtoolbox)
 
-# RFdata
-rf_data = read.csv("./data-raw/vanderPloeg2024_RFdata.csv")
+# Load count data
+raw_data = read.csv("./data-raw/vanderPloeg2024/20221005_wp2/count-table.tsv", sep="\t") %>% as_tibble()
+metadata = raw_data %>% select(sample, subject, visit, group, niche)
+counts   = raw_data %>% select(-sample, -subject, -visit, -group, -niche)
+taxa = read.csv("./data-raw/vanderPloeg2024/20221005_wp2/taxonomic-classification.tsv", sep="\t") %>% as_tibble()
+
+# Load RF data
+rf_data = read.csv("./data-raw/vanderPloeg2024/RFdata.csv")
 colnames(rf_data) = c("subject", "id", "fotonr", "day", "group", "RFgroup", "MQH", "SPS(tm)", "Area_delta_R30", "Area_delta_Rmax", "Area_delta_R30_x_Rmax", "gingiva_mean_R_over_G", "gingiva_mean_R_over_G_upper_jaw", "gingiva_mean_R_over_G_lower_jaw")
 rf_data = rf_data %>% as_tibble()
 
@@ -14,126 +23,233 @@ rf_data[rf_data$subject == "O3VQFX", 1] = "O3VQFQ"
 rf_data[rf_data$subject == "F80LGT", 1] = "F80LGF"
 rf_data[rf_data$subject == "26QQR0", 1] = "26QQrO"
 
-rf_data2 = read.csv("./data-raw/vanderPloeg2024_RFdata2.csv") %>% as_tibble()
-rf_data2 = rf_data2[,c(2,4,181:192)]
-rf_data = rf_data %>% left_join(rf_data2)
+# rf_data2 = read.csv("./data-raw/vanderPloeg2024_RFdata2.csv") %>% as_tibble()
+# rf_data2 = rf_data2[,c(2,4,181:192)]
+# rf_data = rf_data %>% left_join(rf_data2)
 
 rf = rf_data %>% select(subject, RFgroup) %>% unique()
 
-# Subject metadata
-age_gender = read.csv("./data-raw/vanderPloeg2024_demographics.csv", sep=";")
-age_gender = age_gender[2:nrow(age_gender),2:ncol(age_gender)]
-age_gender = age_gender %>% as_tibble() %>% filter(onderzoeksgroep == 0) %>% select(naam, leeftijd, geslacht)
-colnames(age_gender) = c("subject", "age", "gender")
+# Attach RF data to metadata
+metadata = metadata %>% left_join(rf)
 
-# Correction for incorrect subject ids
-age_gender[age_gender$subject == "VSTPHZ", 1] = "VSTPH2"
-age_gender[age_gender$subject == "D2VZH0", 1] = "DZVZH0"
-age_gender[age_gender$subject == "DLODNN", 1] = "DLODDN"
-age_gender[age_gender$subject == "O3VQFX", 1] = "O3VQFQ"
-age_gender[age_gender$subject == "F80LGT", 1] = "F80LGF"
-age_gender[age_gender$subject == "26QQR0", 1] = "26QQrO"
+# Remove test
+mask = metadata$group == "control"
+counts = counts[mask,]
+metadata = metadata[mask,]
 
-age_gender = age_gender %>% arrange(subject)
+# Prepare export of metadata
+mode1 = metadata %>% select(subject, RFgroup) %>% unique() %>% arrange(subject)
+mode3 = metadata %>% select(visit) %>% unique() %>% arrange(visit) %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution"))
 
-# Raw data import
-microbiome.raw = read.csv("./data-raw/vanderPloeg2024_counts.tsv", sep="\t") %>% as_tibble()
-microbiome.meta = microbiome.raw[,1:5] %>% as_tibble()
-microbiome.numeric = microbiome.raw[,6:ncol(microbiome.raw)] %>% as_tibble()
-taxa = read.csv("./data-raw/vanderPloeg2024_speciesMetadata.tsv", sep="\t")
+# Tongue
+tongueMask = metadata$niche == "tongue"
+df_tongue = counts[tongueMask,]
+metadata_tongue = metadata[tongueMask,]
 
-# Prep subject metadata
-sampleInfo = microbiome.meta %>% left_join(rf) %>% left_join(age_gender)
-sampleMask = sampleInfo$group == "control" & sampleInfo$niche == "upper jaw, lingual"
-
-sampleInfo_filtered = sampleInfo[sampleMask,]
-df_filtered = microbiome.numeric[sampleMask,]
-
-# Prep feature metadata
-sparsity = colSums(df_filtered == 0) / nrow(df_filtered)
+# Prep feature metadata - THIS IS DIFFERENT FROM TIFN
+sparsity = colSums(df_tongue == 0) / nrow(df_tongue)
 featureMask = sparsity < 1
-df_filtered = df_filtered[,featureMask]
-taxa = taxa[featureMask,]
+df_tongue = df_tongue[,featureMask]
+mode2 = taxa[featureMask,]
 
-# Fold into data cube
-I = 41
-J = 2253
-K = 7
-cube = array(0L, dim=c(I,J,K))
+# Put into cube
+I = length(unique(metadata$subject))
+J = ncol(df_tongue)
+K = max(metadata$visit)
+X = array(0L, c(I,J,K))
 
 for(k in 1:K){
-  temp = cbind(df_filtered, sampleInfo_filtered) %>% as_tibble()
-  cube[,,k] = temp %>%
+  X[,,k] = cbind(df_tongue, metadata_tongue) %>%
+    as_tibble() %>%
     filter(visit == k) %>%
-    right_join(sampleInfo_filtered %>% select(subject) %>% unique()) %>%
+    right_join(metadata %>% select(subject) %>% unique()) %>%
     arrange(subject) %>%
-    select(-all_of(colnames(sampleInfo_filtered))) %>%
+    select(-all_of(colnames(metadata))) %>%
     as.matrix()
 }
 
-# prepare export
-mode1 = sampleInfo_filtered %>% select(subject, RFgroup) %>% unique() %>% arrange(subject)
-mode2 = taxa %>% select(-representative_sequence)
-mode3 = sampleInfo_filtered %>% select(visit) %>% unique() %>% arrange(visit)
+tongue = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 
-# Export
-vanderPloeg2024 = list("data"=cube, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+# Lowling
+lowlingMask = metadata$niche == "lower jaw, lingual"
+df_lowling = counts[lowlingMask,]
+metadata_lowling = metadata[lowlingMask,]
+
+# Prep feature metadata - THIS IS DIFFERENT FROM TIFN
+sparsity = colSums(df_lowling == 0) / nrow(df_lowling)
+featureMask = sparsity < 1
+df_lowling = df_lowling[,featureMask]
+mode2 = taxa[featureMask,]
+
+# Put into cube
+I = length(unique(metadata$subject))
+J = ncol(df_lowling)
+K = max(metadata$visit)
+X = array(0L, c(I,J,K))
+
+for(k in 1:K){
+  X[,,k] = cbind(df_lowling, metadata_lowling) %>%
+    as_tibble() %>%
+    filter(visit == k) %>%
+    right_join(metadata %>% select(subject) %>% unique()) %>%
+    arrange(subject) %>%
+    select(-all_of(colnames(metadata))) %>%
+    as.matrix()
+}
+
+lowling = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+
+# Lowinter
+lowinterMask = metadata$niche == "lower jaw, interproximal"
+df_lowinter = counts[lowinterMask,]
+metadata_lowinter = metadata[lowinterMask,]
+
+# Prep feature metadata - THIS IS DIFFERENT FROM TIFN
+sparsity = colSums(df_lowinter == 0) / nrow(df_lowinter)
+featureMask = sparsity < 1
+df_lowinter = df_lowinter[,featureMask]
+mode2 = taxa[featureMask,]
+
+# Put into cube
+I = length(unique(metadata$subject))
+J = ncol(df_lowinter)
+K = max(metadata$visit)
+X = array(0L, c(I,J,K))
+
+for(k in 1:K){
+  X[,,k] = cbind(df_lowinter, metadata_lowinter) %>%
+    as_tibble() %>%
+    filter(visit == k) %>%
+    right_join(metadata %>% select(subject) %>% unique()) %>%
+    arrange(subject) %>%
+    select(-all_of(colnames(metadata))) %>%
+    as.matrix()
+}
+
+lowinter = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+
+# Upling
+uplingMask = metadata$niche == "upper jaw, lingual"
+df_upling = counts[uplingMask,]
+metadata_upling = metadata[uplingMask,]
+
+# Prep feature metadata - THIS IS DIFFERENT FROM TIFN
+sparsity = colSums(df_upling == 0) / nrow(df_upling)
+featureMask = sparsity < 1
+df_upling = df_upling[,featureMask]
+mode2 = taxa[featureMask,]
+
+# Put into cube
+I = length(unique(metadata$subject))
+J = ncol(df_upling)
+K = max(metadata$visit)
+X = array(0L, c(I,J,K))
+
+for(k in 1:K){
+  X[,,k] = cbind(df_upling, metadata_upling) %>%
+    as_tibble() %>%
+    filter(visit == k) %>%
+    right_join(metadata %>% select(subject) %>% unique()) %>%
+    arrange(subject) %>%
+    select(-all_of(colnames(metadata))) %>%
+    as.matrix()
+}
+
+upling = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+
+# Upinter
+upinterMask = metadata$niche == "upper jaw, interproximal"
+df_upinter = counts[upinterMask,]
+metadata_upinter = metadata[upinterMask,]
+
+# Prep feature metadata - THIS IS DIFFERENT FROM TIFN
+sparsity = colSums(df_upinter == 0) / nrow(df_upinter)
+featureMask = sparsity < 1
+df_upinter = df_upinter[,featureMask]
+mode2 = taxa[featureMask,]
+
+# Put into cube
+I = length(unique(metadata$subject))
+J = ncol(df_upinter)
+K = max(metadata$visit)
+X = array(0L, c(I,J,K))
+
+for(k in 1:K){
+  X[,,k] = cbind(df_upinter, metadata_upinter) %>%
+    as_tibble() %>%
+    filter(visit == k) %>%
+    right_join(metadata %>% select(subject) %>% unique()) %>%
+    arrange(subject) %>%
+    select(-all_of(colnames(metadata))) %>%
+    as.matrix()
+}
+
+upinter = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+
+# Saliva
+salivaMask = metadata$niche == "saliva"
+df_saliva = counts[salivaMask,]
+metadata_saliva = metadata[salivaMask,]
+
+# Prep feature metadata - THIS IS DIFFERENT FROM TIFN
+sparsity = colSums(df_saliva == 0) / nrow(df_saliva)
+featureMask = sparsity < 1
+df_saliva = df_saliva[,featureMask]
+mode2 = taxa[featureMask,]
+
+# Put into cube
+I = length(unique(metadata$subject))
+J = ncol(df_saliva)
+K = max(metadata$visit)
+X = array(0L, c(I,J,K))
+
+for(k in 1:K){
+  X[,,k] = cbind(df_saliva, metadata_saliva) %>%
+    as_tibble() %>%
+    filter(visit == k) %>%
+    right_join(metadata %>% select(subject) %>% unique()) %>%
+    arrange(subject) %>%
+    select(-all_of(colnames(metadata))) %>%
+    as.matrix()
+}
+
+saliva = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+
+# Process
+processedTongue = processDataCube(tongue, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedLowling = processDataCube(lowling, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedLowinter = processDataCube(lowinter, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedUpling = processDataCube(upling, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedUpinter = processDataCube(upinter, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedSaliva = processDataCube(saliva, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+
+# Metabolomics
+df = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics.csv", header=FALSE) %>% as_tibble()
+mode1 = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics_id_meta.csv", header=FALSE) %>% as_tibble() %>% mutate(subject = V1) %>% select(-V1) %>% left_join(rf)
+mode2 = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics_feature_meta.csv", header=FALSE) %>% as_tibble()
+colnames(mode2) = c("Type", "Function", "Name")
+mode3 = mode3 %>% filter(visit %in% 1:5)
+
+I = length(unique(mode1$subject))
+J = nrow(mode2)
+K = max(mode3$visit)
+X = array(0L, c(I,J,K))
+
+for(k in 1:K){
+  X[,,k] = df[,(400*(k-1)+1):(400*k)] %>%
+    as.matrix()
+}
+
+metabolomics = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
+
+# Save
+vanderPloeg2024 = list()
+vanderPloeg2024$tongue = tongue
+vanderPloeg2024$saliva = saliva
+vanderPloeg2024$lower_jaw_lingual = lowling
+vanderPloeg2024$lower_jaw_interproximal = lowinter
+vanderPloeg2024$upper_jaw_lingual = upling
+vanderPloeg2024$upper_jaw_interproximal = upinter
+vanderPloeg2024$metabolomics = metabolomics
+
 usethis::use_data(vanderPloeg2024, overwrite = TRUE)
-
-# ## Filter based on sparsity per group
-# threshold = 0.50
-#
-# df_low = cbind(microbiome.numeric, sampleInfo) %>%
-#   as_tibble() %>%
-#   filter(RFgroup == 0) %>%
-#   select(-all_of(colnames(sampleInfo)))
-#
-# df_mid = cbind(microbiome.numeric, sampleInfo) %>%
-#   as_tibble() %>%
-#   filter(RFgroup == 1) %>%
-#   select(-all_of(colnames(sampleInfo)))
-#
-# df_high = cbind(microbiome.numeric, sampleInfo) %>%
-#   as_tibble() %>%
-#   filter(RFgroup == 2) %>%
-#   select(-all_of(colnames(sampleInfo)))
-#
-# lowSparsity = colSums(df_low==0) / nrow(df_low)
-# midSparsity = colSums(df_mid==0) / nrow(df_mid)
-# highSparsity = colSums(df_high==0) / nrow(df_high)
-#
-# lowSelection = lowSparsity <= threshold
-# midSelection = midSparsity <= threshold
-# highSelection = highSparsity <= threshold
-#
-# featureSelection = colnames(microbiome.numeric)[lowSelection | midSelection | highSelection]
-#
-# taxonomy_filtered = taxa %>% filter(asv %in% featureSelection)
-#
-# # Filter df
-# df_filtered = cbind(microbiome.numeric, sampleInfo) %>%
-#   as_tibble() %>%
-#   filter(group == "control", niche == "upper jaw, lingual") %>%
-#   select(all_of(featureSelection))
-#
-# # CLR with pseudocount 1
-# df_clr = compositions::clr(df_filtered+1) %>% as_tibble()
-#
-# # Fold data cube - take missing samples into account
-#
-#
-# # Center
-# cube_cnt = array(0L, dim=c(I,J,K))
-# for(j in 1:J){
-#   for(k in 1:K){
-#     cube_cnt[,j,k] = cube[,j,k] - mean(cube[,j,k], na.rm=TRUE)
-#   }
-# }
-#
-# # Scale
-# cube_cnt_scl = array(0L, dim=c(I,J,K))
-# for(j in 1:J){
-#   cube_cnt_scl[,j,] = cube_cnt[,j,] / sd(cube_cnt[,j,], na.rm=TRUE)
-# }
-
-

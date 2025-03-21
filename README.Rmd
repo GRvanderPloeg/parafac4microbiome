@@ -38,7 +38,7 @@ This package also comes with three example datasets.
 
 -   `Fujita2023`: an in-vitro experiment of ocean inocula on peptide medium, sampled every day for 110 days (<doi:10.1186/s40168-023-01474-5>).
 -   `Shao2019`: a large cohort dataset of vaginally and caesarean-section born infants from London (<doi:10.1038/s41586-019-1560-1>).
--   `vanderPloeg2024`: a small gingivitis intervention dataset with specific response groups (<doi:10.1101/2024.03.18.585469>).
+-   `vanderPloeg2024`: a small gingivitis intervention dataset with response groups (<doi:10.1101/2024.03.18.585469>).
 
 ## Documentation
 A basic introduction to the package is given in `vignette("PARAFAC_introduction")` and modelling the example datasets are elaborated in their respective vignettes `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`.
