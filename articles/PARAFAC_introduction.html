@@ -77,9 +77,9 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>Welcome to the <code>parafac4microbiome</code> R package! In this
-vignette we explain the data available in this package, how you can
-model them using PARAFAC and how to plot the outcome. We require the
-following packages and dependencies.</p>
+vignette we explain the datasets that available in this package, how you
+can model them using PARAFAC, and how to plot the outcome. We require
+the following packages and dependencies.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.github.io/parafac4microbiome/">parafac4microbiome</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -97,7 +97,7 @@ following packages and dependencies.</p>
 <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a>
 </h2>
 <p>The <code>parafac4microbiome</code> package comes with three
-datasets: <code>Fujita2023</code>, <code>Shao2019</code> and
+exemplary datasets: <code>Fujita2023</code>, <code>Shao2019</code> and
 <code>vanderPloeg2024</code>. These refer to the first authors of their
 respective papers. Each of the dataset objects are lists with the
 following contents:</p>
@@ -112,8 +112,8 @@ mode.</li>
 focus on <code>Fujita2023</code> for the remainder of this vignette. For
 details on the datasets we refer to the parafac4microbiome paper and to
 the original papers as listed in their respective help files. Modelling
-and component selection are explained in more detail in the vignettes
-corresponding to each dataset:
+and selecting the appropriate number components are explained in more
+detail in the vignettes corresponding to each dataset:
 <code><a href="../articles/Fujita2023_analysis.html">vignette("Fujita2023_analysis")</a></code>,
 <code><a href="../articles/Shao2019_analysis.html">vignette("Shao2019_analysis")</a></code> and
 <code><a href="../articles/vanderPloeg2024_analysis.html">vignette("vanderPloeg2024_analysis")</a></code>.</p>
@@ -197,9 +197,9 @@ corresponding to each dataset:
 <div class="section level3">
 <h3 id="processing-the-data-cube">Processing the data cube<a class="anchor" aria-label="anchor" href="#processing-the-data-cube"></a>
 </h3>
-<p>As shown above, the data cube in Fujita2023$data contains unprocessed
-counts. The function <code><a href="../reference/processDataCube.html">processDataCube()</a></code> performs the
-processing of these counts with the following steps:</p>
+<p>As shown above, the data cube in <code>Fujita2023$data</code>
+contains unprocessed counts. The function <code><a href="../reference/processDataCube.html">processDataCube()</a></code>
+performs the processing of these counts with the following steps:</p>
 <ul>
 <li>It performs feature selection based on the sparsityThreshold
 setting. Sparsity is here defined as the fraction of samples where a
@@ -211,7 +211,7 @@ the <code><a href="https://rdrr.io/pkg/compositions/man/clr.html" class="externa
 subject, for which we refer to a <a href="https://doi.org/10.1002/cem.773" class="external-link">paper by Rasmus Bro and Age
 Smilde</a>. By centering across the subject mode, we make the subjects
 comparable to each other within each time point. Scaling within the
-feature mode avoids the PARAFAC model focussing on features with
+feature mode avoids the PARAFAC model focusing on features with
 abnormally high variation.</li>
 </ul>
 <p>The outcome of processing is a new version of the dataset. Please
@@ -245,15 +245,16 @@ information.</p>
 <div class="section level3">
 <h3 id="making-a-parafac-model">Making a PARAFAC model<a class="anchor" aria-label="anchor" href="#making-a-parafac-model"></a>
 </h3>
-<p>The processed data is ready to be modelled using Parallel Factor
+<p>The processed data is ready to be modeled using Parallel Factor
 Analysis. Here we arbitrarily set the number of factors (i.e. the number
 of components) to be three. This is normally the outcome of a more
 detailed investigation into the correct number of components, described
 in <code><a href="../articles/Fujita2023_analysis.html">vignette("Fujita2023_analysis")</a></code>,
 <code><a href="../articles/Shao2019_analysis.html">vignette("Shao2019_analysis")</a></code> and
 <code><a href="../articles/vanderPloeg2024_analysis.html">vignette("vanderPloeg2024_analysis")</a></code>. The output of the
-function is a parafac object containing the loadings in each mode and
-some statistics like R-squared and the sum of squared error.</p>
+function is a list object containing the PARAFAC loadings in each mode
+in <code>model$Fac</code> and some statistics like R-squared and the sum
+of squared error.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span> <span class="co"># for reproducibility</span></span>
 <span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
@@ -290,13 +291,13 @@ data cube.</p>
 <div class="section level3">
 <h3 id="plotting-a-parafac-model">Plotting a PARAFAC model<a class="anchor" aria-label="anchor" href="#plotting-a-parafac-model"></a>
 </h3>
-<p>We have implemented the <code><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel()</a></code> function to
-allow the user full control over how they want to visualize their model.
-As such, there are a lot of plotting options that can be used, which you
-can see below. A brief overview:</p>
+<p>The <code><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel()</a></code> function gives the user full
+control over how they want to visualize their model. As such, there are
+a lot of plotting options that can be used, which you can see below. A
+brief overview:</p>
 <ul>
 <li>colourCols: per mode (subject, feature, time), specifies by what
-variable the loading bar plot should be coloured.</li>
+variable the loading bar plot should be colored.</li>
 <li>legendTitles: titles of the legends per mode, if colourCode is not
 specified for a mode, a legend will not be generated.</li>
 <li>xLabels: labels for the x axis of each mode.</li>
@@ -329,7 +330,7 @@ sufficient information to get started. For more details on modelling
 specific datasets, please refer to
 <code><a href="../articles/Fujita2023_analysis.html">vignette("Fujita2023_analysis")</a></code>,
 <code><a href="../articles/Shao2019_analysis.html">vignette("Shao2019_analysis")</a></code> and
-<code><a href="../articles/vanderPloeg2024_analysis.html">vignette("vanderPloeg2024_analysis")</a></code></p>
+<code><a href="../articles/vanderPloeg2024_analysis.html">vignette("vanderPloeg2024_analysis")</a></code>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
