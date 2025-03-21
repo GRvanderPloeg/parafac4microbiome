@@ -1,4 +1,6 @@
 test_that("flipLoadings throws no errors", {
+  set.seed(123)
+
   A = array(rnorm(108*2), c(108,2))
   B = array(rnorm(100*2), c(100,2))
   C = array(rnorm(10*2), c(10,2))
@@ -8,6 +10,8 @@ test_that("flipLoadings throws no errors", {
 })
 
 test_that("flipLoadings produces a same length list as models input", {
+  set.seed(123)
+
   A = array(rnorm(108*2), c(108,2))
   B = array(rnorm(100*2), c(100,2))
   C = array(rnorm(10*2), c(10,2))
@@ -19,6 +23,7 @@ test_that("flipLoadings produces a same length list as models input", {
 
 test_that("flipLoadings Fac is not the same as modelled fac", {
   set.seed(123)
+
   processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, CLR=TRUE, centerMode=1, scaleMode=2)
   X = processedFujita$data
   models = parafac(X, 2, nstart=10, output="all", sortComponents=TRUE)

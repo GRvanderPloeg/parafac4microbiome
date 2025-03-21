@@ -49,10 +49,12 @@ flipLoadings = function(models, X){
     Fac = models[[i]]$Fac
 
     for(j in 1:numComponents){
-      if(sum(flipEvidencePerComponent[[j]][,i]) == 2){
-        for(k in 1:numModes){
-          if(flipEvidencePerComponent[[j]][k,i] == 1){
+      if(sum(flipEvidencePerComponent[[j]][,i]) >= 2){
+        for(k in numModes:1){
+          numFlipped = 0 # if all modes need to be flipped, flip maximally 2
+          if((flipEvidencePerComponent[[j]][k,i] == 1) & (numFlipped < 2)){
             Fac[[k]][,j] = -1 * Fac[[k]][,j]
+            numFlipped = numFlipped + 1
           }
         }
       }
