@@ -160,3 +160,50 @@ test_that("vect_to_fac resorts components", {
   newFac = vect_to_fac(v, X, sortComponents=TRUE)
   expect_false(all(unlist(Fac) == unlist(newFac)))
 })
+
+test_that("reshapeData works without errors", {
+  withr::local_package("dplyr")
+
+  Xlong = array(rnorm(108*5*10), c(108*5, 10))
+  subjects = rep(1:108, 5)
+  features = rep(1:10)
+  timepoints = rep(1:5, each=108)
+
+  expect_no_error(reshapeData(Xlong, subjects, features, timepoints))
+})
+
+test_that("reshapeData mode1 is the correct size", {
+  withr::local_package("dplyr")
+
+  Xlong = array(rnorm(108*5*10), c(108*5, 10))
+  subjects = rep(1:108, 5)
+  features = rep(1:10)
+  timepoints = rep(1:5, each=108)
+
+  result = reshapeData(Xlong, subjects, features, timepoints)
+  expect_equal(nrow(result$mode1), 108)
+})
+
+test_that("reshapeData mode2 is the correct size", {
+  withr::local_package("dplyr")
+
+  Xlong = array(rnorm(108*5*10), c(108*5, 10))
+  subjects = rep(1:108, 5)
+  features = rep(1:10)
+  timepoints = rep(1:5, each=108)
+
+  result = reshapeData(Xlong, subjects, features, timepoints)
+  expect_equal(nrow(result$mode2), 10)
+})
+
+test_that("reshapeData mode3 is the correct size", {
+  withr::local_package("dplyr")
+
+  Xlong = array(rnorm(108*5*10), c(108*5, 10))
+  subjects = rep(1:108, 5)
+  features = rep(1:10)
+  timepoints = rep(1:5, each=108)
+
+  result = reshapeData(Xlong, subjects, features, timepoints)
+  expect_equal(nrow(result$mode3), 5)
+})

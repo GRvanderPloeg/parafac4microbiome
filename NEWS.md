@@ -1,5 +1,7 @@
 # parafac4microbiome (development version)
 
+* Added the function `reshapeData()` which reshapes a long dataframe of counts into a data cube.
+
 # parafac4microbiome 1.1.2
 
 * Fixed a URL in README.md to now point towards the correct website.
