@@ -35,7 +35,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Reorganize longitudinal microbiome into a data cube ready for PARAFAC modelling.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/R/utils.R" class="external-link"><code>R/utils.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/R/reshapeData.R" class="external-link"><code>R/reshapeData.R</code></a></small>
       <div class="d-none name"><code>reshapeData.Rd</code></div>
     </div>
 
@@ -45,7 +45,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reshapeData</span><span class="op">(</span><span class="va">Xlong</span>, <span class="va">subjectMetadata</span>, <span class="va">featureMetadata</span>, <span class="va">timepointMetadata</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reshapeData</span><span class="op">(</span></span>
+<span>  <span class="va">Xlong</span>,</span>
+<span>  <span class="va">subjectMetadata</span>,</span>
+<span>  <span class="va">featureMetadata</span>,</span>
+<span>  <span class="va">timepointMetadata</span>,</span>
+<span>  timepointOrder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">timepointMetadata</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -66,6 +72,10 @@
 
 <dt id="arg-timepointmetadata">timepointMetadata<a class="anchor" aria-label="anchor" href="#arg-timepointmetadata"></a></dt>
 <dd><p>Vector containing the time points corresponding to the measurements in Xlong.</p></dd>
+
+
+<dt id="arg-timepointorder">timepointOrder<a class="anchor" aria-label="anchor" href="#arg-timepointorder"></a></dt>
+<dd><p>Vector containing the required order of the timepoints in timepointMetadata (default: sort(unique(timepointMetadata)) ).</p></dd>
 
 </dl></div>
     <div class="section level2">
