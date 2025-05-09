@@ -1,6 +1,9 @@
 # parafac4microbiome 1.2.0
 
 * Added the function `reshapeData()` which reshapes a long dataframe of counts into a data cube.
+* Added tests for `reshapeData()`.
+* `Fujita2023`, `Shao2019`, and `vanderPloeg2024` now utilize `reshapeData` when they are being generated.
+* Many bugfixes across all functions in the package.
 
 # parafac4microbiome 1.1.2
 
