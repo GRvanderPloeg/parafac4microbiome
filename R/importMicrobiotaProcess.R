@@ -19,16 +19,16 @@
 #' # Generate synthetic data
 #' sample_info = data.frame(Sample = factor(c("S1", "S2", "S3", "S4", "S5")),
 #'                          time = factor(c("T1", "T2", "T1", "T2", "T1")))
-#' otu_table = matrix(runif(25, min = 0, max = 100), nrow = 5, ncol = 5,
-#'                    dimnames = list(paste0("OTU", 1:5), sample_info$Sample))
+#' otu_table = matrix(runif(20, min = 0, max = 100), nrow = 4, ncol = 5,
+#'                    dimnames = list(paste0("OTU", 1:4), sample_info$Sample))
 #'
-#' taxonomy_table = data.frame(OTU = paste0("OTU", 1:5),
-#'                             Kingdom = rep("King", 5),
-#'                             Phylum = rep("Phy", 5),
-#'                             Class = rep("Cla", 5),
-#'                             Order = rep("Ord", 5),
-#'                             Family = rep("Fam", 5),
-#'                             Genus = rep("Gen", 5))
+#' taxonomy_table = data.frame(OTU = paste0("OTU", 1:4),
+#'                             Kingdom = rep("King", 4),
+#'                             Phylum = rep("Phy", 4),
+#'                             Class = rep("Cla", 4),
+#'                             Order = rep("Ord", 4),
+#'                             Family = rep("Fam", 4),
+#'                             Genus = rep("Gen", 4))
 #'
 #' # Create Summarized Experiment
 #' synthetic_SE = SummarizedExperiment::SummarizedExperiment(
@@ -37,7 +37,7 @@
 #'                rowData = taxonomy_table)
 #'
 #' # Convert to MicrobiotaProcess object
-#' synthetic_MPSE = as.MPSE(synthetic_SE)
+#' synthetic_MPSE = MicrobiotaProcess::as.MPSE(synthetic_SE)
 #'
 #' dataset = importMicrobiotaProcess(synthetic_MPSE,
 #'                                   subjectIDs = "Sample",
