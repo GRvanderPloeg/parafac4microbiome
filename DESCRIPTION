@@ -50,9 +50,9 @@ Suggests:
     knitr,
     phyloseq,
     rmarkdown,
-    MicrobiotaProcess (<= 1.16.1),
-    TreeSummarizedExperiment (<= 2.12.0),
-    SummarizedExperiment (<= 1.34.0),
+    MicrobiotaProcess (== 1.16.1),
+    TreeSummarizedExperiment (== 2.12.0),
+    SummarizedExperiment (== 1.34.0),
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
