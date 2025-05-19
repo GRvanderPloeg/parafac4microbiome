@@ -101,34 +101,904 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:stats’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     filter</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Generate synthetic data</span></span></span>
-<span class="r-in"><span><span class="va">sample_info</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S1"</span>, <span class="st">"S2"</span>, <span class="st">"S3"</span>, <span class="st">"S4"</span>, <span class="st">"S5"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                         time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"T1"</span>, <span class="st">"T2"</span>, <span class="st">"T1"</span>, <span class="st">"T2"</span>, <span class="st">"T1"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">otu_table</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">20</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span>, ncol <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>                   dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"OTU"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>, <span class="va">sample_info</span><span class="op">$</span><span class="va">Sample</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">taxonomy_table</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>OTU <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"OTU"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            Kingdom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"King"</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            Phylum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Phy"</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            Class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Cla"</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            Order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Ord"</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fam"</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                            Genus <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Gen"</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Create Summarized Experiment</span></span></span>
-<span class="r-in"><span><span class="va">synthetic_SE</span> <span class="op">=</span> <span class="fu">SummarizedExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">SummarizedExperiment</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>               assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>otu <span class="op">=</span> <span class="va">otu_table</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>               colData <span class="op">=</span> <span class="va">sample_info</span>,</span></span>
-<span class="r-in"><span>               rowData <span class="op">=</span> <span class="va">taxonomy_table</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Convert to MicrobiotaProcess object</span></span></span>
-<span class="r-in"><span><span class="va">synthetic_MPSE</span> <span class="op">=</span> <span class="fu">MicrobiotaProcess</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MicrobiotaProcess/man/as.MPSE.html" class="external-link">as.MPSE</a></span><span class="op">(</span><span class="va">synthetic_SE</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dataset</span> <span class="op">=</span> <span class="fu">importMicrobiotaProcess</span><span class="op">(</span><span class="va">synthetic_MPSE</span>,</span></span>
-<span class="r-in"><span>                                  subjectIDs <span class="op">=</span> <span class="st">"Sample"</span>,</span></span>
-<span class="r-in"><span>                                  thirdMode <span class="op">=</span> <span class="st">"time"</span>,</span></span>
-<span class="r-in"><span>                                  taxa_are_rows <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"mouse.time.mpse"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">importMicrobiotaProcess</span><span class="op">(</span><span class="va">mouse.time.mpse</span>, subjectIDs <span class="op">=</span> <span class="st">"Sample"</span>,</span></span>
+<span class="r-in"><span>                        thirdMode <span class="op">=</span> <span class="st">"time"</span>, taxa_are_rows <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> , , 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  579  345  449  430  154  470  282  184   45   158    17   217    52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  405  353  231   69  140   41   96  190   69   106   102    40   129</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 3488 1587 1175  472  338  115  325 1211  434   609    55    41   330</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]  993  602  465  200  402   25  167  381  307   298   171     0    94</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]  327  268  284  158  151   23  123  207  178   207    61     0    48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 1015  674  588  404  476   17  282  261  205   242    45     0   422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]  648  504  438  314  470   11  195  213  176   276    16     0   117</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]  272  352  349  147  582    0  130  286  113   197    19     0   145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]  511  423  482  206  596    0  210  438  146   225    27     0   182</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]   104    93    80   100    69    67    65    42    44   280    54    26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    28   325     0     0    31   109     0    53    14    57   136     8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]   107   368    17    70   190   402    44    30    17   147   296    34</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    61    46    24     0   103   342     0   123     0    32     0    23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    38    87    36    57    37    17    19    10     0    38    55    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]   106    57     0     0    39    74    12    29     0    46    37    27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    73    40     0     0    22    39    10    39     0    13    30    49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    65    45     6     0    22    20     0   117     0    47    30    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    72    99     0     0    38    42     0    26     0    32    49    39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36] [,37]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    70    75    31    43    57    62    28    74    34    45     6    58</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    69   103    45   120   141    25    30    72   103    54    14    53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]   337   200   146   109   284    59    41    83   185   113    96    56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    43    15    19     8    20    22     9     8     9    12    17    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    57    52    49    45    35    78     0    43    16    48    33    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    67   109    47    20    40    42    21    47    23    52    31    45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    13    48    13     8     0    35     0     8    12    20    10     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    57    39    44    49     0    61     8    31    74    58    24    43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    45    51    64    93    56    52    15    41    95    96    33    33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46] [,47] [,48] [,49]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    27    18     0    27    29     0    50    10     0     8    42    35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    34    21     0    32    71     0    64    19    72    24    55    45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    41    84     0    21    82     0    91    81    55    74   140   152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     9     7     0     0    15     0    28    20    10     0    10     6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    10    18     0    23    34     0     7    33    52     6    11     9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    28    21    15     0    51     0     0    37    25     7    26    44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    11    10     0     9    23     0     0    32     8     7     9    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     5    22    24    26    38     0     9    40    16    11    42    13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    16    31    36    33    62     0     0    58    30    17    24    23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,50] [,51] [,52] [,53] [,54] [,55] [,56] [,57] [,58] [,59] [,60] [,61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    55     5    50     0    13    18    84     0     0    62     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    46    11    24     0    21    34    48     0     0    54    37     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]   107    55    38     0    44    48    81     0     0    81    83     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     0    43     0     0     0     0    15     0     0    12    10     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    53     6    20     0    22    19     0     0     0    34    19     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    11    23    20     0    30    23     6     0     0    44    14     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     0    26     0     0    20     0    19     0     0    20     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    36    21     6     0    56    23    11     0     0     0    31     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    33    26    15     0   105    23    30     0     0     0    28     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,62] [,63] [,64] [,65] [,66] [,67] [,68] [,69] [,70] [,71] [,72] [,73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    19    24    20    47     0    41     0    92     0   128     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    19     0    54    38     0    41    10    12     0     0     0    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    48     4    80    38     0   102    32    37     0     0     0    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     5    16     0     0     0    17     9     0     0     0     0    21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     6     0    25     0     0     0     0     0     0     0     0    15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     9     0    30    55     0     0    15    16     0     0     0    30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     0     0     0     0     0     0     8     0     0     0     0    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    12     0    32    20     0     0     7    17    43     0     0    37</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     6     0    21    28     0     0    12    15    60     0     0    48</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,74] [,75] [,76] [,77] [,78] [,79] [,80] [,81] [,82] [,83] [,84] [,85]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    26    10     5     0    14     0    24     7    46     0     0    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     3    12    20    15     0     2    11    12    52    31     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    38    16    12    37    29     6    46    24    61     6     0    43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    19     0     7     0     0     0     0     0    11    15     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    11     9    12    13    23     4    12     5    18    18     0    13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     9    38    12    17    18     0    32    12     0    16     0    11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    19     0     7     5    10     2     0     0     0    18     6     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     8     6    12    13    17     3    21     6     0    13    46    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    18    12    13    25    38     0    24     7     0    10    41    28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,86] [,87] [,88] [,89] [,90] [,91] [,92] [,93] [,94] [,95] [,96] [,97]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     0     0     6     0     0     0     0     0    13     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    19     0    43     0     0     0     0     0     4     0     0     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    38    38    76     9     9    54     0     0    19    23    36    32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     0     0     0     0     0     0     0     0     6     0    15     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     0    55     0     0    10     0     0     6     6     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     0    34     0     6     0     0     0    11     5     0     0    19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     0     0     7     3     0     0     0     0     0     0     0     8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     0     0    35     0     0     0     0     0     9     0     0    26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     0     0     0     0     6     0     0     0     8     0    11    19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,98] [,99] [,100] [,101] [,102] [,103] [,104] [,105] [,106] [,107]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     22      0      9      0      0      0      7     19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     0     0      0      0     17      0      8      0     24     24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     0     0     16      0     46      0     26      0     21     32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     0     0      0      0      0      0      5      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    12     0      0     26     12      6     11      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    14     0     24     30     11      0     29      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     0     0      0      0      0      0      7      0      0     11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    17     0     14      0     12      0     11      0      7     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     0     0     24     32      0      0      8      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,108] [,109] [,110] [,111] [,112] [,113] [,114] [,115] [,116] [,117]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      0     10     11      0     34      0     16     10      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      0      0      6      0     15      0     15      7      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0     37      3     12     21     40      0      0     35     13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0     22      0      0      0      0      0      0     12     12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0     16      0      5      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0     11      0      8     20      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      2      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     11      0      0      9      0      0      0     16      9      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0      0      0      7     33      0      0      0     11      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,118] [,119] [,120] [,121] [,122] [,123] [,124] [,125] [,126] [,127]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0     19      0      0      0      0      0      0     19      7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0     18      0      0     31      0      0     26      7      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0     30      0      0     35     13     65     17     10     39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      5      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      0      9      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0     14     19      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0     17      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0     14      0     17      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0      0      0     14      0     22      0      0      7      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,128] [,129] [,130] [,131] [,132] [,133] [,134] [,135] [,136] [,137]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      0     17      0     57      0     16      8      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      9     11      0      0      7      0      7      9      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0      9     21      0      0      7     14     14     10      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      8      0      2      4      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0     13      9      0      0      0      0      5      4      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     10     11      0      0      0     16     11      5      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     15      7      0      0      0      9     13      6      5      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,138] [,139] [,140] [,141] [,142] [,143] [,144] [,145] [,146] [,147]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      0      0      7      0      0      0      0      9     19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      3      3      0      0      0     29      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     10      8      0      5      0      0     18      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      4      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      4      9      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      9      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      2      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      3      0      0      3      0      0      0      0      0      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0     19      0      0      0      0      0     44      0     17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,148] [,149] [,150] [,151] [,152] [,153] [,154] [,155] [,156] [,157]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     19      0      0      0      0     21     10      0      0     11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      7      0      0      0      3      0      6      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      7     20     38      0     20      0      8      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      0      0     11      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      0      3      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      0      0      4      0      0      0      0      7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0      0      0      0      0      0      0      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      7      0      0      0     10      0      0      0      0     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,158] [,159] [,160] [,161] [,162] [,163] [,164] [,165] [,166] [,167]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      9      0      0      0      0     10      6      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      8      0     21      0      0      0     12      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      0      7      9      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      8      0      9      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      5      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0      0      0      3      0      0      8      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      9      0      0      0      9      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,168] [,169] [,170] [,171] [,172] [,173] [,174] [,175] [,176] [,177]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      0      3      0      0      0      5      3      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      6      0      0      0     11      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     15      5      3      6      0      0      0      0      0      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      9      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0      0      9      0      0      0     13      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0     16      0      5      0     20      0      0      0      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,178] [,179] [,180] [,181] [,182] [,183] [,184] [,185] [,186] [,187]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     10      0      0      0     14      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      0      0      0      0      0      3      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      7     10      0      0      0      0      0      0      0     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      7      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0      0      0      0      3      0      0      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0      0     17      0      0      0      5      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,188] [,189] [,190] [,191] [,192] [,193] [,194] [,195] [,196] [,197]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      6     12      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      0      0      0      0      0      9      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0      7      0      5      0      0      0      4      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      5      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      7      0      0      0      0      0      0      0      3      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      7      0      0      6      0      3      0      0      6      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,198] [,199] [,200] [,201] [,202] [,203] [,204] [,205] [,206] [,207]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      0      0      0      0      0      0      0      6      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0      0      0      0      0      7      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      0      0      0      0      0      0      7      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0      0      8      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,208] [,209] [,210] [,211] [,212] [,213] [,214] [,215] [,216] [,217]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0      0      4      4      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0      0      0      0      0      0      4      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      5      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0      5      0      0      0      0      0      4      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,218]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> , , 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  444  362  345  502  189  331  243  321  167   130   168   146    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  289  304  158  164  180  181  163   89   89    78    42    98   103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  228  176  204  231  130  244  152   83  109    67    78   111    43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  421  277  302  357  104  353  240   41  158   155   269   146    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  645  489  522  583  307  476  396  125  202   229   317   258    22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  325  230  254  388  179  275  214   71  113    88   178   147     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 1495 1215  913 1089  453 1182  861   75  769   269   448   560   147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  863  729  581  853  443  872  579  507  409   198   411   432    18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]  883  779  723  897  417  637  560  515  426   288   478   301    88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]  317  229  399  471  169  216  238  120  241   149    61    98    64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    65    33   103   149    43     6     0    45    86    51    15    57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    64    12    52   116    30     7     0     0    35    13     6    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    61     9    40     0    20     0     0    12    67     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    81    11   113     0    45     6     0    45    14    15     0    13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]   125    15   126   195   105     5   121    39    13    11     8    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    58    25    35     0    35     3    78    17    78    18    48    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]   292    74   306   260   143    41   339   121    79    50    15   110</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]   199    56   270   259   117    55   274   112    94    26    52   183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]   164    42   177    82   119     4   237   149   266    47     0   103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    75    19    30     0    49     5     0    19   140     0    23    54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36] [,37]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0     9    36     0    12    57    22     0     0    32    20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0     0     0     0    21     8    10     0     4     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0    14     4     0    22    24    13     0     0    14     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0    20    10     0     0    10    16     0     0    17    16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     6    18    11     0     0    18    13     0     0    13    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    19    36    36    35     0     0    23    23     0     0    13    26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    10    34    33    17     0    51    47    12     0    26    46    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    12     8    14    22     0    58    44     9     0     0    21    17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     8     6    46    36    24    46   146    45     0    12    59    52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     6     6    32     0     0     0    85    31     0     0    53    25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46] [,47] [,48] [,49]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    27    13    66    41     0     0    18     0     8    19     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    12     7    12     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    14    11    39    37     0     0     8     0     0    14     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0    38     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     6    44    14     0     5     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    32    23    96    31     0     0    21     0    11    14     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    43    38    38    20     0     0    12    13    11    43     0    11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    50    21    12    48     0     0    15     9    15    34     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    88    45     0    30     0     0    45    21    35    64     0     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    29    41     0    20     0     0    25     0    16    20     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,50] [,51] [,52] [,53] [,54] [,55] [,56] [,57] [,58] [,59] [,60] [,61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     8     8    18     0    28     0    29     0     0     6     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     8     6    10     0     0     0    23     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     7     8     0     0     0     0    24     3     0     6     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     8    14    22     0     0     0    16     0     0     0     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0    21    11    13     0     0     3    18     5     0    10     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     5    19    37     0    16     0     5     0     0    14     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     0    37    31    90    18    28    26    58     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0    13    21    62     0    22     0    94     0     0    11     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     8    12    37    43     0    27     0    34     0     0    14     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     0     8    13    41     0    15     0    14     0     0    12     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,62] [,63] [,64] [,65] [,66] [,67] [,68] [,69] [,70] [,71] [,72] [,73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    14    16     0     0    45    11    16    22     0     6    30     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0    28     0     0     0     0     0     0     0     4     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     4    10     0     0    22     0    13    18    11     0    15     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0    21     0     0     0     0     0     0    10     6     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     5     7     0     0     0     0     0     0     0    14     0     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    15     3     0     0    12     0    12     0    15     0     9    12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    13    29     0    23    18     8     0     0    45    18    25     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    19    68     0     0    18     0    14     0    13    31    21     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    59    28     0     0    82    19    67     0     0    13    74     8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    23    19     0     0    47     0    18     0    31     6    52     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,74] [,75] [,76] [,77] [,78] [,79] [,80] [,81] [,82] [,83] [,84] [,85]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    17     0    12     7     0     0     0     9     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0     0     0     0     0     0    13     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     9     0     0     0     0    11     0     3     0    14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     6     0     0     9     0     0     0    14     0     3     0     9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     6     7    11    19     0     0    13     0     0     3    34     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    12    66    41    18    11     5     9    34     0    18    20    24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    16    18     7     5    23     0     0    21     0    18    16     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    14    23    24    13    19     0     0    17     0     7    14     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     0     0    11    12     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,86] [,87] [,88] [,89] [,90] [,91] [,92] [,93] [,94] [,95] [,96] [,97]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0     0    15    13     0    10     9     8    20     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    15     0     0     0     5     0     6     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     0     5     0     0     0     6     0     6     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    14     0     0    11     0     0     0    10     3     6     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     0    10    13     0     0    14     5     0     9     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    26     0     0    16    13     0    14    13    14    16     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    33     0     0    11     0    67    14     0    11    30    21     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    13    39     0    18    22     0    19    23     9    15    14     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    17     0     0    35    31    27    60    42    23     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     0     0     0    17    27     0    23    12    11     9     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,98] [,99] [,100] [,101] [,102] [,103] [,104] [,105] [,106] [,107]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0      0      7      0     14      0      0     11      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0      0      0      0      5      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0      0      0      0      6      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     8     0      0      0      0      3      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     2      0      4      0     10      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0      8      0      0     14      0     13      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    25     0      0      0      0      0      0     16      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0     0      0      0      0     15      0      6      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]    24     0      5      0      0     24      0     41     19      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]    14     0      0     14      0     10      0     23      8      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]    NA    NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,108] [,109] [,110] [,111] [,112] [,113] [,114] [,115] [,116] [,117]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      4      0      0      0     10      0      0     10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     11      0      7      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      6      0      0      0      0      0      0     12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     12      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     16      0      6      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     11      0     16      0     17      0     11      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     11      0     13     13      0      0      8     10      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     12      0     13      0      0      0      9      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0      8      9     11      0      0     32     18      0     26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      9      0      5      9      0      0     19     10      0     11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,118] [,119] [,120] [,121] [,122] [,123] [,124] [,125] [,126] [,127]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0     13      0      0      0      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      7     12      0      0      0      0     21     11      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0     13      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     24      0     11      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     43      0     12      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]     12      0      7      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,128] [,129] [,130] [,131] [,132] [,133] [,134] [,135] [,136] [,137]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      6      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      3      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0     10      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0     15      0      0      0      2      3      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0     15      0      0      0      0      4      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     11      0      0     11      0      0      0      5      4      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     17      0      0      4      0     10      0      0      7     26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0     10      0      0      0      0      0      0      0     15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,138] [,139] [,140] [,141] [,142] [,143] [,144] [,145] [,146] [,147]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      4      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      6      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      5      0      0      0      0      7      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      0      0      0      5      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0      5      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      9      0     17      4      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]     15      0     24      6     22      0     26      0     12      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      6     23     16      0      0      9      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,148] [,149] [,150] [,151] [,152] [,153] [,154] [,155] [,156] [,157]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      4      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      0      0      4      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0     10      0      0     11      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0     15      0      0      0      6     13      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      0      0      0      0      0     11      0     15      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0     15      0     12      0      4      0      9      7      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,158] [,159] [,160] [,161] [,162] [,163] [,164] [,165] [,166] [,167]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      0      0      0      0      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      9      0      0     12      7      5      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      5      0      0      7      0      9      0      9      0      6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0     20      0      6      0      8      0      0      0      9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,168] [,169] [,170] [,171] [,172] [,173] [,174] [,175] [,176] [,177]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0      0      3      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      0      0      0      0      5      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      0      0      4      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0      9      0      0      0     11      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      0      0      0      0      0      0      4      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0      0      5      0      0      0      6      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,178] [,179] [,180] [,181] [,182] [,183] [,184] [,185] [,186] [,187]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      5      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0     10      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      8      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      6      3      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0      0      0      0      0     14      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0      0      0      0      0      0      0      0      8      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      0      0      0      6      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,188] [,189] [,190] [,191] [,192] [,193] [,194] [,195] [,196] [,197]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      5      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      2      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0      0      0      3      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      0      0      0      0      5      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0      0      0      0      0      2      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,198] [,199] [,200] [,201] [,202] [,203] [,204] [,205] [,206] [,207]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      2      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      7      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      4      0      0      0      0      0      0      6      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      2      0      0      0      7      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0      8      0      0      0      0      0      0      0      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,208] [,209] [,210] [,211] [,212] [,213] [,214] [,215] [,216] [,217]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0      0      0      0      4      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0      0      0      0      0      0      0      0      3      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0      0      0      0      0      0      0      0      0      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0      0      0      0      0      0      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0      0      0      0      0      4      0      0      0      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,218]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]     NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mode1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19 × 1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Sample</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> F3D0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> F3D1  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> F3D141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> F3D142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> F3D143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> F3D144</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> F3D145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> F3D146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> F3D147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> F3D148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> F3D149</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> F3D150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> F3D2  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> F3D3  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> F3D5  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> F3D6  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">17</span> F3D7  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">18</span> F3D8  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">19</span> F3D9  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mode2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 218 × 8</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    OTU     Kingdom     Phylum            Class        Order Family Genus Species</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> OTU_67  k__Bacteria p__Actinobacteria c__Actinoba… o__B… f__Bi… g__B… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> OTU_231 k__Bacteria p__Actinobacteria c__Coriobac… o__C… f__At… g__O… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> OTU_188 k__Bacteria p__Actinobacteria c__Coriobac… o__C… f__Eg… g__E… s__mur…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> OTU_150 k__Bacteria p__Actinobacteria c__Coriobac… o__C… f__Eg… g__E… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> OTU_207 k__Bacteria p__Actinobacteria c__Coriobac… o__C… f__Eg… g__E… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> OTU_5   k__Bacteria p__Bacteroidetes  c__Bacteroi… o__B… f__Ba… g__B… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> OTU_1   k__Bacteria p__Bacteroidetes  c__Bacteroi… o__B… f__Mu… g__u… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> OTU_2   k__Bacteria p__Bacteroidetes  c__Bacteroi… o__B… f__Mu… g__u… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> OTU_3   k__Bacteria p__Bacteroidetes  c__Bacteroi… o__B… f__Mu… g__u… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> OTU_4   k__Bacteria p__Bacteroidetes  c__Bacteroi… o__B… f__Mu… g__u… s__un_…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 208 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $mode3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2 × 1</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   time </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> Early</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> Late </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
