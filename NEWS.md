@@ -1,5 +1,8 @@
 # parafac4microbiome 1.2.1
 
+* The package is now fully compatible with R version 4.5.
+* Due to breaking changes to the `TreeSummarizedExperiment` package that came with R version 4.5, minimum version requirements for `TreeSummarizedExperiment`, `MicrobiotaProcess`, and `SummarizedExperiment` have temporarily been added to the dependencies. This breaks compatibility with older versions of Ubuntu temporarily.
+
 # parafac4microbiome 1.2.0
 
 * Added the function `reshapeData()` which reshapes a long dataframe of counts into a data cube.
