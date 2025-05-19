@@ -31,34 +31,9 @@ Import MicrobiotaProcess object for PARAFAC modelling
 \dontshow{if (rlang::is_installed("MicrobiotaProcess")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 library(MicrobiotaProcess)
-
-# Generate synthetic data
-sample_info = data.frame(Sample = factor(c("S1", "S2", "S3", "S4", "S5")),
-                         time = factor(c("T1", "T2", "T1", "T2", "T1")))
-otu_table = matrix(runif(20, min = 0, max = 100), nrow = 4, ncol = 5,
-                   dimnames = list(paste0("OTU", 1:4), sample_info$Sample))
-
-taxonomy_table = data.frame(OTU = paste0("OTU", 1:4),
-                            Kingdom = rep("King", 4),
-                            Phylum = rep("Phy", 4),
-                            Class = rep("Cla", 4),
-                            Order = rep("Ord", 4),
-                            Family = rep("Fam", 4),
-                            Genus = rep("Gen", 4))
-
-# Create Summarized Experiment
-synthetic_SE = SummarizedExperiment::SummarizedExperiment(
-               assays = list(otu = otu_table),
-               colData = sample_info,
-               rowData = taxonomy_table)
-
-# Convert to MicrobiotaProcess object
-synthetic_MPSE = MicrobiotaProcess::as.MPSE(synthetic_SE)
-
-dataset = importMicrobiotaProcess(synthetic_MPSE,
-                                  subjectIDs = "Sample",
-                                  thirdMode = "time",
-                                  taxa_are_rows = TRUE)
+data("mouse.time.mpse")
+importMicrobiotaProcess(mouse.time.mpse, subjectIDs = "Sample",
+                        thirdMode = "time", taxa_are_rows = TRUE)
 }
 \dontshow{\}) # examplesIf}
 }
