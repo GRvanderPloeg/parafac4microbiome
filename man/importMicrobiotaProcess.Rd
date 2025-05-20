@@ -29,7 +29,7 @@ Import MicrobiotaProcess object for PARAFAC modelling
 }
 \examples{
 \dontshow{if (rlang::is_installed("MicrobiotaProcess")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\donttest{
+\dontrun{
 library(MicrobiotaProcess)
 data("mouse.time.mpse")
 importMicrobiotaProcess(mouse.time.mpse, subjectIDs = "Sample",

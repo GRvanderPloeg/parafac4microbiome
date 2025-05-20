@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examplesIf rlang::is_installed("MicrobiotaProcess")
-#' \donttest{
+#' \dontrun{
 #' library(MicrobiotaProcess)
 #' data("mouse.time.mpse")
 
