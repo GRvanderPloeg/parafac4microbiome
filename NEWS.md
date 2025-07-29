@@ -1,3 +1,5 @@
+# parafac4microbiome 1.3.1
+
 # parafac4microbiome 1.3.0
 
 * Removal of the all-at-once optimization for `parafac()` since the ALS scheme outperforms it under all circumstances.
