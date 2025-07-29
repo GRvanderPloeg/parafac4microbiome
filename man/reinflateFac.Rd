@@ -21,6 +21,6 @@ Calculate Xhat from a model Fac object
 }
 \examples{
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
+model = parafac(processedFujita$data, nfac=1, nstart=1)
 Xhat = reinflateFac(model$Fac, processedFujita$data)
 }

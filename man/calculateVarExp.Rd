@@ -19,6 +19,6 @@ Calculate the variation explained by a PARAFAC model.
 }
 \examples{
 X = Fujita2023$data
-model = parafac(X, nfac=1, nstart=1, verbose=FALSE)
+model = parafac(X, nfac=1, nstart=1)
 calculateVarExp(model$Fac, X)
 }

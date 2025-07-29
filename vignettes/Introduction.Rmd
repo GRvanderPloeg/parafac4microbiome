@@ -1,8 +1,8 @@
 ---
-title: "Introduction to PARAFAC modelling"
+title: "Introduction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{PARAFAC_introduction}
+  %\VignetteIndexEntry{Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -35,7 +35,7 @@ The `parafac4microbiome` package comes with three exemplary datasets: `Fujita202
 *   mode2: metadata corresponding to the feature (microbial abundances) mode.
 *   mode3: metadata corresponding to the time mode.
 
-We briefly show what the data in these datasets look like and then focus on `Fujita2023` for the remainder of this vignette. For details on the datasets we refer to the parafac4microbiome paper and to the original papers as listed in their respective help files. Modelling and selecting the appropriate number components are explained in more detail in the vignettes corresponding to each dataset: `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`.
+We briefly show what the data in these datasets look like and then focus on `Fujita2023` for the remainder of this vignette. For details on the datasets we refer to the parafac4microbiome paper and to the original papers as listed in their respective help files. Modelling and selecting the appropriate number components are explained in more detail in the vignettes corresponding to each dataset: `vignette("Fujita2023")`, `vignette("Shao2019")` and `vignette("vanderPloeg2024")`.
 
 ```{r datasets}
 dim(Fujita2023$data)
@@ -65,11 +65,11 @@ head(processedFujita$data[,,1])
 ```
 
 ## Making a PARAFAC model
-The processed data is ready to be modeled using Parallel Factor Analysis. Here we arbitrarily set the number of factors (i.e. the number of components) to be three. This is normally the outcome of a more detailed investigation into the correct number of components, described in `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`. The output of the function is a list object containing the PARAFAC loadings in each mode in `model$Fac` and some statistics like R-squared and the sum of squared error.
+The processed data is ready to be modeled using Parallel Factor Analysis. Here we arbitrarily set the number of factors (i.e. the number of components) to be three. This is normally the outcome of a more detailed investigation into the correct number of components, described in `vignette("Fujita2023")`, `vignette("Shao2019")` and `vignette("vanderPloeg2024")`. The output of the function is a list object containing the PARAFAC loadings in each mode in `model$Fac` and some statistics like R-squared and the sum of squared error.
 
 ```{r fujita2023 modelling}
 set.seed(0) # for reproducibility
-model = parafac(processedFujita$data, nfac=3, verbose=FALSE)
+model = parafac(processedFujita$data, nfac=3)
 
 head(model$Fac[[1]])
 head(model$Fac[[2]])
@@ -104,4 +104,4 @@ plotPARAFACmodel(model$Fac, processedFujita,
   overallTitle = "Fujita PARAFAC model")
 ```
 
-This concludes the introduction to the `parafac4microbiome` package. We hope this gives you sufficient information to get started. For more details on modelling specific datasets, please refer to `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`.
+This concludes the introduction to the `parafac4microbiome` package. We hope this gives you sufficient information to get started. For more details on modelling specific datasets, please refer to `vignette("Fujita2023")`, `vignette("Shao2019")` and `vignette("vanderPloeg2024")`.

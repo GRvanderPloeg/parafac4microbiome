@@ -41,7 +41,7 @@ This package also comes with three example datasets.
 -   `vanderPloeg2024`: a small gingivitis intervention dataset with response groups (<doi:10.1101/2024.03.18.585469>).
 
 ## Documentation
-A basic introduction to the package is given in `vignette("PARAFAC_introduction")` and modelling the example datasets are elaborated in their respective vignettes `vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and `vignette("vanderPloeg2024_analysis")`.
+A basic introduction to the package is given in `vignette("PARAFAC")` and modelling the example datasets are elaborated in their respective vignettes `vignette("Fujita2023")`, `vignette("Shao2019")` and `vignette("vanderPloeg2024")`.
 
 These vignettes and all function documentation can be found [here](https://grvanderploeg.com/parafac4microbiome/).
 
@@ -66,7 +66,7 @@ devtools::install_github("GRvanderPloeg/parafac4microbiome")
 
 Please use the following citation when using this package:
 
--   van der Ploeg, G. R., Westerhuis, J., Heintz-Buschart, A., & Smilde, A. (2024). parafac4microbiome: Exploratory analysis of longitudinal microbiome data using Parallel Factor Analysis. bioRxiv, 2024-05.
+-   van der Ploeg, G. R., Westerhuis, J., Heintz-Buschart, A., & Smilde, A. (2025). parafac4microbiome: Exploratory analysis of longitudinal microbiome data using Parallel Factor Analysis. mSystems 10:e00472-25. https://doi.org/10.1128/msystems.00472-25 
 
 ## Usage
 

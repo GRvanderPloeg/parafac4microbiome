@@ -1,5 +1,10 @@
 # parafac4microbiome 1.3.0
 
+* Removal of the all-at-once optimization for `parafac()` since the ALS scheme outperforms it under all circumstances.
+* Removal of deprecated verbose option for `parafac()`.
+* Renaming of vignettes to be easier to visually parse (also in preparation of the addition of new vignettes).
+* Overhaul of the entire testing suite to be more robust and fast.
+
 # parafac4microbiome 1.2.1
 
 * The package is now fully compatible with R version 4.5.

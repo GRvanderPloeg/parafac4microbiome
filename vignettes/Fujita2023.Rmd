@@ -1,8 +1,8 @@
 ---
-title: "Fujita2023_analysis"
+title: "Fujita2023"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Fujita2023_analysis}
+  %\VignetteIndexEntry{Fujita2023}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

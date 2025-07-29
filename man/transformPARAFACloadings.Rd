@@ -23,6 +23,6 @@ Note: this function only works for 3-way PARAFAC models.
 }
 \examples{
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-model = parafac(processedFujita$data, nfac=2, nstart=1, verbose=FALSE)
+model = parafac(processedFujita$data, nfac=2, nstart=1)
 transformedA = transformPARAFACloadings(model$Fac, 1)
 }

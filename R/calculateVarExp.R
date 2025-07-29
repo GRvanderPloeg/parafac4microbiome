@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' X = Fujita2023$data
-#' model = parafac(X, nfac=1, nstart=1, verbose=FALSE)
+#' model = parafac(X, nfac=1, nstart=1)
 #' calculateVarExp(model$Fac, X)
 calculateVarExp = function(Fac, X){
   Fac = lapply(Fac, as.matrix) # protection from the 1-component case

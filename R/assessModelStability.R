@@ -19,12 +19,9 @@
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 #' modelStability = assessModelStability(processedFujita,
 #'                                       minNumComponents=1,
-#'                                       maxNumComponents=2,
-#'                                       ctol=1e-4,
-#'                                       maxit=250)
+#'                                       maxNumComponents=2)
 assessModelStability = function(dataset, minNumComponents=1, maxNumComponents=5, numFolds=dim(dataset$data)[1], considerGroups=FALSE, groupVariable="",
-                               colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, method="als", ctol=1e-6,
-                               maxit=2500, max_fn=10000, rel_tol=1e-8, abs_tol=1e-8, grad_tol=1e-8, numCores=1){
+                               colourCols=NULL, legendTitles=NULL, xLabels=NULL, legendColNums=NULL, arrangeModes=NULL, maxit=500, ctol=1e-4, numCores=1){
 
   if(considerGroups == TRUE & groupVariable == ""){
     warning("When setting considerGroups to TRUE, please also specify a groupVariable.")
@@ -98,13 +95,13 @@ assessModelStability = function(dataset, minNumComponents=1, maxNumComponents=5,
       cl = parallel::makeCluster(numCores)
       doParallel::registerDoParallel(cl)
       models = foreach::foreach(i=1:numFolds) %dopar% {
-        model = parafac4microbiome::parafac(X[-samplesToRemove[[i]],,], nfac=f, initialization="nvec", nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+        model = parafac4microbiome::parafac(X[-samplesToRemove[[i]],,], nfac=f, initialization="nvec", nstart=1, ctol=ctol, maxit=maxit)
       }
       parallel::stopCluster(cl)
     } else{
       models = list()
       for(i in 1:numFolds){
-        models[[i]] = parafac4microbiome::parafac(X[-samplesToRemove[[i]],,], nfac=f, initialization="nvec", nstart=1, ctol=ctol, maxit=maxit, verbose=FALSE)
+        models[[i]] = parafac4microbiome::parafac(X[-samplesToRemove[[i]],,], nfac=f, initialization="nvec", nstart=1, ctol=ctol, maxit=maxit)
       }
     }
 

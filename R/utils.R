@@ -116,7 +116,7 @@ reinflateTensor = function(A, B, C, returnAsTensor=FALSE){
 #'
 #' @examples
 #' processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
-#' model = parafac(processedFujita$data, nfac=1, nstart=1, verbose=FALSE)
+#' model = parafac(processedFujita$data, nfac=1, nstart=1)
 #' Xhat = reinflateFac(model$Fac, processedFujita$data)
 reinflateFac = function(Fac, X, returnAsTensor=FALSE){
   Fac = lapply(Fac, as.matrix) # Cast to matrix for correct indexation in the one-component case.

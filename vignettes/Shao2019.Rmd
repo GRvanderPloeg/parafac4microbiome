@@ -1,8 +1,8 @@
 ---
-title: "Shao2019_analysis"
+title: "Shao2019"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Shao2019_analysis}
+  %\VignetteIndexEntry{Shao2019}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

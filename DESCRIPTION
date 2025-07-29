@@ -35,7 +35,6 @@ Imports:
     lifecycle,
     magrittr,
     methods,
-    mize,
     multiway,
     parallel,
     pracma,

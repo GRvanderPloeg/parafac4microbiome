@@ -5,8 +5,6 @@
 #' @param minNumComponents Minimum number of components (default 1).
 #' @param maxNumComponents Maximum number of components (default 5).
 #' @param numRepetitions Number of randomly initialized models to create (default 100).
-#' @param ctol Change in SSQ needed for model to be converged (default 1e-6).
-#' @param maxit Maximum number of iterations (default 2500).
 #' @param numCores Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)
 #'
 #' @return A list object of the following:
@@ -23,11 +21,9 @@
 #' assessment = assessModelQuality(X,
 #'                                 minNumComponents=1,
 #'                                 maxNumComponents=3,
-#'                                 numRepetitions=5,
-#'                                 ctol=1e-4,
-#'                                 maxit=250)
+#'                                 numRepetitions=5)
 #' assessment$plots$overview
-assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, method="als", ctol=1e-6, maxit=2500, max_fn=10000, rel_tol=1e-8, abs_tol=1e-8, grad_tol=1e-8, numCores=1){
+assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepetitions=100, ctol=1e-4, maxit=500, numCores=1){
 
   metrics = list()
   allModels = list()
@@ -49,11 +45,11 @@ assessModelQuality = function(X, minNumComponents=1, maxNumComponents=5, numRepe
       cl = parallel::makeCluster(numCores)
       doParallel::registerDoParallel(cl)
       models = foreach::foreach(i=1:numRepetitions) %dopar% {
-        model=parafac4microbiome::parafac(X, nfac=f, nstart=1, method=method, ctol=ctol, rel_tol=rel_tol, abs_tol=abs_tol, grad_tol=grad_tol, maxit=maxit, max_fn=max_fn, verbose=FALSE)
+        model=parafac4microbiome::parafac(X, nfac=f, nstart=1)
       }
       parallel::stopCluster(cl)
     } else{
-      models = parafac(X, nfac=f, nstart=numRepetitions, method=method, ctol=ctol, rel_tol=rel_tol, abs_tol=abs_tol, grad_tol=grad_tol, maxit=maxit, max_fn=max_fn, output ="all", verbose=FALSE)
+      models = parafac4microbiome::parafac(X, nfac=f, nstart=numRepetitions, output ="all")
     }
 
     # Store output

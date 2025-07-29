@@ -9,14 +9,8 @@ parafac(
   nfac,
   nstart = 1,
   maxit = 500,
-  max_fn = 10000,
   ctol = 1e-04,
-  rel_tol = 1e-08,
-  abs_tol = 1e-08,
-  grad_tol = 1e-08,
   initialization = "random",
-  method = "als",
-  verbose = FALSE,
   output = "best",
   sortComponents = FALSE
 )
@@ -28,23 +22,11 @@ parafac(
 
 \item{nstart}{Number of models to randomly initialize (default 1).}
 
-\item{maxit}{Maximum number of iterations allowed without convergence in the ALS case (default 500).}
-
-\item{max_fn}{Maximum number of function evaluations allowed without convergence in the OPT case (default 10000).}
+\item{maxit}{Maximum number of iterations allowed without convergence (default 500).}
 
 \item{ctol}{Relative change in loss tolerated to call the algorithm converged in the ALS case (default 1e-4).}
 
-\item{rel_tol}{Relative change in loss tolerated to call the algorithm converged in the OPT case (default 1e-8).}
-
-\item{abs_tol}{Absolute loss tolerated to call the algorithm converged in the OPT case (default 1e-8).}
-
-\item{grad_tol}{Tolerance on the two-norm of the gradient divided over the number of elements in the gradient in the OPT case (default 1e-8).}
-
 \item{initialization}{"Random" for randomly initialized input vectors or "nvec" for svd-based best guess.}
-
-\item{method}{Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.}
-
-\item{verbose}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} verbose output}
 
 \item{output}{String ("best"/"all") Return only the best model of the nstart models ("best") or return all of them in a list object ("all").}
 

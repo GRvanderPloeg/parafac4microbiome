@@ -1,8 +1,8 @@
 ---
-title: "vanderPloeg2024_analysis"
+title: "vanderPloeg2024"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{vanderPloeg2024_analysis}
+  %\VignetteIndexEntry{vanderPloeg2024}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

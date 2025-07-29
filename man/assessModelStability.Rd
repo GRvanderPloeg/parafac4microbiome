@@ -16,13 +16,8 @@ assessModelStability(
   xLabels = NULL,
   legendColNums = NULL,
   arrangeModes = NULL,
-  method = "als",
-  ctol = 1e-06,
-  maxit = 2500,
-  max_fn = 10000,
-  rel_tol = 1e-08,
-  abs_tol = 1e-08,
-  grad_tol = 1e-08,
+  maxit = 500,
+  ctol = 1e-04,
   numCores = 1
 )
 }
@@ -49,19 +44,9 @@ assessModelStability(
 
 \item{arrangeModes}{Vector of boolean values per mode, stating if the loadings should be arranged according to colourCols (TRUE) or not (FALSE).}
 
-\item{method}{Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.}
+\item{maxit}{Maximum number of iterations allowed without convergence (default 500).}
 
 \item{ctol}{Relative change in loss tolerated to call the algorithm converged in the ALS case (default 1e-4).}
-
-\item{maxit}{Maximum number of iterations allowed without convergence in the ALS case (default 500).}
-
-\item{max_fn}{Maximum number of function evaluations allowed without convergence in the OPT case (default 10000).}
-
-\item{rel_tol}{Relative change in loss tolerated to call the algorithm converged in the OPT case (default 1e-8).}
-
-\item{abs_tol}{Absolute loss tolerated to call the algorithm converged in the OPT case (default 1e-8).}
-
-\item{grad_tol}{Tolerance on the two-norm of the gradient divided over the number of elements in the gradient in the OPT case (default 1e-8).}
 
 \item{numCores}{Number of cores to use. If set larger than 1, it will run the job in parallel (default 1)}
 }
@@ -81,7 +66,5 @@ Bootstrapping procedure to determine PARAFAC model stability for a given number 
 processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
 modelStability = assessModelStability(processedFujita,
                                       minNumComponents=1,
-                                      maxNumComponents=2,
-                                      ctol=1e-4,
-                                      maxit=250)
+                                      maxNumComponents=2)
 }
