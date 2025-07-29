@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,10 +18,10 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Fujita2023_analysis.html">Fujita2023_analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/PARAFAC_introduction.html">Introduction to PARAFAC modelling</a></li>
-    <li><a class="dropdown-item" href="../articles/Shao2019_analysis.html">Shao2019_analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/vanderPloeg2024_analysis.html">vanderPloeg2024_analysis</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
+    <li><a class="dropdown-item" href="../articles/Introduction.html">Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/Shao2019.html">Shao2019</a></li>
+    <li><a class="dropdown-item" href="../articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -35,7 +35,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculate Factor Match Score for all initialized models.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/v1.2.1/R/calculateFMS.R" class="external-link"><code>R/calculateFMS.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/R/calculateFMS.R" class="external-link"><code>R/calculateFMS.R</code></a></small>
       <div class="d-none name"><code>calculateFMS.Rd</code></div>
     </div>
 
@@ -69,14 +69,14 @@
 <span class="r-in"><span><span class="va">X</span> <span class="op">=</span> <span class="fu"><a href="reinflateTensor.html">reinflateTensor</a></span><span class="op">(</span><span class="va">A</span>, <span class="va">B</span>, <span class="va">C</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">models</span> <span class="op">=</span> <span class="fu"><a href="parafac.html">parafac</a></span><span class="op">(</span><span class="va">X</span>, <span class="fl">2</span>, initialization<span class="op">=</span><span class="st">"random"</span>, nstart<span class="op">=</span><span class="fl">10</span>, maxit<span class="op">=</span><span class="fl">2</span>, output<span class="op">=</span><span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">calculateFMS</span><span class="op">(</span><span class="va">models</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.019222617 0.051410324 0.044553311 0.013180252 0.031413279 0.080113014</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.070364495 0.052823131 0.081888309 0.021390005 0.032625534 0.049462377</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.020698580 0.012998548 0.050191097 0.024177485 0.010568126 0.071054816</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.021058105 0.064456801 0.028841366 0.010927542 0.016008336 0.008524141</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.032627296 0.022839585 0.038337194 0.018410821 0.046819722 0.019912162</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [31] 0.010937011 0.085768189 0.007195913 0.043129164 0.063321470 0.011410836</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [37] 0.020875075 0.055114088 0.036329486 0.018802141 0.022493230 0.016800785</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [43] 0.012460249 0.022959609 0.012384079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.025461441 0.051886842 0.023800382 0.007717426 0.040055884 0.042772256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.084319630 0.090802289 0.024838915 0.034198819 0.039982563 0.048909237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.046063679 0.063312176 0.035905995 0.031095529 0.026787061 0.050014313</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.036016638 0.023684890 0.042446021 0.053899948 0.031381054 0.015127195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25] 0.052330629 0.014021322 0.015849344 0.050638957 0.041642001 0.028173094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [31] 0.029577363 0.058029880 0.012203774 0.023725391 0.052249522 0.008829398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] 0.017972498 0.035585396 0.035183596 0.028134644 0.021513035 0.023719843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [43] 0.031142829 0.016726202 0.038221313</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -88,7 +88,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

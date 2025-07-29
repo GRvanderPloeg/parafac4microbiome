@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,10 +18,10 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Fujita2023_analysis.html">Fujita2023_analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/PARAFAC_introduction.html">Introduction to PARAFAC modelling</a></li>
-    <li><a class="dropdown-item" href="../articles/Shao2019_analysis.html">Shao2019_analysis</a></li>
-    <li><a class="dropdown-item" href="../articles/vanderPloeg2024_analysis.html">vanderPloeg2024_analysis</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
+    <li><a class="dropdown-item" href="../articles/Introduction.html">Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/Shao2019.html">Shao2019</a></li>
+    <li><a class="dropdown-item" href="../articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -35,7 +35,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Parallel Factor Analysis</h1>
-      <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/v1.2.1/R/parafac.R" class="external-link"><code>R/parafac.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/R/parafac.R" class="external-link"><code>R/parafac.R</code></a></small>
       <div class="d-none name"><code>parafac.Rd</code></div>
     </div>
 
@@ -50,14 +50,8 @@
 <span>  <span class="va">nfac</span>,</span>
 <span>  nstart <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  maxit <span class="op">=</span> <span class="fl">500</span>,</span>
-<span>  max_fn <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  ctol <span class="op">=</span> <span class="fl">1e-04</span>,</span>
-<span>  rel_tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
-<span>  abs_tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
-<span>  grad_tol <span class="op">=</span> <span class="fl">1e-08</span>,</span>
 <span>  initialization <span class="op">=</span> <span class="st">"random"</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"als"</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  output <span class="op">=</span> <span class="st">"best"</span>,</span>
 <span>  sortComponents <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -80,39 +74,15 @@
 
 
 <dt id="arg-maxit">maxit<a class="anchor" aria-label="anchor" href="#arg-maxit"></a></dt>
-<dd><p>Maximum number of iterations allowed without convergence in the ALS case (default 500).</p></dd>
-
-
-<dt id="arg-max-fn">max_fn<a class="anchor" aria-label="anchor" href="#arg-max-fn"></a></dt>
-<dd><p>Maximum number of function evaluations allowed without convergence in the OPT case (default 10000).</p></dd>
+<dd><p>Maximum number of iterations allowed without convergence (default 500).</p></dd>
 
 
 <dt id="arg-ctol">ctol<a class="anchor" aria-label="anchor" href="#arg-ctol"></a></dt>
 <dd><p>Relative change in loss tolerated to call the algorithm converged in the ALS case (default 1e-4).</p></dd>
 
 
-<dt id="arg-rel-tol">rel_tol<a class="anchor" aria-label="anchor" href="#arg-rel-tol"></a></dt>
-<dd><p>Relative change in loss tolerated to call the algorithm converged in the OPT case (default 1e-8).</p></dd>
-
-
-<dt id="arg-abs-tol">abs_tol<a class="anchor" aria-label="anchor" href="#arg-abs-tol"></a></dt>
-<dd><p>Absolute loss tolerated to call the algorithm converged in the OPT case (default 1e-8).</p></dd>
-
-
-<dt id="arg-grad-tol">grad_tol<a class="anchor" aria-label="anchor" href="#arg-grad-tol"></a></dt>
-<dd><p>Tolerance on the two-norm of the gradient divided over the number of elements in the gradient in the OPT case (default 1e-8).</p></dd>
-
-
 <dt id="arg-initialization">initialization<a class="anchor" aria-label="anchor" href="#arg-initialization"></a></dt>
 <dd><p>"Random" for randomly initialized input vectors or "nvec" for svd-based best guess.</p></dd>
-
-
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Use ALS algorithm ("als", default) or use all-at-once optimization ("opt"). The all-at-once optimization is based on a nonlinear conjugate gradient method with Hestenes-Stiefel updates and the More-Thuente line search algorithm.</p></dd>
-
-
-<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> verbose output</p></dd>
 
 
 <dt id="arg-output">output<a class="anchor" aria-label="anchor" href="#arg-output"></a></dt>
@@ -143,7 +113,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
