@@ -1,3 +1,5 @@
+# parafac4microbiome 1.3.0
+
 # parafac4microbiome 1.2.1
 
 * The package is now fully compatible with R version 4.5.
