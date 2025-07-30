@@ -23,14 +23,29 @@ rf_data[rf_data$subject == "O3VQFX", 1] = "O3VQFQ"
 rf_data[rf_data$subject == "F80LGT", 1] = "F80LGF"
 rf_data[rf_data$subject == "26QQR0", 1] = "26QQrO"
 
-# rf_data2 = read.csv("./data-raw/vanderPloeg2024_RFdata2.csv") %>% as_tibble()
-# rf_data2 = rf_data2[,c(2,4,181:192)]
-# rf_data = rf_data %>% left_join(rf_data2)
+rf_data2 = read.csv("./data-raw/vanderPloeg2024/red_fluorescence_data.csv") %>% as_tibble()
+rf_data2 = rf_data2[,c(2,4,181:192)]
+rf_data = rf_data %>% left_join(rf_data2)
 
 rf = rf_data %>% select(subject, RFgroup) %>% unique()
 
-# Attach RF data to metadata
-metadata = metadata %>% left_join(rf)
+# Add age + gender metadata
+age_gender = read.csv("./data-raw/vanderPloeg2024/Ploeg_subjectMetadata.csv", sep=";")
+age_gender = age_gender[2:nrow(age_gender),2:ncol(age_gender)]
+age_gender = age_gender %>% as_tibble() %>% filter(onderzoeksgroep == 0) %>% select(naam, leeftijd, geslacht)
+colnames(age_gender) = c("subject", "age", "gender")
+
+age_gender[age_gender$subject == "VSTPHZ", 1] = "VSTPH2"
+age_gender[age_gender$subject == "D2VZH0", 1] = "DZVZH0"
+age_gender[age_gender$subject == "DLODNN", 1] = "DLODDN"
+age_gender[age_gender$subject == "O3VQFX", 1] = "O3VQFQ"
+age_gender[age_gender$subject == "F80LGT", 1] = "F80LGF"
+age_gender[age_gender$subject == "26QQR0", 1] = "26QQrO"
+
+age_gender = age_gender %>% arrange(subject)
+
+# Attach RF + gender + age data to metadata
+metadata = metadata %>% left_join(rf) %>% left_join(age_gender)
 
 # Remove test
 mask = metadata$group == "control"
@@ -55,28 +70,10 @@ mode2 = taxa[featureMask,]
 tongue = reshapeData(df_tongue, metadata_tongue$subject, mode2, metadata_tongue$visit)
 
 colnames(tongue$mode1) = c("subject", "index")
-tongue$mode1 = tongue$mode1 %>% left_join(rf) %>% select(-index)
+tongue$mode1 = tongue$mode1 %>% left_join(rf) %>% left_join(age_gender) %>% select(-index)
 tongue$mode2 = tongue$mode2 %>% select(-index)
 colnames(tongue$mode3) = c("visit", "index")
 tongue$mode3 = tongue$mode3 %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution")) %>% select(-index)
-
-# # Put into cube
-# I = length(unique(metadata$subject))
-# J = ncol(df_tongue)
-# K = max(metadata$visit)
-# X = array(0L, c(I,J,K))
-#
-# for(k in 1:K){
-#   X[,,k] = cbind(df_tongue, metadata_tongue) %>%
-#     as_tibble() %>%
-#     filter(visit == k) %>%
-#     right_join(metadata %>% select(subject) %>% unique()) %>%
-#     arrange(subject) %>%
-#     select(-all_of(colnames(metadata))) %>%
-#     as.matrix()
-# }
-#
-# tongue = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 
 # Lowling
 lowlingMask = metadata$niche == "lower jaw, lingual"
@@ -92,28 +89,10 @@ mode2 = taxa[featureMask,]
 lowling = reshapeData(df_lowling, metadata_lowling$subject, mode2, metadata_lowling$visit)
 
 colnames(lowling$mode1) = c("subject", "index")
-lowling$mode1 = lowling$mode1 %>% left_join(rf) %>% select(-index)
+lowling$mode1 = lowling$mode1 %>% left_join(rf) %>% left_join(age_gender) %>% select(-index)
 lowling$mode2 = lowling$mode2 %>% select(-index)
 colnames(lowling$mode3) = c("visit", "index")
 lowling$mode3 = lowling$mode3 %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution")) %>% select(-index)
-
-# # Put into cube
-# I = length(unique(metadata$subject))
-# J = ncol(df_lowling)
-# K = max(metadata$visit)
-# X = array(0L, c(I,J,K))
-#
-# for(k in 1:K){
-#   X[,,k] = cbind(df_lowling, metadata_lowling) %>%
-#     as_tibble() %>%
-#     filter(visit == k) %>%
-#     right_join(metadata %>% select(subject) %>% unique()) %>%
-#     arrange(subject) %>%
-#     select(-all_of(colnames(metadata))) %>%
-#     as.matrix()
-# }
-#
-# lowling = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 
 # Lowinter
 lowinterMask = metadata$niche == "lower jaw, interproximal"
@@ -129,28 +108,10 @@ mode2 = taxa[featureMask,]
 lowinter = reshapeData(df_lowinter, metadata_lowinter$subject, mode2, metadata_lowinter$visit)
 
 colnames(lowinter$mode1) = c("subject", "index")
-lowinter$mode1 = lowinter$mode1 %>% left_join(rf) %>% select(-index)
+lowinter$mode1 = lowinter$mode1 %>% left_join(rf) %>% left_join(age_gender) %>% select(-index)
 lowinter$mode2 = lowinter$mode2 %>% select(-index)
 colnames(lowinter$mode3) = c("visit", "index")
 lowinter$mode3 = lowinter$mode3 %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution")) %>% select(-index)
-
-# # Put into cube
-# I = length(unique(metadata$subject))
-# J = ncol(df_lowinter)
-# K = max(metadata$visit)
-# X = array(0L, c(I,J,K))
-#
-# for(k in 1:K){
-#   X[,,k] = cbind(df_lowinter, metadata_lowinter) %>%
-#     as_tibble() %>%
-#     filter(visit == k) %>%
-#     right_join(metadata %>% select(subject) %>% unique()) %>%
-#     arrange(subject) %>%
-#     select(-all_of(colnames(metadata))) %>%
-#     as.matrix()
-# }
-#
-# lowinter = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 
 # Upling
 uplingMask = metadata$niche == "upper jaw, lingual"
@@ -166,28 +127,10 @@ mode2 = taxa[featureMask,]
 upling = reshapeData(df_upling, metadata_upling$subject, mode2, metadata_upling$visit)
 
 colnames(upling$mode1) = c("subject", "index")
-upling$mode1 = upling$mode1 %>% left_join(rf) %>% select(-index)
+upling$mode1 = upling$mode1 %>% left_join(rf) %>% left_join(age_gender) %>% select(-index)
 upling$mode2 = upling$mode2 %>% select(-index)
 colnames(upling$mode3) = c("visit", "index")
 upling$mode3 = upling$mode3 %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution")) %>% select(-index)
-
-# # Put into cube
-# I = length(unique(metadata$subject))
-# J = ncol(df_upling)
-# K = max(metadata$visit)
-# X = array(0L, c(I,J,K))
-#
-# for(k in 1:K){
-#   X[,,k] = cbind(df_upling, metadata_upling) %>%
-#     as_tibble() %>%
-#     filter(visit == k) %>%
-#     right_join(metadata %>% select(subject) %>% unique()) %>%
-#     arrange(subject) %>%
-#     select(-all_of(colnames(metadata))) %>%
-#     as.matrix()
-# }
-#
-# upling = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 
 # Upinter
 upinterMask = metadata$niche == "upper jaw, interproximal"
@@ -203,28 +146,10 @@ mode2 = taxa[featureMask,]
 upinter = reshapeData(df_upinter, metadata_upinter$subject, mode2, metadata_upinter$visit)
 
 colnames(upinter$mode1) = c("subject", "index")
-upinter$mode1 = upinter$mode1 %>% left_join(rf) %>% select(-index)
+upinter$mode1 = upinter$mode1 %>% left_join(rf) %>% left_join(age_gender) %>% select(-index)
 upinter$mode2 = upinter$mode2 %>% select(-index)
 colnames(upinter$mode3) = c("visit", "index")
 upinter$mode3 = upinter$mode3 %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution")) %>% select(-index)
-
-# # Put into cube
-# I = length(unique(metadata$subject))
-# J = ncol(df_upinter)
-# K = max(metadata$visit)
-# X = array(0L, c(I,J,K))
-#
-# for(k in 1:K){
-#   X[,,k] = cbind(df_upinter, metadata_upinter) %>%
-#     as_tibble() %>%
-#     filter(visit == k) %>%
-#     right_join(metadata %>% select(subject) %>% unique()) %>%
-#     arrange(subject) %>%
-#     select(-all_of(colnames(metadata))) %>%
-#     as.matrix()
-# }
-#
-# upinter = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
 
 # Saliva
 salivaMask = metadata$niche == "saliva"
@@ -240,40 +165,14 @@ mode2 = taxa[featureMask,]
 saliva = reshapeData(df_saliva, metadata_saliva$subject, mode2, metadata_saliva$visit)
 
 colnames(saliva$mode1) = c("subject", "index")
-saliva$mode1 = saliva$mode1 %>% left_join(rf) %>% select(-index)
+saliva$mode1 = saliva$mode1 %>% left_join(rf) %>% left_join(age_gender) %>% select(-index)
 saliva$mode2 = saliva$mode2 %>% select(-index)
 colnames(saliva$mode3) = c("visit", "index")
 saliva$mode3 = saliva$mode3 %>% mutate(status=c("Baseline", "EG", "EG", "EG", "EG", "EG", "Resolution")) %>% select(-index)
 
-# # Put into cube
-# I = length(unique(metadata$subject))
-# J = ncol(df_saliva)
-# K = max(metadata$visit)
-# X = array(0L, c(I,J,K))
-#
-# for(k in 1:K){
-#   X[,,k] = cbind(df_saliva, metadata_saliva) %>%
-#     as_tibble() %>%
-#     filter(visit == k) %>%
-#     right_join(metadata %>% select(subject) %>% unique()) %>%
-#     arrange(subject) %>%
-#     select(-all_of(colnames(metadata))) %>%
-#     as.matrix()
-# }
-#
-# saliva = list("data"=X, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
-
-# Process
-# processedTongue = processDataCube(tongue, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-# processedLowling = processDataCube(lowling, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-# processedLowinter = processDataCube(lowinter, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-# processedUpling = processDataCube(upling, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-# processedUpinter = processDataCube(upinter, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-# processedSaliva = processDataCube(saliva, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-
 # Metabolomics
 df = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics.csv", header=FALSE) %>% as_tibble()
-mode1 = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics_id_meta.csv", header=FALSE) %>% as_tibble() %>% mutate(subject = V1) %>% select(-V1) %>% left_join(rf)
+mode1 = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics_id_meta.csv", header=FALSE) %>% as_tibble() %>% mutate(subject = V1) %>% select(-V1) %>% left_join(rf) %>% left_join(age_gender)
 mode2 = read.csv("./data-raw/vanderPloeg2024/processed_metabolome/Metabolomics_feature_meta.csv", header=FALSE) %>% as_tibble()
 colnames(mode2) = c("Type", "Function", "Name")
 mode3 = mode3 %>% filter(visit %in% 1:5)
@@ -299,5 +198,6 @@ vanderPloeg2024$lower_jaw_interproximal = lowinter
 vanderPloeg2024$upper_jaw_lingual = upling
 vanderPloeg2024$upper_jaw_interproximal = upinter
 vanderPloeg2024$metabolomics = metabolomics
+vanderPloeg2024$red_fluorescence = rf_data
 
 usethis::use_data(vanderPloeg2024, overwrite = TRUE)

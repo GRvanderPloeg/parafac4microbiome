@@ -37,46 +37,4 @@ Fujita2023$mode2 = as.data.frame(Fujita2023$mode2 %>% select(-index))
 Fujita2023$mode3 = Fujita2023$mode3$timepointMetadata %>% as_tibble()
 colnames(Fujita2023$mode3) = "time"
 
-# 20250402
-# Test for equality in terms of contents to avoid breaking changes:
-#
-# names(parafac4microbiome::Fujita2023$mode2$Kingdom) used to return strings of DNA
-# this is now removed and should not break anything
-#
-# all.equal(Fujita2023, parafac4microbiome::Fujita2023, check.attributes=FALSE)
-# [1] TRUE
-
-# The following was the old approach (prior to 20250402):
-#
-# # Mode 1 - replicate mode
-# mode1 = sampleInfo_filtered %>% filter(time==1) %>% arrange(replicate.id) %>% select(replicate.id)
-#
-# # Mode 2 - taxonomy
-# mode2 = taxonomy
-# row.names(mode2) = NULL
-#
-# # Mode 3 - time
-# mode3 = sampleInfo_filtered %>% filter(time %in% 1:110) %>% select(time) %>% unique()
-#
-# # Prepare count cube
-# I = 8
-# J = 28
-# K = 110
-# cube = array(NA, dim=c(I,J,K))
-#
-# for(k in 1:K){
-#   temp = cbind(WC, sampleInfo) %>% as_tibble()
-#   cube[,,k] = temp %>%
-#     filter(time == k) %>%
-#     arrange(replicate.id) %>%
-#     select(-all_of(colnames(sampleInfo))) %>%
-#     as.matrix()
-# }
-#
-# # Somehow there are half counts in there, so round the data
-# cube = round(cube)
-#
-# Export
-# Fujita2023 = list("data"=cube, "mode1"=mode1, "mode2"=mode2, "mode3"=mode3)
-
 usethis::use_data(Fujita2023, overwrite = TRUE)

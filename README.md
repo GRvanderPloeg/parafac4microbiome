@@ -8,6 +8,13 @@
 [![Codecov test
 coverage](https://codecov.io/gh/GRvanderPloeg/parafac4microbiome/branch/master/graph/badge.svg)](https://app.codecov.io/gh/GRvanderPloeg/parafac4microbiome?branch=master)
 [![R-CMD-check](https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml)
+![CRAN/METACRAN
+Version](https://img.shields.io/cran/v/parafac4microbiome) ![GitHub
+Release](https://img.shields.io/github/v/release/GRvanderPloeg/parafac4microbiome)
+![GitHub R package
+version](https://img.shields.io/github/r-package/v/GRvanderPloeg/parafac4microbiome)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15476822.svg)](https://doi.org/10.5281/zenodo.15476822)
+
 <!-- badges: end -->
 
 ## Overview
@@ -41,10 +48,9 @@ This package also comes with three example datasets.
 ## Documentation
 
 A basic introduction to the package is given in
-`vignette("PARAFAC_introduction")` and modelling the example datasets
-are elaborated in their respective vignettes
-`vignette("Fujita2023_analysis")`, `vignette("Shao2019_analysis")` and
-`vignette("vanderPloeg2024_analysis")`.
+`vignette("Introduction")` and modelling the example datasets are
+elaborated in their respective vignettes `vignette("Fujita2023")`,
+`vignette("Shao2019")` and `vignette("vanderPloeg2024")`.
 
 These vignettes and all function documentation can be found
 [here](https://grvanderploeg.com/parafac4microbiome/).
@@ -72,9 +78,9 @@ devtools::install_github("GRvanderPloeg/parafac4microbiome")
 Please use the following citation when using this package:
 
 - van der Ploeg, G. R., Westerhuis, J., Heintz-Buschart, A., &
-  Smilde, A. (2024). parafac4microbiome: Exploratory analysis of
-  longitudinal microbiome data using Parallel Factor Analysis. bioRxiv,
-  2024-05.
+  Smilde, A. (2025). parafac4microbiome: Exploratory analysis of
+  longitudinal microbiome data using Parallel Factor Analysis. mSystems
+  10:e00472-25. <https://doi.org/10.1128/msystems.00472-25>
 
 ## Usage
 
@@ -90,7 +96,7 @@ processedFujita = processDataCube(Fujita2023,
                                   scaleMode=2)
 
 # Make a PARAFAC model
-model = parafac(processedFujita$data, nfac=3, nstart=10, output="best", verbose=FALSE)
+model = parafac(processedFujita$data, nfac=3, nstart=10, output="best")
 
 # Sign flip components to make figure interpretable and comparable to the paper.
 # This has no effect on the model or the fit.

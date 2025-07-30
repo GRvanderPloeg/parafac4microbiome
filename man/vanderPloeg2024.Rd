@@ -3,7 +3,7 @@
 \docType{data}
 \name{vanderPloeg2024}
 \alias{vanderPloeg2024}
-\title{vanderPloeg2024 longitudinal dataset}
+\title{vanderPloeg2024 longitudinal multi-omics dataset}
 \format{
 \subsection{\code{vanderPloeg2024}}{
 
@@ -24,7 +24,7 @@ Each measured dataset contains three elements:
 vanderPloeg2024
 }
 \description{
-The vanderPloeg2024 longitudinal data containing six oral microbiome niches,
-as well as salivary metabolomics.
+The vanderPloeg2024 longitudinal multi-omics dataset containing six oral microbiome niches,
+as well as salivary metabolomics and oral health measurements.
 }
 \keyword{datasets}

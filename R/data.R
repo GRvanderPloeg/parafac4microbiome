@@ -34,10 +34,10 @@
 #' @source \doi{10.1038/s41586-019-1560-1}
 "Shao2019"
 
-#' vanderPloeg2024 longitudinal dataset
+#' vanderPloeg2024 longitudinal multi-omics dataset
 #'
-#' The vanderPloeg2024 longitudinal data containing six oral microbiome niches,
-#' as well as salivary metabolomics.
+#' The vanderPloeg2024 longitudinal multi-omics dataset containing six oral microbiome niches,
+#' as well as salivary metabolomics and oral health measurements.
 #'
 #' @format ## `vanderPloeg2024`
 #'

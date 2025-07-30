@@ -1,5 +1,8 @@
 # parafac4microbiome 1.3.1
 
+* Addition of age, gender and oral health data to `vanderPloeg2024`.
+* Addition of TIFN2, MAINHEALTH, GOHTRANS, and AP articles to package documentation. These are only rendered for the website due to computational requirements.
+
 # parafac4microbiome 1.3.0
 
 * Removal of the all-at-once optimization for `parafac()` since the ALS scheme outperforms it under all circumstances.

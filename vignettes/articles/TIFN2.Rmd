@@ -1,0 +1,155 @@
+---
+title: "TIFN2"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
+library(parafac4microbiome)
+library(NPLStoolbox)
+library(CMTFtoolbox)
+library(vegan)
+library(scales)
+library(ggrepel)
+```
+
+```{r processing}
+processedTongue = processDataCube(parafac4microbiome::vanderPloeg2024$tongue, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedLowling = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedLowinter = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_interproximal, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedUpling = processDataCube(parafac4microbiome::vanderPloeg2024$upper_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedUpinter = processDataCube(parafac4microbiome::vanderPloeg2024$upper_jaw_interproximal, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedSaliva = processDataCube(parafac4microbiome::vanderPloeg2024$saliva, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedMetabolomics = parafac4microbiome::vanderPloeg2024$metabolomics
+```
+
+```{r cp assess num components}
+assessment_tongue = assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
+assessment_tongue$plots$overview
+
+assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)
+assessment_lowling$plots$overview
+
+assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)
+assessment_lowinter$plots$overview
+
+assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)
+assessment_upling$plots$overview
+
+assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)
+assessment_upinter$plots$overview
+
+assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
+assessment_saliva$plots$overview
+
+assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)
+assessment_metab$plots$overview
+```
+
+```{r cp stability num components}
+colourCols = c("RFgroup", "Phylum", "")
+legendTitles = c("RF group", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(3,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
+
+stability_tongue = assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+stability_tongue$modelPlots[[2]]
+stability_tongue$modelPlots[[3]]
+
+stability_upinter = assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+stability_upinter$modelPlots[[2]]
+stability_upinter$modelPlots[[3]]
+```
+
+```{r make cp models}
+cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
+cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)
+cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)
+cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)
+cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)
+cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
+cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)
+```
+
+```{r cp metadata test}
+testMetadata = function(model, comp, metadata){
+  transformedSubjectLoadings = transformPARAFACloadings(model$Fac, 1)[,comp]
+  transformedSubjectLoadings = transformedSubjectLoadings / norm(transformedSubjectLoadings, "2")
+  
+  metadata = metadata$mode1 %>% left_join(vanderPloeg2024$red_fluorescence %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject")
+  
+  result = lm(transformedSubjectLoadings ~ plaquepercent + bomppercent + Area_delta_R30 + gender + age, data=metadata)
+  
+  # Extract coefficients and confidence intervals
+  coef_estimates <- summary(result)$coefficients
+  conf_intervals <- confint(result)
+  
+  # Remove intercept
+  coef_estimates <- coef_estimates[rownames(coef_estimates) != "(Intercept)", ]
+  conf_intervals <- conf_intervals[rownames(conf_intervals) != "(Intercept)", ]
+  
+  # Combine into a clean data frame
+  summary_table <- data.frame(
+    Term     = rownames(coef_estimates),
+    Estimate = coef_estimates[, "Estimate"] * 1e3,
+    CI       = paste0(
+                 conf_intervals[, 1], " – ",
+                 conf_intervals[, 2]
+               ),
+    P_value  = coef_estimates[, "Pr(>|t|)"],
+    P_adjust = p.adjust(coef_estimates[, "Pr(>|t|)"], "BH"),
+    row.names = NULL
+  )
+  
+  return(summary_table)
+}
+
+testMetadata(cp_tongue, 1, processedTongue)
+testMetadata(cp_tongue, 2, processedTongue)
+testMetadata(cp_lowling, 1, processedLowling)
+testMetadata(cp_lowinter, 1, processedLowinter)
+testMetadata(cp_lowinter, 2, processedLowinter)
+testMetadata(cp_upling, 1, processedUpling)
+testMetadata(cp_upling, 2, processedUpling)
+testMetadata(cp_upinter, 1, processedUpinter)
+testMetadata(cp_upinter, 2, processedUpinter)
+testMetadata(cp_saliva, 1, processedSaliva)
+testMetadata(cp_saliva, 2, processedSaliva)
+testMetadata(cp_metabolomics, 1, processedMetabolomics)
+```
+
+```{r plot models}
+colourCols = c("RFgroup", "Phylum", "")
+legendTitles = c("RF group", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(3,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
+
+parafac4microbiome::plotPARAFACmodel(cp_tongue$Fac, processedTongue, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Tongue")
+parafac4microbiome::plotPARAFACmodel(cp_lowling$Fac, processedLowling, 1, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Lowling")
+parafac4microbiome::plotPARAFACmodel(cp_lowinter$Fac, processedLowinter, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Lowinter")
+parafac4microbiome::plotPARAFACmodel(cp_upling$Fac, processedUpling, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Upling")
+parafac4microbiome::plotPARAFACmodel(cp_upinter$Fac, processedUpinter, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Upinter")
+parafac4microbiome::plotPARAFACmodel(cp_saliva$Fac, processedSaliva, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Saliva")
+parafac4microbiome::plotPARAFACmodel(cp_metabolomics$Fac, processedMetabolomics, 1, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
+  overallTitle = "Metabolomics")
+```
+
