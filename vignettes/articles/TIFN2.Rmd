@@ -13,7 +13,6 @@ knitr::opts_chunk$set(
 library(dplyr)
 library(parafac4microbiome)
 library(NPLStoolbox)
-library(CMTFtoolbox)
 ```
 
 ```{r processing}
