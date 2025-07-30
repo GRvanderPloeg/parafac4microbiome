@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">parafac4microbiome</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,7 @@
 <li><a class="dropdown-item" href="articles/Fujita2023.html">Fujita2023</a></li>
     <li><a class="dropdown-item" href="articles/Introduction.html">Introduction</a></li>
     <li><a class="dropdown-item" href="articles/Shao2019.html">Shao2019</a></li>
+    <li><a class="dropdown-item" href="articles/TIFN2.html">TIFN2</a></li>
     <li><a class="dropdown-item" href="articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
   </ul>
 </li>
@@ -69,6 +70,7 @@
 </div>
 <!-- badges: start -->
 
+<!-- badges: end -->
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -98,7 +100,7 @@
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>A basic introduction to the package is given in <code>vignette("PARAFAC_introduction")</code> and modelling the example datasets are elaborated in their respective vignettes <code>vignette("Fujita2023_analysis")</code>, <code>vignette("Shao2019_analysis")</code> and <code>vignette("vanderPloeg2024_analysis")</code>.</p>
+<p>A basic introduction to the package is given in <code><a href="articles/Introduction.html">vignette("Introduction")</a></code> and modelling the example datasets are elaborated in their respective vignettes <code><a href="articles/Fujita2023.html">vignette("Fujita2023")</a></code>, <code><a href="articles/Shao2019.html">vignette("Shao2019")</a></code> and <code><a href="articles/vanderPloeg2024.html">vignette("vanderPloeg2024")</a></code>.</p>
 <p>These vignettes and all function documentation can be found <a href="https://grvanderploeg.com/parafac4microbiome/" class="external-link">here</a>.</p>
 </div>
 <div class="section level2">
@@ -121,7 +123,8 @@
 </h2>
 <p>Please use the following citation when using this package:</p>
 <ul>
-<li>van der Ploeg, G. R., Westerhuis, J., Heintz-Buschart, A., &amp; Smilde, A. (2024). parafac4microbiome: Exploratory analysis of longitudinal microbiome data using Parallel Factor Analysis. bioRxiv, 2024-05.</li>
+<li>van der Ploeg, G. R., Westerhuis, J., Heintz-Buschart, A., &amp; Smilde, A. (2025). parafac4microbiome: Exploratory analysis of longitudinal microbiome data using Parallel Factor Analysis. mSystems 10:e00472-25. <a href="https://doi.org/10.1128/msystems.00472-25" class="external-link uri">https://doi.org/10.1128/msystems.00472-25</a>
+</li>
 </ul>
 </div>
 <div class="section level2">
@@ -139,7 +142,7 @@
 <span>                                  scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Make a PARAFAC model</span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, nstart<span class="op">=</span><span class="fl">10</span>, output<span class="op">=</span><span class="st">"best"</span>, verbose<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedFujita</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">3</span>, nstart<span class="op">=</span><span class="fl">10</span>, output<span class="op">=</span><span class="st">"best"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Sign flip components to make figure interpretable and comparable to the paper.</span></span>
 <span><span class="co"># This has no effect on the model or the fit.</span></span>
@@ -205,6 +208,7 @@
 <ul class="list-unstyled">
 <li><a href="https://app.codecov.io/gh/GRvanderPloeg/parafac4microbiome?branch=master" class="external-link"><img src="https://codecov.io/gh/GRvanderPloeg/parafac4microbiome/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/GRvanderPloeg/parafac4microbiome/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.15476822" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.15476822.svg" alt="DOI"></a></li>
 </ul>
 </div>
 
