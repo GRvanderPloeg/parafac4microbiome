@@ -1,5 +1,7 @@
 # parafac4microbiome 1.3.2
 
+* Removal of importMicrobiotaProcess due to not meeting CRAN requirements.
+
 # parafac4microbiome 1.3.1
 
 * Addition of age, gender and oral health data to `vanderPloeg2024`.
