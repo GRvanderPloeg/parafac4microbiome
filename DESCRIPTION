@@ -1,6 +1,6 @@
 Package: parafac4microbiome
 Title: Parallel Factor Analysis Modelling of Longitudinal Microbiome Data
-Version: 1.3.1
+Version: 1.3.2
 Authors@R: c(
     person("Geert Roelof", "van der Ploeg", , "g.r.ploeg@uva.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0007-5204-3386")),
@@ -49,7 +49,6 @@ Suggests:
     knitr,
     phyloseq,
     rmarkdown,
-    MicrobiotaProcess (>= 1.20.1),
     TreeSummarizedExperiment (>= 2.16.1),
     SummarizedExperiment (>= 1.38.1),
     testthat (>= 3.0.0),
