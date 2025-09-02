@@ -11,6 +11,7 @@ library(dplyr)
 library(parafac4microbiome)
 library(NPLStoolbox)
 library(CMTFtoolbox)
+library(ggplot2)
 ```
 
 ```{r import metadata}
