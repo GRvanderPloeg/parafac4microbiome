@@ -8,6 +8,7 @@ date: "2025-05-19"
 
 ```{r setup}
 library(dplyr)
+library(tidyr)
 library(parafac4microbiome)
 library(NPLStoolbox)
 library(CMTFtoolbox)
