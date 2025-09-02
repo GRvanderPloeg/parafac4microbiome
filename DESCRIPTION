@@ -54,7 +54,8 @@ Suggests:
     testthat (>= 3.0.0),
     withr,
     NPLStoolbox,
-    CMTFtoolbox
+    CMTFtoolbox,
+    readr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://grvanderploeg.com/parafac4microbiome/, https://github.com/GRvanderPloeg/parafac4microbiome/
