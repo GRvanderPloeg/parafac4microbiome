@@ -16,6 +16,7 @@ library(ggplot2)
 library(ggpubr)
 library(stringr)
 library(scales)
+library(ggpattern)
 ```
 
 ```{r metadata test function}
