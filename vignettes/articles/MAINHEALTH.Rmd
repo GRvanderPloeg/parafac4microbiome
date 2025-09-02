@@ -14,6 +14,7 @@ library(NPLStoolbox)
 library(CMTFtoolbox)
 library(ggplot2)
 library(ggpubr)
+library(stringr)
 ```
 
 ```{r metadata test function}
