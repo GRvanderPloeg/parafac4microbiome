@@ -15,6 +15,7 @@ library(CMTFtoolbox)
 library(ggplot2)
 library(ggpubr)
 library(stringr)
+library(scales)
 ```
 
 ```{r metadata test function}
