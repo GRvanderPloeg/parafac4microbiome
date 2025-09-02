@@ -6,18 +6,11 @@ date: "2025-05-09"
 
 # Preamble
 
-```{r setup, include=FALSE}
-library(tidyverse)
-library(ggplot2)
-library(ggpubr)
-library(ggpattern)
-library(ggrepel)
-library(stringr)
+```{r setup}
+library(dplyr)
 library(parafac4microbiome)
 library(NPLStoolbox)
 library(CMTFtoolbox)
-library(scales)
-library(vegan)
 ```
 
 ```{r metadata test function}

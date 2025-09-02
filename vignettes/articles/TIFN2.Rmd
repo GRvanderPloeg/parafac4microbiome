@@ -7,18 +7,10 @@ date: "2025-04-16"
 # Preamble
 
 ```{r setup}
-library(tidyverse)
-library(ggplot2)
-library(ggpubr)
-library(stringr)
+library(dplyr)
 library(parafac4microbiome)
 library(NPLStoolbox)
 library(CMTFtoolbox)
-library(vegan)
-library(scales)
-library(ggrepel)
-
-set.seed(123)
 ```
 
 ```{r Import red fluorescence data}
