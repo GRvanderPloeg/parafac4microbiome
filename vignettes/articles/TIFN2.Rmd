@@ -1,86 +1,71 @@
 ---
 title: "TIFN2"
+output: html_document
+date: "2025-04-16"
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+# Preamble
 
 ```{r setup}
-library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
 library(parafac4microbiome)
 library(NPLStoolbox)
+library(CMTFtoolbox)
+library(vegan)
+library(scales)
+library(ggrepel)
+
+set.seed(123)
 ```
 
-```{r processing}
-processedTongue = processDataCube(parafac4microbiome::vanderPloeg2024$tongue, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-processedLowling = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-processedLowinter = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_interproximal, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-processedUpling = processDataCube(parafac4microbiome::vanderPloeg2024$upper_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-processedUpinter = processDataCube(parafac4microbiome::vanderPloeg2024$upper_jaw_interproximal, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-processedSaliva = processDataCube(parafac4microbiome::vanderPloeg2024$saliva, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
-processedMetabolomics = parafac4microbiome::vanderPloeg2024$metabolomics
+```{r Import red fluorescence data}
+rf_data = read.csv("../../data-raw/vanderPloeg2024/RFdata.csv")
+colnames(rf_data) = c("subject", "id", "fotonr", "day", "group", "RFgroup", "MQH", "SPS(tm)", "Area_delta_R30", "Area_delta_Rmax", "Area_delta_R30_x_Rmax", "gingiva_mean_R_over_G", "gingiva_mean_R_over_G_upper_jaw", "gingiva_mean_R_over_G_lower_jaw")
+rf_data = rf_data %>% as_tibble()
+
+rf_data[rf_data$subject == "VSTPHZ", 1] = "VSTPH2"
+rf_data[rf_data$subject == "D2VZH0", 1] = "DZVZH0"
+rf_data[rf_data$subject == "DLODNN", 1] = "DLODDN"
+rf_data[rf_data$subject == "O3VQFX", 1] = "O3VQFQ"
+rf_data[rf_data$subject == "F80LGT", 1] = "F80LGF"
+rf_data[rf_data$subject == "26QQR0", 1] = "26QQrO"
+
+rf_data2 = read.csv("../../data-raw/vanderPloeg2024/red_fluorescence_data.csv") %>% as_tibble()
+rf_data2 = rf_data2[,c(2,4,181:192)]
+rf_data = rf_data %>% left_join(rf_data2)
+
+rf = rf_data %>% select(subject, RFgroup) %>% unique()
 ```
 
-```{r cp assess num components}
-assessment_tongue = assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
-assessment_tongue$plots$overview
+```{r Import subject metadata}
+age_gender = read.csv("../../data-raw/vanderPloeg2024/Ploeg_subjectMetadata.csv", sep=";")
+age_gender = age_gender[2:nrow(age_gender),2:ncol(age_gender)]
+age_gender = age_gender %>% as_tibble() %>% filter(onderzoeksgroep == 0) %>% select(naam, leeftijd, geslacht)
+colnames(age_gender) = c("subject", "age", "gender")
 
-assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)
-assessment_lowling$plots$overview
+# Correction for incorrect subject ids
+age_gender[age_gender$subject == "VSTPHZ", 1] = "VSTPH2"
+age_gender[age_gender$subject == "D2VZH0", 1] = "DZVZH0"
+age_gender[age_gender$subject == "DLODNN", 1] = "DLODDN"
+age_gender[age_gender$subject == "O3VQFX", 1] = "O3VQFQ"
+age_gender[age_gender$subject == "F80LGT", 1] = "F80LGF"
+age_gender[age_gender$subject == "26QQR0", 1] = "26QQrO"
 
-assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)
-assessment_lowinter$plots$overview
-
-assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)
-assessment_upling$plots$overview
-
-assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)
-assessment_upinter$plots$overview
-
-assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
-assessment_saliva$plots$overview
-
-assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)
-assessment_metab$plots$overview
+age_gender = age_gender %>% arrange(subject)
 ```
 
-```{r cp stability num components}
-colourCols = c("RFgroup", "Phylum", "")
-legendTitles = c("RF group", "Phylum", "")
-xLabels = c("Subject index", "Feature index", "Time index")
-legendColNums = c(3,5,0)
-arrangeModes = c(TRUE, TRUE, FALSE)
-continuousModes = c(FALSE,FALSE,TRUE)
+```{r functions}
 
-stability_tongue = assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-stability_tongue$modelPlots[[2]]
-stability_tongue$modelPlots[[3]]
+mapping = c(-14,0,2,5,9,14,21)
 
-stability_upinter = assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-stability_upinter$modelPlots[[2]]
-stability_upinter$modelPlots[[3]]
-```
-
-```{r make cp models}
-cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
-cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)
-cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)
-cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)
-cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)
-cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
-cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)
-```
-
-```{r cp metadata test}
 testMetadata = function(model, comp, metadata){
-  transformedSubjectLoadings = transformPARAFACloadings(model$Fac, 1)[,comp]
+  transformedSubjectLoadings = model$Fac[[1]][,comp]
   transformedSubjectLoadings = transformedSubjectLoadings / norm(transformedSubjectLoadings, "2")
   
-  metadata = metadata$mode1 %>% left_join(vanderPloeg2024$red_fluorescence %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject")
+  metadata = metadata$mode1 %>% left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject")
   
   result = lm(transformedSubjectLoadings ~ plaquepercent + bomppercent + Area_delta_R30 + gender + age, data=metadata)
   
@@ -108,41 +93,374 @@ testMetadata = function(model, comp, metadata){
   return(summary_table)
 }
 
+testFeatures = function(model, metadata, componentNum, metadataVar){
+  df = metadata$mode1 %>% left_join(rf_data %>% filter(day==14)) %>% left_join(age_gender)
+  topIndices = metadata$mode2 %>% mutate(index=1:nrow(.), Comp = model$Fac[[2]][,componentNum]) %>% arrange(desc(Comp)) %>% head() %>% select(index) %>% pull()
+  bottomIndices = metadata$mode2 %>% mutate(index=1:nrow(.), Comp = model$Fac[[2]][,componentNum]) %>% arrange(desc(Comp)) %>% tail() %>% select(index) %>% pull()
+  
+  timepoint = which(abs(model$Fac[[3]][,componentNum]) == max(abs(model$Fac[[3]][,componentNum])))
+  
+  Xhat = parafac4microbiome::reinflateTensor(model$Fac[[1]][,componentNum], model$Fac[[2]][,componentNum], model$Fac[[3]][,componentNum])
+  y = df[metadataVar]
+  
+  print("Positive loadings:")
+  print(cor(Xhat[,topIndices[1],timepoint], y))
+  print("Negative loadings:")
+  print(cor(Xhat[,bottomIndices[1],timepoint], y))
+}
+
+plotFeatures = function(mode2, model, componentNum, flip=FALSE){
+  
+  if(flip==TRUE){
+    df = mode2 %>% mutate(Comp = -1*model$Fac[[2]][,componentNum]) %>% arrange(Comp) %>% filter(Species != "") %>% mutate(index=1:nrow(.), name = paste(Genus, Species))
+  } else{
+    df = mode2 %>% mutate(Comp = model$Fac[[2]][,componentNum]) %>% arrange(Comp) %>% filter(Species != "") %>% mutate(index=1:nrow(.), name = paste(Genus, Species))
+  }
+  df = rbind(df %>% head(n=10), df %>% tail(n=10))
+  
+  plot=df %>%
+    ggplot(aes(x=Comp,y=as.factor(index),fill=as.factor(Phylum))) +
+    geom_bar(stat="identity", col="black") +
+    scale_y_discrete(label=df$name) +
+    xlab("Loading") +
+    ylab("") +
+    guides(fill=guide_legend(title="Phylum")) +
+    theme(text=element_text(size=16))
+  
+  return(plot)
+}
+```
+
+```{r define colours}
+phylum_colors = hue_pal()(7)
+```
+
+# Processing
+
+```{r processing}
+processedTongue = processDataCube(parafac4microbiome::vanderPloeg2024$tongue, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedLowling = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedLowinter = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_interproximal, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedUpling = processDataCube(parafac4microbiome::vanderPloeg2024$upper_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedUpinter = processDataCube(parafac4microbiome::vanderPloeg2024$upper_jaw_interproximal, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedSaliva = processDataCube(parafac4microbiome::vanderPloeg2024$saliva, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
+processedMetabolomics = parafac4microbiome::vanderPloeg2024$metabolomics
+```
+
+# Model selection
+
+```{r cp assess num components}
+# assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
+# assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)
+# assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)
+# assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)
+# assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)
+# assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
+# assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)
+# 
+# a = assessment_tongue$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# b = assessment_lowling$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# c = assessment_lowinter$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# d = assessment_upling$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# e = assessment_upinter$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# f = assessment_saliva$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# g = assessment_metab$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# ggarrange(a,b,c,d,e,f,g, nrow=4, ncol=2)
+```
+
+```{r cp stability num components}
+# colourCols = c("", "", "")
+# legendTitles = c("RF group", "Phylum", "")
+# xLabels = c("Subject index", "Feature index", "Time index")
+# legendColNums = c(3,5,0)
+# arrangeModes = c(TRUE, TRUE, FALSE)
+# continuousModes = c(FALSE,FALSE,TRUE)
+# 
+# stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_tongue$modelPlots[[2]]
+# stability_tongue$modelPlots[[3]]
+# 
+# stability_lowling = parafac4microbiome::assessModelStability(processedLowling, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_lowling$modelPlots[[1]]
+# stability_lowling$modelPlots[[2]]
+# 
+# stability_lowinter = parafac4microbiome::assessModelStability(processedLowinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_lowinter$modelPlots[[2]]
+# stability_lowinter$modelPlots[[3]]
+# 
+# stability_upling = parafac4microbiome::assessModelStability(processedUpling, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_upling$modelPlots[[2]]
+# stability_upling$modelPlots[[3]]
+# 
+# stability_upinter = parafac4microbiome::assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_upinter$modelPlots[[2]]
+# stability_upinter$modelPlots[[3]]
+# 
+# stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_saliva$modelPlots[[2]]
+# stability_saliva$modelPlots[[3]]
+# 
+# stability_metab = parafac4microbiome::assessModelStability(processedMetabolomics, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_metab$modelPlots[[1]]
+# stability_metab$modelPlots[[2]]
+```
+
+```{r make cp models}
+# cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
+# cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)
+# cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)
+# cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)
+# cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)
+# cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
+# cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)
+
+# saveRDS(cp_tongue, "./cp_tongue.RDS")
+# saveRDS(cp_lowling, "./cp_lowling.RDS")
+# saveRDS(cp_lowinter, "./cp_lowinter.RDS")
+# saveRDS(cp_upling, "./cp_upling.RDS")
+# saveRDS(cp_upinter, "./cp_upinter.RDS")
+# saveRDS(cp_saliva, "./cp_saliva.RDS")
+# saveRDS(cp_metabolomics, "./cp_metabolomics.RDS")
+
+cp_tongue = readRDS("./TIFN2/cp_tongue.RDS")
+cp_lowling = readRDS("./TIFN2/cp_lowling.RDS")
+cp_lowinter = readRDS("./TIFN2/cp_lowinter.RDS")
+cp_upling = readRDS("./TIFN2/cp_upling.RDS")
+cp_upinter = readRDS("./TIFN2/cp_upinter.RDS")
+cp_saliva = readRDS("./TIFN2/cp_saliva.RDS")
+cp_metabolomics = readRDS("./TIFN2/cp_metabolomics.RDS")
+```
+
+# Tongue microbiome
+
+```{r tongue test subject mode}
 testMetadata(cp_tongue, 1, processedTongue)
 testMetadata(cp_tongue, 2, processedTongue)
+```
+```{r plot cp tongue comp 1}
+testFeatures(cp_tongue, processedTongue, 1, "plaquepercent") # no flip
+testFeatures(cp_tongue, processedTongue, 1, "age") # flip
+
+a = processedTongue$mode1 %>%
+  mutate(Component_1 = cp_tongue$Fac[[1]][,1]) %>%
+  left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject") %>%
+  ggplot(aes(x=plaquepercent,y=Component_1)) +
+  geom_point() +
+  xlab("Plaque%") +
+  ylab("Loading") +
+  stat_cor() +
+  theme(text=element_text(size=16))
+
+b = plotFeatures(processedTongue$mode2, cp_tongue, 1, flip=FALSE) + scale_fill_manual(values=phylum_colors[-c(3,7)]) + theme(legend.position="none")
+
+c = processedTongue$mode3 %>%
+  mutate(Component_1 = -1*cp_tongue$Fac[[3]][,1], day=c(-14,0,2,5,9,14,21)) %>%
+  ggplot(aes(x=day,y=Component_1)) +
+  annotate(geom = "rect", xmin = 0, xmax = 14, ymin = -Inf, ymax = Inf, fill = "red", colour = "black", alpha=0.25) +
+  geom_line() +
+  geom_point() +
+  xlab("Time point [days]") +
+  ylab("Loading") +
+  ylim(0,1) +
+  theme(legend.position="none", text=element_text(size=16))
+
+a
+b
+c
+```
+
+# Lower jaw lingual microbiome
+
+```{r lowling test subject mode}
 testMetadata(cp_lowling, 1, processedLowling)
+```
+
+```{r plot cp lowling comp 1}
+testFeatures(cp_lowling, processedLowling, 1, "Area_delta_R30") # flip
+
+a = processedLowling$mode1 %>%
+  mutate(Component_1 = cp_lowling$Fac[[1]][,1]) %>%
+  left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject") %>%
+  ggplot(aes(x=Area_delta_R30,y=Component_1)) +
+  geom_point() +
+  xlab("RF%") +
+  ylab("Loading") +
+  stat_cor() +
+  theme(text=element_text(size=16))
+
+b = plotFeatures(processedLowling$mode2, cp_lowling, 1, flip=TRUE) + scale_fill_manual(values=phylum_colors[-7]) + theme(legend.position="none")
+
+c = processedLowling$mode3 %>%
+  mutate(Component_1 = cp_lowling$Fac[[3]][,1], day=c(-14,0,2,5,9,14,21)) %>%
+  ggplot(aes(x=day,y=Component_1)) +
+  annotate(geom = "rect", xmin = 0, xmax = 14, ymin = -Inf, ymax = Inf, fill = "red", colour = "black", alpha=0.25) +
+  geom_line() +
+  geom_point() +
+  xlab("Time point [days]") +
+  ylab("Loading") +
+  ylim(0,1) +
+  theme(legend.position="none", text=element_text(size=16))
+
+a
+b
+c
+```
+
+# Lower jaw interproximal microbiome
+
+```{r lowinter test subject mode}
 testMetadata(cp_lowinter, 1, processedLowinter)
 testMetadata(cp_lowinter, 2, processedLowinter)
+```
+
+```{r plot cp lowinter comp 2}
+testFeatures(cp_lowinter, processedLowinter, 2, "bomppercent") # no flip
+
+a = processedLowinter$mode1 %>%
+  mutate(Component_1 = cp_lowinter$Fac[[1]][,2]) %>%
+  left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject") %>%
+  ggplot(aes(x=bomppercent,y=Component_1)) +
+  geom_point() +
+  xlab("BOMP%") +
+  ylab("Loading") +
+  stat_cor() +
+  theme(text=element_text(size=16))
+
+b = plotFeatures(processedLowinter$mode2, cp_lowinter, 2, flip=FALSE) + scale_fill_manual(values=phylum_colors[-c(3)]) + theme(legend.position="none")
+
+c = processedLowinter$mode3 %>%
+  mutate(Component_1 = -1*cp_lowinter$Fac[[3]][,2], day=c(-14,0,2,5,9,14,21)) %>%
+  ggplot(aes(x=day,y=Component_1)) +
+  annotate(geom = "rect", xmin = 0, xmax = 14, ymin = -Inf, ymax = Inf, fill = "red", colour = "black", alpha=0.25) +
+  geom_line() +
+  geom_point() +
+  xlab("Time point [days]") +
+  ylab("Loading") +
+  ylim(0,1) +
+  theme(legend.position="none", text=element_text(size=16))
+
+a
+b
+c
+```
+
+# Upper jaw lingual microbiome
+
+```{r upling test subject mode}
 testMetadata(cp_upling, 1, processedUpling)
 testMetadata(cp_upling, 2, processedUpling)
+```
+
+```{r plot cp upling comp 2}
+testFeatures(cp_upling, processedUpling, 2, "Area_delta_R30") # flip
+
+a = processedUpling$mode1 %>%
+  mutate(Component_1 = cp_upling$Fac[[1]][,2]) %>%
+  left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject") %>%
+  ggplot(aes(x=Area_delta_R30,y=Component_1)) +
+  geom_point() +
+  xlab("RF%") +
+  ylab("Loading") +
+  stat_cor() +
+  theme(text=element_text(size=16))
+
+b = plotFeatures(processedUpling$mode2, cp_upling, 2, flip=TRUE) + scale_fill_manual(values=phylum_colors[-c(3,7)]) + theme(legend.position="none")
+
+c = processedUpling$mode3 %>%
+  mutate(Component_1 = cp_upling$Fac[[3]][,2], day=c(-14,0,2,5,9,14,21)) %>%
+  ggplot(aes(x=day,y=Component_1)) +
+  annotate(geom = "rect", xmin = 0, xmax = 14, ymin = -Inf, ymax = Inf, fill = "red", colour = "black", alpha=0.25) +
+  geom_line() +
+  geom_point() +
+  xlab("Time point [days]") +
+  ylab("Loading") +
+  ylim(0,1) +
+  theme(legend.position="none", text=element_text(size=16))
+
+a
+b
+c
+```
+
+# Upper jaw interproximal microbiome
+
+```{r upling test subject mode}
 testMetadata(cp_upinter, 1, processedUpinter)
 testMetadata(cp_upinter, 2, processedUpinter)
+```
+
+```{r plot cp upinter comp 1}
+testFeatures(cp_upinter, processedUpinter, 1, "bomppercent") # flip
+testFeatures(cp_upinter, processedUpinter, 1, "gender") # flip
+
+a = processedUpinter$mode1 %>%
+  mutate(Component_1 = cp_upinter$Fac[[1]][,1]) %>%
+  left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject") %>%
+  ggplot(aes(x=bomppercent,y=Component_1)) +
+  geom_point() +
+  xlab("BOMP%") +
+  ylab("Loading") +
+  stat_cor() +
+  theme(text=element_text(size=16))
+
+b = plotFeatures(processedUpinter$mode2, cp_upinter, 1, flip=TRUE) + scale_fill_manual(values=phylum_colors[-c(3,7)]) + theme(legend.position="none")
+
+c = processedUpinter$mode3 %>%
+  mutate(Component_1 = -1*cp_upinter$Fac[[3]][,1], day=c(-14,0,2,5,9,14,21)) %>%
+  ggplot(aes(x=day,y=Component_1)) +
+  annotate(geom = "rect", xmin = 0, xmax = 14, ymin = -Inf, ymax = Inf, fill = "red", colour = "black", alpha=0.25) +
+  geom_line() +
+  geom_point() +
+  xlab("Time point [days]") +
+  ylab("Loading") +
+  ylim(0,1) +
+  theme(legend.position="none", text=element_text(size=16))
+
+a
+b
+c
+```
+
+# Salivary microbiome
+
+```{r saliva test subject mode}
 testMetadata(cp_saliva, 1, processedSaliva)
 testMetadata(cp_saliva, 2, processedSaliva)
+```
+
+```{r plot cp saliva comp 2}
+testFeatures(cp_saliva, processedSaliva, 2, "age") # no flip
+
+a = processedSaliva$mode1 %>%
+  mutate(Component_1 = cp_saliva$Fac[[1]][,2]) %>%
+  left_join(rf_data %>% select(subject,day,Area_delta_R30,plaquepercent,bomppercent) %>% filter(day==14), by="subject") %>%
+  ggplot(aes(x=age,y=Component_1)) +
+  geom_point() +
+  xlab("Age") +
+  ylab("Loading") +
+  stat_cor() +
+  theme(text=element_text(size=16))
+
+b = plotFeatures(processedSaliva$mode2, cp_saliva, 2, flip=FALSE) + scale_fill_manual(values=phylum_colors[-c(7)]) + theme(legend.position="none")
+
+c = processedSaliva$mode3 %>%
+  mutate(Component_1 = -1*cp_saliva$Fac[[3]][,2], day=c(-14,0,2,5,9,14,21)) %>%
+  ggplot(aes(x=day,y=Component_1)) +
+  annotate(geom = "rect", xmin = 0, xmax = 14, ymin = -Inf, ymax = Inf, fill = "red", colour = "black", alpha=0.25) +
+  geom_line() +
+  geom_point() +
+  xlab("Time point [days]") +
+  ylab("Loading") +
+  ylim(0,1) +
+  theme(legend.position="none", text=element_text(size=16))
+
+a
+b
+c
+```
+
+# Salivary metabolomics
+
+```{r saliva test subject mode}
 testMetadata(cp_metabolomics, 1, processedMetabolomics)
 ```
-
-```{r plot models}
-colourCols = c("RFgroup", "Phylum", "")
-legendTitles = c("RF group", "Phylum", "")
-xLabels = c("Subject index", "Feature index", "Time index")
-legendColNums = c(3,5,0)
-arrangeModes = c(TRUE, TRUE, FALSE)
-continuousModes = c(FALSE,FALSE,TRUE)
-
-parafac4microbiome::plotPARAFACmodel(cp_tongue$Fac, processedTongue, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Tongue")
-parafac4microbiome::plotPARAFACmodel(cp_lowling$Fac, processedLowling, 1, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Lowling")
-parafac4microbiome::plotPARAFACmodel(cp_lowinter$Fac, processedLowinter, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Lowinter")
-parafac4microbiome::plotPARAFACmodel(cp_upling$Fac, processedUpling, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Upling")
-parafac4microbiome::plotPARAFACmodel(cp_upinter$Fac, processedUpinter, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Upinter")
-parafac4microbiome::plotPARAFACmodel(cp_saliva$Fac, processedSaliva, 2, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Saliva")
-parafac4microbiome::plotPARAFACmodel(cp_metabolomics$Fac, processedMetabolomics, 1, colourCols, legendTitles, xLabels, legendColNums, arrangeModes, continuousModes,
-  overallTitle = "Metabolomics")
-```
-
