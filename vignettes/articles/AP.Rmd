@@ -1,0 +1,260 @@
+---
+title: "GOHTRANS"
+output: html_document
+date: "2025-05-19"
+---
+
+# Preamble
+
+```{r setup}
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
+library(parafac4microbiome)
+library(NPLStoolbox)
+library(CMTFtoolbox)
+library(vegan)
+library(scales)
+library(ggrepel)
+library(pls)
+```
+
+```{r functions}
+testMetadata = function(model, comp, metadata){
+
+  transformedSubjectLoadings = model$Fac[[1]][,comp]
+  transformedSubjectLoadings = transformedSubjectLoadings / norm(transformedSubjectLoadings, "2")
+  
+  metadata = metadata$mode1 %>% left_join(ageInfo, by="SubjectID") %>% mutate(Gender=as.numeric(as.factor(Gender), PainS_NopainA=as.numeric(as.factor(PainS_NopainA))))
+  result = lm(transformedSubjectLoadings ~ Gender + Age + PainS_NopainA, data=metadata)
+  
+  # Extract coefficients and confidence intervals
+  coef_estimates <- summary(result)$coefficients
+  conf_intervals <- confint(result)
+  
+  # Remove intercept
+  coef_estimates <- coef_estimates[rownames(coef_estimates) != "(Intercept)", ]
+  conf_intervals <- conf_intervals[rownames(conf_intervals) != "(Intercept)", ]
+  
+  # Combine into a clean data frame
+  summary_table <- data.frame(
+    Term     = rownames(coef_estimates),
+    Estimate = coef_estimates[, "Estimate"] * 1e3,
+    CI       = paste0(
+                 conf_intervals[, 1], " – ",
+                 conf_intervals[, 2]
+               ),
+    P_value  = coef_estimates[, "Pr(>|t|)"],
+    P_adjust = p.adjust(coef_estimates[, "Pr(>|t|)"], "BH"),
+    row.names = NULL
+  )
+  
+  return(summary_table)
+}
+```
+
+```{r load age info}
+cytokines_meta_data = read.csv("./AP/input_deduplicated_metadata_RvdP.csv", sep=" ", header=FALSE) %>% as_tibble()
+colnames(cytokines_meta_data) = c("SubjectID", "Visit", "Gender", "Age", "Pain_noPain", "case_control")
+ageInfo = cytokines_meta_data %>% select(SubjectID, Age) %>% unique()
+```
+
+```{r processing}
+# Full cohort
+processedCytokines_full = CMTFtoolbox::Georgiou2025$Inflammatory_mediators
+processedCytokines_full$data = log(processedCytokines_full$data + 0.005)
+
+# Remove outlier subjects: A11-8
+processedCytokines_full$data = processedCytokines_full$data[-25,,]
+processedCytokines_full$mode1 = processedCytokines_full$mode1[-25,]
+
+processedCytokines_full$data = multiwayCenter(processedCytokines_full$data, 1)
+processedCytokines_full$data = multiwayScale(processedCytokines_full$data, 2)
+
+# Control only subcohort
+processedCytokines_control = CMTFtoolbox::Georgiou2025$Inflammatory_mediators
+
+mask = processedCytokines_control$mode1$case_control == "control"
+processedCytokines_control$data = processedCytokines_control$data[mask,,]
+processedCytokines_control$mode1 = processedCytokines_control$mode1[mask,]
+
+processedCytokines_control$data = log(processedCytokines_control$data + 0.005)
+processedCytokines_control$data = multiwayCenter(processedCytokines_control$data, 1)
+processedCytokines_control$data = multiwayScale(processedCytokines_control$data, 2)
+
+# Case only subcohort
+processedCytokines_case = CMTFtoolbox::Georgiou2025$Inflammatory_mediators
+
+mask = processedCytokines_case$mode1$case_control == "case"
+processedCytokines_case$data = processedCytokines_case$data[mask,,]
+processedCytokines_case$mode1 = processedCytokines_case$mode1[mask,]
+
+# Also remove subject A11-8 due to being an outlier
+processedCytokines_case$data = processedCytokines_case$data[-25,,]
+processedCytokines_case$mode1 = processedCytokines_case$mode1[-25,]
+
+processedCytokines_case$data = log(processedCytokines_case$data + 0.005)
+processedCytokines_case$data = multiwayCenter(processedCytokines_case$data, 1)
+processedCytokines_case$data = multiwayScale(processedCytokines_case$data, 2)
+```
+
+```{r cp assess num components}
+# assessment_cytokines_full = parafac4microbiome::assessModelQuality(processedCytokines_full$data, numRepetitions=10, numCores=10)
+# assessment_cytokines_full$plots$overview # def 2
+#
+# assessment_cytokines_control = parafac4microbiome::assessModelQuality(processedCytokines_control$data, numRepetitions=10, numCores=10)
+# assessment_cytokines_control$plots$overview # def 1
+#
+# assessment_cytokines_case = parafac4microbiome::assessModelQuality(processedCytokines_case$data, numRepetitions=10, numCores=10)
+# assessment_cytokines_case$plots$overview # 2-4
+#
+# saveRDS(assessment_cytokines_full, "./CP_assessment_cytokines_full.RDS")
+# saveRDS(assessment_cytokines_control, "./CP_assessment_cytokines_control.RDS")
+# saveRDS(assessment_cytokines_case, "./CP_assessment_cytokines_case.RDS")
+# 
+# assessment_cytokines_full = readRDS("./CP_assessment_cytokines_full.RDS")
+# assessment_cytokines_full$plots$overview
+# 
+# assessment_cytokines_control = readRDS("./CP_assessment_cytokines_control.RDS")
+# assessment_cytokines_control$plots$overview
+# 
+# assessment_cytokines_case = readRDS("./CP_assessment_cytokines_case.RDS")
+# assessment_cytokines_case$plots$overview
+# 
+# a = assessment_cytokines_full$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# 
+# b = assessment_cytokines_control$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# 
+# c = assessment_cytokines_case$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# 
+# ggarrange(a,b,c, nrow=1, ncol=3)
+```
+
+```{r cp stability num components}
+# colourCols = c("", "", "")
+# legendTitles = c("", "", "")
+# xLabels = c("Subject index", "Feature index", "Time index")
+# legendColNums = c(2,5,0)
+# arrangeModes = c(FALSE, FALSE, FALSE)
+# continuousModes = c(FALSE,FALSE,TRUE)
+# 
+# stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines_case, maxNumComponents=5, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_cytokines$modelPlots[[2]]
+# stability_cytokines$modelPlots[[3]]
+# stability_cytokines$modelPlots[[4]]
+# stability_cytokines$modelPlots[[5]]
+```
+
+```{r make cp models}
+# cp_cytokines_full = parafac4microbiome::parafac(processedCytokines_full$data, nfac=2, nstart=100)
+# cp_cytokines_control = parafac4microbiome::parafac(processedCytokines_control$data, nfac=1, nstart=100)
+# cp_cytokines_case = parafac4microbiome::parafac(processedCytokines_case$data, nfac=3, nstart=100)
+# 
+# saveRDS(cp_cytokines_full, "./cp_cytokines_full.RDS")
+# saveRDS(cp_cytokines_control, "./cp_cytokines_control.RDS")
+# saveRDS(cp_cytokines_case, "./cp_cytokines_case.RDS")
+
+cp_cytokines_full = readRDS("./AP/cp_cytokines_full.RDS")
+cp_cytokines_control = readRDS("./AP/cp_cytokines_control.RDS")
+cp_cytokines_case = readRDS("./AP/cp_cytokines_case.RDS")
+```
+
+# Inflammatory mediators
+
+```{r cp subject metadata test}
+testMetadata(cp_cytokines_case, 1, processedCytokines_case)
+testMetadata(cp_cytokines_case, 2, processedCytokines_case)
+testMetadata(cp_cytokines_case, 3, processedCytokines_case)
+```
+
+```{r case-only cp component 1}
+# Check sign
+topIndices = processedCytokines_case$mode2 %>% mutate(index=1:nrow(.), Comp = cp_cytokines_case$Fac[[2]][,1]) %>% arrange(desc(Comp)) %>% head() %>% select(index) %>% pull()
+bottomIndices = processedCytokines_case$mode2 %>% mutate(index=1:nrow(.), Comp = cp_cytokines_case$Fac[[2]][,1]) %>% arrange(desc(Comp)) %>% tail() %>% select(index) %>% pull()
+
+Xhat = parafac4microbiome::reinflateTensor(cp_cytokines_case$Fac[[1]][,1], cp_cytokines_case$Fac[[2]][,1], cp_cytokines_case$Fac[[3]][,1])
+
+print("Positive loadings:")
+print(cor(Xhat[,topIndices[1],2], as.numeric(as.factor(processedCytokines_case$mode1$Gender)), use="pairwise.complete.obs")) # flip
+print("Negative loadings:")
+print(cor(Xhat[,bottomIndices[5],2], as.numeric(as.factor(processedCytokines_case$mode1$Gender)), use="pairwise.complete.obs"))
+
+# Plot
+a = processedCytokines_case$mode1 %>%
+  mutate(Comp1 = cp_cytokines_case$Fac[[1]][,1]) %>%
+  ggplot(aes(x=as.factor(Gender),y=Comp1)) +
+  geom_boxplot() +
+  geom_jitter(height=0, width=0.05) +
+  stat_compare_means(comparisons=list(c("F", "M")),label="p.signif") +
+  xlab("") +
+  ylab("Loading") +
+  scale_x_discrete(labels=c("Female", "Male")) +
+  theme(text=element_text(size=16))
+
+temp = processedCytokines_case$mode2 %>%
+  as_tibble() %>%
+  mutate(Component_1 = -1*cp_cytokines_case$Fac[[2]][,1]) %>%
+  arrange(Component_1) %>%
+  mutate(index=1:nrow(.))
+
+b=temp %>%
+  ggplot(aes(x=as.factor(index),y=Component_1)) +
+  geom_bar(stat="identity",col="black") +
+  scale_x_discrete(label=temp$name) +
+  xlab("") +
+  ylab("Loading") +
+  scale_x_discrete(labels=c("IL-10", "OPG", "VEGF", "CRP", expression(IFN-gamma), "IL-6", expression(TNF-alpha), "GM-CSF", "IL-17A", "IL-8", "IL-12p70", expression(IL-1*alpha), expression(IL-1*beta), expression(MIP-1*alpha), "IL-4", "RANKL")) +
+  theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+c = cp_cytokines_case$Fac[[3]][,1] %>% as_tibble() %>% mutate(value=-1*value) %>% mutate(timepoint=c(-6,-3,0,1,6,13)) %>% ggplot(aes(x=timepoint,y=value)) + geom_line() + geom_point() + xlab("Time point [weeks]") + ylab("Loading") + ylim(0,1) + theme(text=element_text(size=16))
+
+a
+b
+c
+```
+
+```{r case-only cp component 3}
+# Check sign
+topIndices = processedCytokines_case$mode2 %>% mutate(index=1:nrow(.), Comp = cp_cytokines_case$Fac[[2]][,3]) %>% arrange(desc(Comp)) %>% head() %>% select(index) %>% pull()
+bottomIndices = processedCytokines_case$mode2 %>% mutate(index=1:nrow(.), Comp = cp_cytokines_case$Fac[[2]][,3]) %>% arrange(desc(Comp)) %>% tail() %>% select(index) %>% pull()
+
+Xhat = parafac4microbiome::reinflateTensor(cp_cytokines_case$Fac[[1]][,3], cp_cytokines_case$Fac[[2]][,3], cp_cytokines_case$Fac[[3]][,3])
+
+print("Positive loadings:")
+print(cor(Xhat[,topIndices[1],2], processedCytokines_case$mode1 %>% left_join(ageInfo) %>% select(Age), use="pairwise.complete.obs")) # no flip
+print("Negative loadings:")
+print(cor(Xhat[,bottomIndices[5],2], processedCytokines_case$mode1 %>% left_join(ageInfo) %>% select(Age), use="pairwise.complete.obs"))
+
+# Plot
+a = processedCytokines_case$mode1 %>%
+  left_join(ageInfo) %>%
+  mutate(Comp1 = cp_cytokines_case$Fac[[1]][,3]) %>%
+  ggplot(aes(x=Age,y=Comp1)) +
+  geom_point() +
+  stat_cor() +
+  xlab("Age") +
+  ylab("Loading") +
+  theme(text=element_text(size=16))
+
+temp = processedCytokines_case$mode2 %>%
+  as_tibble() %>%
+  mutate(Component_1 = cp_cytokines_case$Fac[[2]][,3]) %>%
+  arrange(Component_1) %>%
+  mutate(index=1:nrow(.))
+
+b=temp %>%
+  ggplot(aes(x=as.factor(index),y=Component_1)) +
+  geom_bar(stat="identity",col="black") +
+  scale_x_discrete(label=temp$name) +
+  xlab("") +
+  ylab("Loading") +
+  scale_x_discrete(labels=c("IL-10", "IL-17A", "GM-CSF", "IL-12p70", expression(IFN-gamma), expression(IL-1*alpha), "RANKL", expression(IL-1*beta), "CRP", "OPG", expression(MIP-1*alpha), "IL-6", expression(TNF-alpha), "VEGF", "IL-8")) +
+  theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+c = cp_cytokines_case$Fac[[3]][,3] %>% as_tibble() %>% mutate(value=-1*value) %>% mutate(timepoint=c(-6,-3,0,1,6,13)) %>% ggplot(aes(x=timepoint,y=value)) + geom_line() + geom_point() + xlab("Time point [weeks]") + ylab("Loading") + ylim(0,1) + theme(text=element_text(size=16))
+
+a
+b
+c
+```

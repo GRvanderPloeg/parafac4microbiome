@@ -1,0 +1,227 @@
+---
+title: "GOHTRANS"
+output: html_document
+date: "2025-05-19"
+---
+
+# Preamble
+
+```{r setup}
+library(tidyverse)
+library(ggplot2)
+library(ggpubr)
+library(stringr)
+library(parafac4microbiome)
+library(NPLStoolbox)
+library(CMTFtoolbox)
+library(vegan)
+library(scales)
+library(ggrepel)
+```
+
+```{r import metadata}
+ph_BOMP = read_delim("./GOHTRANS/GOH-TRANS_export_20240205.csv",
+                     delim = ";", escape_double = FALSE, trim_ws = TRUE) %>% as_tibble()
+
+df1 = ph_BOMP %>% select(`Participant Id`, starts_with("5.")) %>% mutate(subject = 1:42, numTeeth = `5.1|Number of teeth`, DMFT = `5.2|DMFT`, numBleedingSites = `5.3|Bleeding sites`, boppercent = `5.4|BOP%`, DPSI = `5.5|DPSI`, pH = `5.8|pH`) %>% select(subject, numTeeth, DMFT, numBleedingSites, boppercent, DPSI, pH)
+df2 = ph_BOMP %>% select(`Participant Id`, starts_with("12.")) %>% mutate(subject = 1:42, numTeeth = `12.1|Number of teeth`, DMFT = `12.2|DMFT`, numBleedingSites = `12.3|Bleeding sites`, boppercent = `12.4|BOP%`, DPSI = `12.5|DPSI`, pH = `12.8|pH`) %>% select(subject, numTeeth, DMFT, numBleedingSites, boppercent, DPSI, pH)
+df3 = ph_BOMP %>% select(`Participant Id`, starts_with("19.")) %>% mutate(subject = 1:42, numTeeth = `19.1|Number of teeth`, DMFT = `19.2|DMFT`, numBleedingSites = `19.3|Bleeding sites`, boppercent = `19.4|BOP%`, DPSI = `19.5|DPSI`, pH = `19.8|pH`) %>% select(subject, numTeeth, DMFT, numBleedingSites, boppercent, DPSI, pH)
+df4 = ph_BOMP %>% select(`Participant Id`, starts_with("26.")) %>% mutate(subject = 1:42, numTeeth = `26.1|Number of teeth`, DMFT = `26.2|DMFT`, numBleedingSites = `26.3|Bleeding sites`, boppercent = `26.4|BOP%`, DPSI = `26.5|DPSI`, pH = `26.8|pH`) %>% select(subject, numTeeth, DMFT, numBleedingSites, boppercent, DPSI, pH)
+
+otherMeta = rbind(df1, df2, df3, df4) %>% as_tibble() %>% mutate(newTimepoint = rep(c(0,3,6,12), each=42))
+otherMeta = otherMeta %>% select(subject, newTimepoint, boppercent)
+otherMeta[otherMeta$boppercent < 0 & !is.na(otherMeta$boppercent), "boppercent"] = NA
+
+saliva_sampleMeta = read.csv("./GOHTRANS/sampleInfo_fixed.csv", sep=" ") %>% as_tibble() %>% select(subject, GenderID, Age, newTimepoint)
+
+# CODS XI
+df = read.csv("./GOHTRANS/CODS_XI.csv")
+df = df[1:40,1:10] %>% as_tibble() %>% filter(Participant_code %in% saliva_sampleMeta$subject)
+
+CODS = df %>% select(Participant_code, CODS_BASELINE, CODS_3_MONTHS, CODS_6_MONTHS, CODS_12_MONTHS) %>% pivot_longer(-Participant_code) %>% mutate(timepoint = NA)
+CODS[CODS$name == "CODS_BASELINE", "timepoint"] = 0
+CODS[CODS$name == "CODS_3_MONTHS", "timepoint"] = 3
+CODS[CODS$name == "CODS_6_MONTHS", "timepoint"] = 6
+CODS[CODS$name == "CODS_12_MONTHS", "timepoint"] = 12
+CODS[CODS$value == -99, "value"] = NA
+CODS = CODS %>% mutate(subject = Participant_code, newTimepoint = timepoint, CODS = value) %>% select(-Participant_code, -name, -value, -timepoint)
+
+XI = df %>% select(Participant_code, XI_BASELINE, XI_3_MONTHS, XI_6_MONTHS, XI_12_MONTHS) %>% pivot_longer(-Participant_code) %>% mutate(timepoint = NA)
+XI[XI$name == "XI_BASELINE", "timepoint"] = 0
+XI[XI$name == "XI_3_MONTHS", "timepoint"] = 3
+XI[XI$name == "XI_6_MONTHS", "timepoint"] = 6
+XI[XI$name == "XI_12_MONTHS", "timepoint"] = 12
+XI[XI$value == -99, "value"] = NA
+XI = XI %>% mutate(subject = Participant_code, newTimepoint = timepoint, XI = value) %>% select(-Participant_code, -name, -value, -timepoint)
+
+df = otherMeta %>% left_join(CODS) %>% left_join(XI) %>% select(subject, newTimepoint, boppercent, CODS, XI) %>% filter(newTimepoint != "NA")
+
+meta = df %>% left_join(otherMeta) %>% left_join(saliva_sampleMeta) %>% unique()
+meta[meta < 0] <- NA
+meta$GenderID = as.numeric(as.factor(meta$GenderID)) - 1
+
+staticMeta = meta %>% filter(newTimepoint == 0) %>% select(subject, GenderID, Age)
+dynamicMeta = meta %>% select(-GenderID, -Age)
+# 
+# newBOP = residuals(lm(boppercent ~ GenderID + Age + CODS + XI, data=meta, na.action=na.exclude))
+# newCODS= residuals(lm(CODS ~ boppercent + GenderID + Age + XI, data=meta, na.action=na.exclude))
+# newXI = residuals(lm(XI ~ boppercent + GenderID + Age + CODS, data=meta, na.action=na.exclude))
+# 
+# meta = meta %>% mutate(boppercent = newBOP, CODS = newCODS, XI = newXI)
+```
+
+```{r define functions}
+clinical_metadata = NPLStoolbox::Cornejo2025$Clinical_measurements$mode1 %>% mutate(BOP = NPLStoolbox::Cornejo2025$Clinical_measurements$data[,1,2], CODS = NPLStoolbox::Cornejo2025$Clinical_measurements$data[,2,2], XI = NPLStoolbox::Cornejo2025$Clinical_measurements$data[,3,2]) %>% left_join(NPLStoolbox::Cornejo2025$Subject_metadata %>% mutate(subject = as.character(subject)))
+
+testMetadata = function(model, comp, metadata){
+  transformedSubjectLoadings = model$Fac[[1]][,comp]
+  transformedSubjectLoadings = transformedSubjectLoadings / norm(transformedSubjectLoadings, "2")
+  
+  metadata = metadata$mode1 %>% left_join(clinical_metadata) %>% mutate(GenderID = as.numeric(as.factor(GenderID))-1)
+  
+  result = lm(transformedSubjectLoadings ~ GenderID + Age + BOP + CODS + XI, data=metadata)
+  
+  # Extract coefficients and confidence intervals
+  coef_estimates <- summary(result)$coefficients
+  conf_intervals <- confint(result)
+  
+  # Remove intercept
+  coef_estimates <- coef_estimates[rownames(coef_estimates) != "(Intercept)", ]
+  conf_intervals <- conf_intervals[rownames(conf_intervals) != "(Intercept)", ]
+  
+  # Combine into a clean data frame
+  summary_table <- data.frame(
+    Term     = rownames(coef_estimates),
+    Estimate = coef_estimates[, "Estimate"] * 1e3,
+    CI       = paste0(
+                 conf_intervals[, 1], " – ",
+                 conf_intervals[, 2]
+               ),
+    P_value  = coef_estimates[, "Pr(>|t|)"],
+    P_adjust = p.adjust(coef_estimates[, "Pr(>|t|)"], "BH"),
+    row.names = NULL
+  )
+  
+  return(summary_table)
+}
+```
+
+# Model selection
+
+```{r processing}
+processedTongue = processDataCube(NPLStoolbox::Cornejo2025$Tongue_microbiome, sparsityThreshold = 0.5, considerGroups=TRUE, groupVariable="GenderID", CLR=TRUE, centerMode=1, scaleMode=2)
+processedSaliva = processDataCube(NPLStoolbox::Cornejo2025$Salivary_microbiome, sparsityThreshold = 0.5, considerGroups=TRUE, groupVariable="GenderID", CLR=TRUE, centerMode=1, scaleMode=2)
+
+processedCytokines = NPLStoolbox::Cornejo2025$Salivary_cytokines
+processedCytokines$data = log(processedCytokines$data + 0.1300)
+# Remove subject 1, 18, 19, and 27 due to being an outlier
+processedCytokines$data = processedCytokines$data[-c(1,9,10,19),,]
+processedCytokines$mode1 = processedCytokines$mode1[-c(1,9,10,19),]
+processedCytokines$data = multiwayCenter(processedCytokines$data, 1)
+processedCytokines$data = multiwayScale(processedCytokines$data, 2)
+
+processedBiochemistry = NPLStoolbox::Cornejo2025$Salivary_biochemistry
+processedBiochemistry$data = log(processedBiochemistry$data)
+processedBiochemistry$data = multiwayCenter(processedBiochemistry$data, 1)
+processedBiochemistry$data = multiwayScale(processedBiochemistry$data, 2)
+```
+
+```{r cp assess num components}
+# assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
+# assessment_tongue$plots$overview # 1 or 2?
+# 
+# assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
+# assessment_saliva$plots$overview # def 2
+# 
+# assessment_cytokines = parafac4microbiome::assessModelQuality(processedCytokines$data, numRepetitions=10, numCores=10)
+# assessment_cytokines$plots$overview # def 2
+# 
+# assessment_biochemistry = parafac4microbiome::assessModelQuality(processedBiochemistry$data, numRepetitions=10, numCores=10)
+# assessment_biochemistry$plots$overview # 2 or 3?
+#
+# saveRDS(assessment_tongue, "./CP_assessment_tongue.RDS")
+# saveRDS(assessment_saliva, "./CP_assessment_saliva.RDS")
+# saveRDS(assessment_cytokines, "./CP_assessment_cytokines.RDS")
+# saveRDS(assessment_biochemistry, "./CP_assessment_biochemistry.RDS")
+# 
+# assessment_tongue = readRDS("./CP_assessment_tongue.RDS")
+# assessment_saliva = readRDS("./CP_assessment_saliva.RDS")
+# assessment_cytokines = readRDS("./CP_assessment_cytokines.RDS")
+# assessment_biochemistry = readRDS("./CP_assessment_biochemistry.RDS")
+# 
+# a = assessment_tongue$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# b = assessment_saliva$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# c = assessment_cytokines$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# d = assessment_biochemistry$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# ggarrange(a,b,c,d)
+```
+
+```{r cp stability num components}
+# colourCols = c("", "", "")
+# legendTitles = c("", "", "")
+# xLabels = c("Subject index", "Feature index", "Time index")
+# legendColNums = c(2,5,0)
+# arrangeModes = c(FALSE, FALSE, FALSE)
+# continuousModes = c(FALSE,FALSE,TRUE)
+# 
+# stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_tongue$modelPlots[[2]]
+# stability_tongue$modelPlots[[3]]
+# 
+# stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_saliva$modelPlots[[2]]
+# stability_saliva$modelPlots[[2]]
+# 
+# stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_cytokines$modelPlots[[2]]
+# stability_cytokines$modelPlots[[3]]
+# 
+# stability_biochemistry = parafac4microbiome::assessModelStability(processedBiochemistry, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_biochemistry$modelPlots[[2]]
+# stability_biochemistry$modelPlots[[3]]
+```
+
+```{r make cp models}
+# cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
+# cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
+# cp_cytokines = parafac4microbiome::parafac(processedCytokines$data, nfac=2, nstart=100)
+# cp_biochemistry = parafac4microbiome::parafac(processedBiochemistry$data, nfac=2, nstart=100)
+# 
+# saveRDS(cp_tongue, "./cp_tongue.RDS")
+# saveRDS(cp_saliva, "./cp_saliva.RDS")
+# saveRDS(cp_cytokines, "./cp_cytokines.RDS")
+# saveRDS(cp_biochemistry, "./cp_biochemistry.RDS")
+
+cp_tongue = readRDS("./GOHTRANS/cp_tongue.RDS")
+cp_saliva = readRDS("./GOHTRANS/cp_saliva.RDS")
+cp_cytokines = readRDS("./GOHTRANS/cp_cytokines.RDS")
+cp_biochemistry = readRDS("./GOHTRANS/cp_biochemistry.RDS")
+```
+
+# Tongue microbiome
+
+```{r tongue test subject mode}
+testMetadata(cp_tongue, 1, processedTongue)
+testMetadata(cp_tongue, 2, processedTongue)
+```
+
+# Salivary microbiome
+
+```{r saliva test subject mode}
+testMetadata(cp_saliva, 1, processedSaliva)
+testMetadata(cp_saliva, 2, processedSaliva)
+```
+
+# Salivary cytokines
+
+```{r cytokines test subject mode}
+testMetadata(cp_cytokines, 1, processedCytokines)
+testMetadata(cp_cytokines, 2, processedCytokines)
+```
+
+# Salivary biochemistry
+
+```{r biochemistry test subject mode}
+testMetadata(cp_biochemistry, 1, processedBiochemistry)
+testMetadata(cp_biochemistry, 2, processedBiochemistry)
+```

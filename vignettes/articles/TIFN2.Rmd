@@ -384,7 +384,7 @@ c
 
 # Upper jaw interproximal microbiome
 
-```{r upling test subject mode}
+```{r upinter test subject mode}
 testMetadata(cp_upinter, 1, processedUpinter)
 testMetadata(cp_upinter, 2, processedUpinter)
 ```
