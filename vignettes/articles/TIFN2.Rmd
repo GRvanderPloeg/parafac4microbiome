@@ -12,6 +12,7 @@ library(parafac4microbiome)
 library(NPLStoolbox)
 library(CMTFtoolbox)
 library(ggplot2)
+library(ggpubr)
 ```
 
 ```{r Import red fluorescence data}
