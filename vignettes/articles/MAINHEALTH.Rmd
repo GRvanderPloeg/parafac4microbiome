@@ -215,7 +215,7 @@ c
 
 # HM metabolome
 
-```{r faecal cp subject mode metadata test}
+```{r hm metabolome cp subject mode metadata test}
 testMetadata(cp_milkMetab, 1, processedMilkMetab)
 testMetadata(cp_milkMetab, 2, processedMilkMetab)
 testMetadata(cp_milkMetab, 3, processedMilkMetab)
