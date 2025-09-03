@@ -38,8 +38,11 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
+<li><a class="dropdown-item" href="../articles/AP.html">GOHTRANS</a></li>
+    <li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
+    <li><a class="dropdown-item" href="../articles/GOHTRANS.html">GOHTRANS</a></li>
     <li><a class="dropdown-item" href="../articles/Introduction.html">Introduction</a></li>
+    <li><a class="dropdown-item" href="../articles/MAINHEALTH.html">MAINHEALTH</a></li>
     <li><a class="dropdown-item" href="../articles/Shao2019.html">Shao2019</a></li>
     <li><a class="dropdown-item" href="../articles/TIFN2.html">TIFN2</a></li>
     <li><a class="dropdown-item" href="../articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
@@ -66,6 +69,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>TIFN2</h1>
             
+            <h4 data-toc-skip class="date">2025-04-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/vignettes/articles/TIFN2.Rmd" class="external-link"><code>vignettes/articles/TIFN2.Rmd</code></a></small>
       <div class="d-none name"><code>TIFN2.Rmd</code></div>
@@ -73,96 +77,77 @@
 
     
     
+<div class="section level2">
+<h2 id="preamble">Preamble<a class="anchor" aria-label="anchor" href="#preamble"></a>
+</h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.com/parafac4microbiome/" class="external-link">parafac4microbiome</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/GRvanderPloeg/NPLStoolbox" class="external-link">NPLStoolbox</a></span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">processedTongue</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">tongue</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">processedLowling</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">lower_jaw_lingual</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">processedLowinter</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">lower_jaw_interproximal</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">processedUpling</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">upper_jaw_lingual</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">processedUpinter</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">upper_jaw_interproximal</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">processedSaliva</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">saliva</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">processedMetabolomics</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">metabolomics</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">assessment_tongue</span> <span class="op">=</span> <span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedTongue</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_tongue</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-1.png" width="700"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">assessment_lowling</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedLowling</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_lowling</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-2.png" width="700"></p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     filter, lag</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">assessment_lowinter</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedLowinter</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_lowinter</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-3.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">assessment_upling</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedUpling</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_upling</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-4.png" width="700"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">assessment_upinter</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedUpinter</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_upinter</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-5.png" width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">assessment_saliva</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedSaliva</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_saliva</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-6.png" width="700"></p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.com/parafac4microbiome/" class="external-link">parafac4microbiome</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/GRvanderPloeg/NPLStoolbox" class="external-link">NPLStoolbox</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://grvanderploeg.com/CMTFtoolbox/" class="external-link">CMTFtoolbox</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'CMTFtoolbox'</span></span></code></pre>
+<pre><code><span><span class="co">## The following object is masked from 'package:NPLStoolbox':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     npred</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:parafac4microbiome':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     fac_to_vect, reinflateFac, reinflateTensor, vect_to_fac</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">assessment_metab</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/assessModelQuality.html">assessModelQuality</a></span><span class="op">(</span><span class="va">processedMetabolomics</span><span class="op">$</span><span class="va">data</span>, numRepetitions<span class="op">=</span><span class="fl">10</span>, numCores<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">assessment_metab</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20assess%20num%20components-7.png" width="700"></p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/" class="external-link">ggpubr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">colourCols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RFgroup"</span>, <span class="st">"Phylum"</span>, <span class="st">""</span><span class="op">)</span></span>
-<span><span class="va">legendTitles</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RF group"</span>, <span class="st">"Phylum"</span>, <span class="st">""</span><span class="op">)</span></span>
-<span><span class="va">xLabels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Subject index"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time index"</span><span class="op">)</span></span>
-<span><span class="va">legendColNums</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">arrangeModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">continuousModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">rf_data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"../../data-raw/vanderPloeg2024/RFdata.csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">rf_data</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"id"</span>, <span class="st">"fotonr"</span>, <span class="st">"day"</span>, <span class="st">"group"</span>, <span class="st">"RFgroup"</span>, <span class="st">"MQH"</span>, <span class="st">"SPS(tm)"</span>, <span class="st">"Area_delta_R30"</span>, <span class="st">"Area_delta_Rmax"</span>, <span class="st">"Area_delta_R30_x_Rmax"</span>, <span class="st">"gingiva_mean_R_over_G"</span>, <span class="st">"gingiva_mean_R_over_G_upper_jaw"</span>, <span class="st">"gingiva_mean_R_over_G_lower_jaw"</span><span class="op">)</span></span>
+<span><span class="va">rf_data</span> <span class="op">=</span> <span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">stability_tongue</span> <span class="op">=</span> <span class="fu"><a href="../reference/assessModelStability.html">assessModelStability</a></span><span class="op">(</span><span class="va">processedTongue</span>, maxNumComponents<span class="op">=</span><span class="fl">3</span>, numFolds<span class="op">=</span><span class="fl">10</span>, colourCols<span class="op">=</span><span class="va">colourCols</span>, legendTitles<span class="op">=</span><span class="va">legendTitles</span>, xLabels <span class="op">=</span> <span class="va">xLabels</span>, legendColNums<span class="op">=</span><span class="va">legendColNums</span>, arrangeModes<span class="op">=</span><span class="va">arrangeModes</span>, numCores<span class="op">=</span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">stability_tongue</span><span class="op">$</span><span class="va">modelPlots</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20stability%20num%20components-1.png" width="700"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">stability_tongue</span><span class="op">$</span><span class="va">modelPlots</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20stability%20num%20components-2.png" width="700"></p>
+<span><span class="va">rf_data</span><span class="op">[</span><span class="va">rf_data</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"VSTPHZ"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"VSTPH2"</span></span>
+<span><span class="va">rf_data</span><span class="op">[</span><span class="va">rf_data</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"D2VZH0"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"DZVZH0"</span></span>
+<span><span class="va">rf_data</span><span class="op">[</span><span class="va">rf_data</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"DLODNN"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"DLODDN"</span></span>
+<span><span class="va">rf_data</span><span class="op">[</span><span class="va">rf_data</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"O3VQFX"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"O3VQFQ"</span></span>
+<span><span class="va">rf_data</span><span class="op">[</span><span class="va">rf_data</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"F80LGT"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"F80LGF"</span></span>
+<span><span class="va">rf_data</span><span class="op">[</span><span class="va">rf_data</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"26QQR0"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"26QQrO"</span></span>
+<span></span>
+<span><span class="va">rf_data2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"../../data-raw/vanderPloeg2024/red_fluorescence_data.csv"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">rf_data2</span> <span class="op">=</span> <span class="va">rf_data2</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">181</span><span class="op">:</span><span class="fl">192</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">rf_data</span> <span class="op">=</span> <span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(id, day)`</span></span></code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="va">stability_upinter</span> <span class="op">=</span> <span class="fu"><a href="../reference/assessModelStability.html">assessModelStability</a></span><span class="op">(</span><span class="va">processedUpinter</span>, maxNumComponents<span class="op">=</span><span class="fl">3</span>, numFolds<span class="op">=</span><span class="fl">10</span>, colourCols<span class="op">=</span><span class="va">colourCols</span>, legendTitles<span class="op">=</span><span class="va">legendTitles</span>, xLabels <span class="op">=</span> <span class="va">xLabels</span>, legendColNums<span class="op">=</span><span class="va">legendColNums</span>, arrangeModes<span class="op">=</span><span class="va">arrangeModes</span>, numCores<span class="op">=</span><span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">stability_upinter</span><span class="op">$</span><span class="va">modelPlots</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20stability%20num%20components-3.png" width="700"></p>
+<code class="sourceCode R"><span><span class="va">rf</span> <span class="op">=</span> <span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>, <span class="va">RFgroup</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">stability_upinter</span><span class="op">$</span><span class="va">modelPlots</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/cp%20stability%20num%20components-4.png" width="700"></p>
+<code class="sourceCode R"><span><span class="va">age_gender</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="st">"../../data-raw/vanderPloeg2024/Ploeg_subjectMetadata.csv"</span>, sep<span class="op">=</span><span class="st">";"</span><span class="op">)</span></span>
+<span><span class="va">age_gender</span> <span class="op">=</span> <span class="va">age_gender</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">age_gender</span><span class="op">)</span>,<span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">age_gender</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">age_gender</span> <span class="op">=</span> <span class="va">age_gender</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">onderzoeksgroep</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">naam</span>, <span class="va">leeftijd</span>, <span class="va">geslacht</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">age_gender</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="st">"age"</span>, <span class="st">"gender"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Correction for incorrect subject ids</span></span>
+<span><span class="va">age_gender</span><span class="op">[</span><span class="va">age_gender</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"VSTPHZ"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"VSTPH2"</span></span>
+<span><span class="va">age_gender</span><span class="op">[</span><span class="va">age_gender</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"D2VZH0"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"DZVZH0"</span></span>
+<span><span class="va">age_gender</span><span class="op">[</span><span class="va">age_gender</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"DLODNN"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"DLODDN"</span></span>
+<span><span class="va">age_gender</span><span class="op">[</span><span class="va">age_gender</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"O3VQFX"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"O3VQFQ"</span></span>
+<span><span class="va">age_gender</span><span class="op">[</span><span class="va">age_gender</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"F80LGT"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"F80LGF"</span></span>
+<span><span class="va">age_gender</span><span class="op">[</span><span class="va">age_gender</span><span class="op">$</span><span class="va">subject</span> <span class="op">==</span> <span class="st">"26QQR0"</span>, <span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"26QQrO"</span></span>
+<span></span>
+<span><span class="va">age_gender</span> <span class="op">=</span> <span class="va">age_gender</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">subject</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cp_tongue</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedTongue</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">2</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">cp_lowling</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedLowling</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">1</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">cp_lowinter</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedLowinter</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">2</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">cp_upling</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedUpling</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">2</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">cp_upinter</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedUpinter</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">2</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">cp_saliva</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedSaliva</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">2</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">cp_metabolomics</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/parafac.html">parafac</a></span><span class="op">(</span><span class="va">processedMetabolomics</span><span class="op">$</span><span class="va">data</span>, nfac<span class="op">=</span><span class="fl">1</span>, nstart<span class="op">=</span><span class="fl">100</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">testMetadata</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>, <span class="va">comp</span>, <span class="va">metadata</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">transformedSubjectLoadings</span> <span class="op">=</span> <span class="fu"><a href="../reference/transformPARAFACloadings.html">transformPARAFACloadings</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span>, <span class="fl">1</span><span class="op">)</span><span class="op">[</span>,<span class="va">comp</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="va">mapping</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">testMetadata</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>, <span class="va">comp</span>, <span class="va">metadata</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">transformedSubjectLoadings</span> <span class="op">=</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">comp</span><span class="op">]</span></span>
 <span>  <span class="va">transformedSubjectLoadings</span> <span class="op">=</span> <span class="va">transformedSubjectLoadings</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/norm.html" class="external-link">norm</a></span><span class="op">(</span><span class="va">transformedSubjectLoadings</span>, <span class="st">"2"</span><span class="op">)</span></span>
 <span>  </span>
-<span>  <span class="va">metadata</span> <span class="op">=</span> <span class="va">metadata</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">vanderPloeg2024</span><span class="op">$</span><span class="va">red_fluorescence</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span></span>
+<span>  <span class="va">metadata</span> <span class="op">=</span> <span class="va">metadata</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">result</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">transformedSubjectLoadings</span> <span class="op">~</span> <span class="va">plaquepercent</span> <span class="op">+</span> <span class="va">bomppercent</span> <span class="op">+</span> <span class="va">Area_delta_R30</span> <span class="op">+</span> <span class="va">gender</span> <span class="op">+</span> <span class="va">age</span>, data<span class="op">=</span><span class="va">metadata</span><span class="op">)</span></span>
 <span>  </span>
@@ -190,198 +175,607 @@
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">summary_table</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">1</span>, <span class="va">processedTongue</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                         CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent -7.5822683 -0.0128447981932743 – -0.00231973832740774</span></span>
-<span><span class="co">#&gt; 2    bomppercent  0.9231415 -0.00236470070402032 – 0.00421098379021022</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  1.8514918  -0.00477870837570338 – 0.0084816919298291</span></span>
-<span><span class="co">#&gt; 4         gender  4.8154398   -0.0885416859076374 – 0.0981725654207313</span></span>
-<span><span class="co">#&gt; 5            age 14.8619327    0.0065466568449098 – 0.0231772086332818</span></span>
-<span><span class="co">#&gt;        P_value    P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.0060091824 0.015022956</span></span>
-<span><span class="co">#&gt; 2 0.5723172847 0.717991555</span></span>
-<span><span class="co">#&gt; 3 0.5743932438 0.717991555</span></span>
-<span><span class="co">#&gt; 4 0.9172000037 0.917200004</span></span>
-<span><span class="co">#&gt; 5 0.0009008391 0.004504195</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">2</span>, <span class="va">processedTongue</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                         CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  -1.470831 -0.00774087652102776 – 0.00479921503852629</span></span>
-<span><span class="co">#&gt; 2    bomppercent  -2.022641 -0.00593994325341581 – 0.00189466164910002</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  -4.994439  -0.0128939967625232 – 0.00290511849828337</span></span>
-<span><span class="co">#&gt; 4         gender -42.654012    -0.153884438874493 – 0.0685764152176233</span></span>
-<span><span class="co">#&gt; 5            age   3.393808   -0.0065134346803709 – 0.0133010504408422</span></span>
-<span><span class="co">#&gt;     P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.6368744 0.6368744</span></span>
-<span><span class="co">#&gt; 2 0.3017239 0.6142220</span></span>
-<span><span class="co">#&gt; 3 0.2077427 0.6142220</span></span>
-<span><span class="co">#&gt; 4 0.4415093 0.6142220</span></span>
-<span><span class="co">#&gt; 5 0.4913776 0.6142220</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowling</span>, <span class="fl">1</span>, <span class="va">processedLowling</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                         CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  -4.045863 -0.00898804283492606 – 0.00089631674972345</span></span>
-<span><span class="co">#&gt; 2    bomppercent  -2.596336 -0.00568403462309891 – 0.00049136303586988</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30 -10.214824 -0.0164414185575453 – -0.00398822907200625</span></span>
-<span><span class="co">#&gt; 4         gender -82.762670   -0.170436793375464 – 0.00491145387711936</span></span>
-<span><span class="co">#&gt; 5            age  -2.443801  -0.0102528940991745 – 0.00536529297646459</span></span>
-<span><span class="co">#&gt;       P_value   P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.105459929 0.13182491</span></span>
-<span><span class="co">#&gt; 2 0.096672023 0.13182491</span></span>
-<span><span class="co">#&gt; 3 0.002053051 0.01026526</span></span>
-<span><span class="co">#&gt; 4 0.063511447 0.13182491</span></span>
-<span><span class="co">#&gt; 5 0.529359622 0.52935962</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="fl">1</span>, <span class="va">processedLowinter</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                          CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  -2.434126  -0.00846635949340225 – 0.00359810745608451</span></span>
-<span><span class="co">#&gt; 2    bomppercent   3.424065 -0.000344660250091408 – 0.00719279124775479</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  -7.306946  -0.0149068863574801 – 0.000292994998243587</span></span>
-<span><span class="co">#&gt; 4         gender -78.160031     -0.185171674697412 – 0.0288516128522022</span></span>
-<span><span class="co">#&gt; 5            age  -5.976242    -0.015507719707431 – 0.00355523527425291</span></span>
-<span><span class="co">#&gt;      P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.41822203 0.4182220</span></span>
-<span><span class="co">#&gt; 2 0.07359514 0.1839878</span></span>
-<span><span class="co">#&gt; 3 0.05899468 0.1839878</span></span>
-<span><span class="co">#&gt; 4 0.14708562 0.2451427</span></span>
-<span><span class="co">#&gt; 5 0.21145149 0.2643144</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="fl">2</span>, <span class="va">processedLowinter</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                         CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  2.8311345 -0.00314110864245655 – 0.00880337766140032</span></span>
-<span><span class="co">#&gt; 2    bomppercent  3.9200707 0.000188824738963201 – 0.00765131658041496</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  0.3307337  -0.00719362590923236 – 0.0078550932288655</span></span>
-<span><span class="co">#&gt; 4         gender 19.8248632    -0.0861225539988762 – 0.125772280439005</span></span>
-<span><span class="co">#&gt; 5            age  3.2431239   -0.0061935634485384 – 0.0126798112014249</span></span>
-<span><span class="co">#&gt;      P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.34246585 0.8166329</span></span>
-<span><span class="co">#&gt; 2 0.04002742 0.2001371</span></span>
-<span><span class="co">#&gt; 3 0.92940501 0.9294050</span></span>
-<span><span class="co">#&gt; 4 0.70633476 0.8829185</span></span>
-<span><span class="co">#&gt; 5 0.48997974 0.8166329</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="fl">1</span>, <span class="va">processedUpling</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term  Estimate                                         CI   P_value</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  2.511420 -0.00356746805080028 – 0.00859030851362675 0.4073212</span></span>
-<span><span class="co">#&gt; 2    bomppercent  3.020891 -0.00077698350686279 – 0.00681876453237555 0.1153387</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  3.798073   -0.0038606477132654 – 0.0114567933392421 0.3209597</span></span>
-<span><span class="co">#&gt; 4         gender 34.561948     -0.0732773509874726 – 0.14240124637675 0.5195281</span></span>
-<span><span class="co">#&gt; 5            age -0.886911  -0.0104921073081138 – 0.00871828535120744 0.8523878</span></span>
-<span><span class="co">#&gt;    P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.6494101</span></span>
-<span><span class="co">#&gt; 2 0.5766934</span></span>
-<span><span class="co">#&gt; 3 0.6494101</span></span>
-<span><span class="co">#&gt; 4 0.6494101</span></span>
-<span><span class="co">#&gt; 5 0.8523878</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="fl">2</span>, <span class="va">processedUpling</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                        CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  2.5306859 -0.00356824415515762 – 0.0086296158954944</span></span>
-<span><span class="co">#&gt; 2    bomppercent  0.2034754 -0.0036069199493453 – 0.00401387083190149</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  8.1783956  0.00049442470478565 – 0.0158623664746058</span></span>
-<span><span class="co">#&gt; 4         gender 84.5889919   -0.0236058467630009 – 0.192783830463618</span></span>
-<span><span class="co">#&gt; 5            age  0.6422043  -0.00899465978137149 – 0.010279068431573</span></span>
-<span><span class="co">#&gt;      P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.40529959 0.6754993</span></span>
-<span><span class="co">#&gt; 2 0.91429122 0.9142912</span></span>
-<span><span class="co">#&gt; 3 0.03764326 0.1882163</span></span>
-<span><span class="co">#&gt; 4 0.12146608 0.3036652</span></span>
-<span><span class="co">#&gt; 5 0.89315990 0.9142912</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="fl">1</span>, <span class="va">processedUpinter</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term    Estimate                                          CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent   -2.814274  -0.00826061185340105 – 0.00263206420300627</span></span>
-<span><span class="co">#&gt; 2    bomppercent   -3.192434 -0.00659511342869162 – 0.000210244636499445</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30   -7.022575 -0.0138843530784991 – -0.000160797417321151</span></span>
-<span><span class="co">#&gt; 4         gender -110.454309    -0.207072184351565 – -0.0138364326547657</span></span>
-<span><span class="co">#&gt; 5            age   -1.389587   -0.00999529601516111 – 0.0072161227870755</span></span>
-<span><span class="co">#&gt;      P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.30136208 0.3767026</span></span>
-<span><span class="co">#&gt; 2 0.06506720 0.1084453</span></span>
-<span><span class="co">#&gt; 3 0.04513921 0.1084453</span></span>
-<span><span class="co">#&gt; 4 0.02624554 0.1084453</span></span>
-<span><span class="co">#&gt; 5 0.74501059 0.7450106</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="fl">2</span>, <span class="va">processedUpinter</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term  Estimate                                         CI   P_value</span></span>
-<span><span class="co">#&gt; 1  plaquepercent -2.710847 -0.00896645118894094 – 0.00354475799069917 0.3850003</span></span>
-<span><span class="co">#&gt; 2    bomppercent  2.584954 -0.00132332573260628 – 0.00649323448226151 0.1880057</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30 -1.600749 -0.00948211239065241 – 0.00628061429618728 0.6826150</span></span>
-<span><span class="co">#&gt; 4         gender 21.046166    -0.0899280749044152 – 0.132020406620614 0.7025612</span></span>
-<span><span class="co">#&gt; 5            age -7.790367  -0.0176747911938898 – 0.00209405714035475 0.1185832</span></span>
-<span><span class="co">#&gt;    P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.6416672</span></span>
-<span><span class="co">#&gt; 2 0.4700141</span></span>
-<span><span class="co">#&gt; 3 0.7025612</span></span>
-<span><span class="co">#&gt; 4 0.7025612</span></span>
-<span><span class="co">#&gt; 5 0.4700141</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">1</span>, <span class="va">processedSaliva</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term  Estimate                                         CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent -3.897532 -0.00981027366469069 – 0.00201521022558586</span></span>
-<span><span class="co">#&gt; 2    bomppercent  2.211191  -0.0014828807091094 – 0.00590526264067308</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  3.876556  -0.00357283918714432 – 0.0113259501964904</span></span>
-<span><span class="co">#&gt; 4         gender 69.061034    -0.0358308334679268 – 0.173952901665905</span></span>
-<span><span class="co">#&gt; 5            age 10.372091   0.00102942100161564 – 0.0197147610154618</span></span>
-<span><span class="co">#&gt;      P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.18946185 0.2905401</span></span>
-<span><span class="co">#&gt; 2 0.23243207 0.2905401</span></span>
-<span><span class="co">#&gt; 3 0.29800575 0.2980057</span></span>
-<span><span class="co">#&gt; 4 0.18996862 0.2905401</span></span>
-<span><span class="co">#&gt; 5 0.03057498 0.1528749</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">2</span>, <span class="va">processedSaliva</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term   Estimate                                         CI</span></span>
-<span><span class="co">#&gt; 1  plaquepercent  -4.132439 -0.00974061125477911 – 0.00147573233866911</span></span>
-<span><span class="co">#&gt; 2    bomppercent  -1.461212 -0.00496499904532008 – 0.00204257502925521</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30  -6.286724 -0.0133523944344635 – 0.000778946185827744</span></span>
-<span><span class="co">#&gt; 4         gender -73.637107    -0.173125908829778 – 0.0258516954196962</span></span>
-<span><span class="co">#&gt; 5            age  10.065789   0.00120436754605748 – 0.0189272104927239</span></span>
-<span><span class="co">#&gt;      P_value  P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.14364164 0.1795520</span></span>
-<span><span class="co">#&gt; 2 0.40295215 0.4029522</span></span>
-<span><span class="co">#&gt; 3 0.07947659 0.1795520</span></span>
-<span><span class="co">#&gt; 4 0.14191360 0.1795520</span></span>
-<span><span class="co">#&gt; 5 0.02715158 0.1357579</span></span>
-<span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_metabolomics</span>, <span class="fl">1</span>, <span class="va">processedMetabolomics</span><span class="op">)</span></span>
-<span><span class="co">#&gt;             Term  Estimate                                         CI   P_value</span></span>
-<span><span class="co">#&gt; 1  plaquepercent -4.322341  -0.0104408654355027 – 0.00179618427456725 0.1602392</span></span>
-<span><span class="co">#&gt; 2    bomppercent -1.786318 -0.00552918075883336 – 0.00195654395477168 0.3389415</span></span>
-<span><span class="co">#&gt; 3 Area_delta_R30 -3.987202  -0.0115380347230205 – 0.00356363052776998 0.2907738</span></span>
-<span><span class="co">#&gt; 4         gender 34.644787    -0.0718282432667193 – 0.141117817257719 0.5129001</span></span>
-<span><span class="co">#&gt; 5            age  7.326636  -0.00213977971574463 – 0.0167930523653612 0.1250078</span></span>
-<span><span class="co">#&gt;    P_adjust</span></span>
-<span><span class="co">#&gt; 1 0.4005979</span></span>
-<span><span class="co">#&gt; 2 0.4236768</span></span>
-<span><span class="co">#&gt; 3 0.4236768</span></span>
-<span><span class="co">#&gt; 4 0.5129001</span></span>
-<span><span class="co">#&gt; 5 0.4005979</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">colourCols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RFgroup"</span>, <span class="st">"Phylum"</span>, <span class="st">""</span><span class="op">)</span></span>
-<span><span class="va">legendTitles</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RF group"</span>, <span class="st">"Phylum"</span>, <span class="st">""</span><span class="op">)</span></span>
-<span><span class="va">xLabels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Subject index"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time index"</span><span class="op">)</span></span>
-<span><span class="va">legendColNums</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">arrangeModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">continuousModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">testFeatures</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>, <span class="va">metadata</span>, <span class="va">componentNum</span>, <span class="va">metadataVar</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">df</span> <span class="op">=</span> <span class="va">metadata</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">age_gender</span><span class="op">)</span></span>
+<span>  <span class="va">topIndices</span> <span class="op">=</span> <span class="va">metadata</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, Comp <span class="op">=</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">bottomIndices</span> <span class="op">=</span> <span class="va">metadata</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, Comp <span class="op">=</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">timepoint</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">Xhat</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/reinflateTensor.html">reinflateTensor</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span>, <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span>, <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">y</span> <span class="op">=</span> <span class="va">df</span><span class="op">[</span><span class="va">metadataVar</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Positive loadings:"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">Xhat</span><span class="op">[</span>,<span class="va">topIndices</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">timepoint</span><span class="op">]</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Negative loadings:"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">Xhat</span><span class="op">[</span>,<span class="va">bottomIndices</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="va">timepoint</span><span class="op">]</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_tongue</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedTongue</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Tongue"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-1.png" width="700"></p>
+<span><span class="va">plotFeatures</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mode2</span>, <span class="va">model</span>, <span class="va">componentNum</span>, <span class="va">flip</span><span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span><span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span><span class="op">(</span><span class="va">flip</span><span class="op">==</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">df</span> <span class="op">=</span> <span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Comp <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">!=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">Genus</span>, <span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span><span class="op">{</span></span>
+<span>    <span class="va">df</span> <span class="op">=</span> <span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Comp <span class="op">=</span> <span class="va">model</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="va">componentNum</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">!=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">Genus</span>, <span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10</span><span class="op">)</span>, <span class="va">df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">plot</span><span class="op">=</span><span class="va">df</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Comp</span>,y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Phylum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>stat<span class="op">=</span><span class="st">"identity"</span>, col<span class="op">=</span><span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_y_discrete</a></span><span class="op">(</span>label<span class="op">=</span><span class="va">df</span><span class="op">$</span><span class="va">name</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Phylum"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">phylum_colors</span> <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/pal_hue.html" class="external-link">hue_pal</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="processing">Processing<a class="anchor" aria-label="anchor" href="#processing"></a>
+</h2>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">processedTongue</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">tongue</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedLowling</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">lower_jaw_lingual</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedLowinter</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">lower_jaw_interproximal</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedUpling</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">upper_jaw_lingual</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedUpinter</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">upper_jaw_interproximal</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedSaliva</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">saliva</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">processedMetabolomics</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">metabolomics</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="model-selection">Model selection<a class="anchor" aria-label="anchor" href="#model-selection"></a>
+</h2>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_lowling</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedLowling</span>, <span class="fl">1</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Lowling"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-2.png" width="700"></p>
+<code class="sourceCode R"><span><span class="co"># assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># a = assessment_tongue$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># b = assessment_lowling$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># c = assessment_lowinter$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># d = assessment_upling$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># e = assessment_upinter$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># f = assessment_saliva$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># g = assessment_metab$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># ggarrange(a,b,c,d,e,f,g, nrow=4, ncol=2)</span></span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_lowinter</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedLowinter</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Lowinter"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-3.png" width="700"></p>
+<code class="sourceCode R"><span><span class="co"># colourCols = c("", "", "")</span></span>
+<span><span class="co"># legendTitles = c("RF group", "Phylum", "")</span></span>
+<span><span class="co"># xLabels = c("Subject index", "Feature index", "Time index")</span></span>
+<span><span class="co"># legendColNums = c(3,5,0)</span></span>
+<span><span class="co"># arrangeModes = c(TRUE, TRUE, FALSE)</span></span>
+<span><span class="co"># continuousModes = c(FALSE,FALSE,TRUE)</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_tongue$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_tongue$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_lowling = parafac4microbiome::assessModelStability(processedLowling, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_lowling$modelPlots[[1]]</span></span>
+<span><span class="co"># stability_lowling$modelPlots[[2]]</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_lowinter = parafac4microbiome::assessModelStability(processedLowinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_lowinter$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_lowinter$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_upling = parafac4microbiome::assessModelStability(processedUpling, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_upling$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_upling$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_upinter = parafac4microbiome::assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_upinter$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_upinter$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_saliva$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_metab = parafac4microbiome::assessModelStability(processedMetabolomics, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_metab$modelPlots[[1]]</span></span>
+<span><span class="co"># stability_metab$modelPlots[[2]]</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_upling</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedUpling</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Upling"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-4.png" width="700"></p>
+<code class="sourceCode R"><span><span class="co"># cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)</span></span>
+<span><span class="co"># cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)</span></span>
+<span><span class="co"># cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)</span></span>
+<span><span class="co"># cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)</span></span>
+<span><span class="co"># cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)</span></span>
+<span><span class="co"># cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)</span></span>
+<span><span class="co"># cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)</span></span>
+<span></span>
+<span><span class="co"># saveRDS(cp_tongue, "./cp_tongue.RDS")</span></span>
+<span><span class="co"># saveRDS(cp_lowling, "./cp_lowling.RDS")</span></span>
+<span><span class="co"># saveRDS(cp_lowinter, "./cp_lowinter.RDS")</span></span>
+<span><span class="co"># saveRDS(cp_upling, "./cp_upling.RDS")</span></span>
+<span><span class="co"># saveRDS(cp_upinter, "./cp_upinter.RDS")</span></span>
+<span><span class="co"># saveRDS(cp_saliva, "./cp_saliva.RDS")</span></span>
+<span><span class="co"># saveRDS(cp_metabolomics, "./cp_metabolomics.RDS")</span></span>
+<span></span>
+<span><span class="va">cp_tongue</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_tongue.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_lowling</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_lowling.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_lowinter</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_lowinter.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_upling</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_upling.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_upinter</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_upinter.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_saliva</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_saliva.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_metabolomics</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_metabolomics.RDS"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="tongue-microbiome">Tongue microbiome<a class="anchor" aria-label="anchor" href="#tongue-microbiome"></a>
+</h2>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_upinter</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedUpinter</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Upinter"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-5.png" width="700"></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_saliva</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedSaliva</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Saliva"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-6.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">1</span>, <span class="va">processedTongue</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term  Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent -7.085726 -0.0125436561188763 – -0.00162779504204587</span></span>
+<span><span class="co">## 2    bomppercent  1.189991 -0.00221993077742614 – 0.00459991246706438</span></span>
+<span><span class="co">## 3 Area_delta_R30  2.527468 -0.00434891510321956 – 0.00940385109507837</span></span>
+<span><span class="co">## 4         gender 11.109220    -0.0857143066863078 – 0.107932746588392</span></span>
+<span><span class="co">## 5            age 13.793423   0.00516939627811755 – 0.0224174495211815</span></span>
+<span><span class="co">##       P_value   P_adjust</span></span>
+<span><span class="co">## 1 0.012433782 0.03108445</span></span>
+<span><span class="co">## 2 0.483348754 0.60418594</span></span>
+<span><span class="co">## 3 0.460540316 0.60418594</span></span>
+<span><span class="co">## 4 0.817174114 0.81717411</span></span>
+<span><span class="co">## 5 0.002572981 0.01286491</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">cp_metabolomics</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedMetabolomics</span>, <span class="fl">1</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
-<span>  overallTitle <span class="op">=</span> <span class="st">"Metabolomics"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="TIFN2_files/figure-html/plot%20models-7.png" width="700"></p>
-  </main>
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">2</span>, <span class="va">processedTongue</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent  -0.877180 -0.00719453415388883 – 0.00544017410099945</span></span>
+<span><span class="co">## 2    bomppercent  -2.057600  -0.0060044593190253 – 0.00188925874240208</span></span>
+<span><span class="co">## 3 Area_delta_R30  -5.035993   -0.012995154144287 – 0.00292316758866404</span></span>
+<span><span class="co">## 4         gender -42.102114    -0.154171789877283 – 0.0699675615970461</span></span>
+<span><span class="co">## 5            age   2.246435  -0.00773555910142959 – 0.0122284290033156</span></span>
+<span><span class="co">##     P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.7796915 0.7796915</span></span>
+<span><span class="co">## 2 0.2971467 0.7428669</span></span>
+<span><span class="co">## 3 0.2074012 0.7428669</span></span>
+<span><span class="co">## 4 0.4507719 0.7512864</span></span>
+<span><span class="co">## 5 0.6505852 0.7796915</span></span></code></pre>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="va">processedTongue</span>, <span class="fl">1</span>, <span class="st">"plaquepercent"</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##      plaquepercent</span></span>
+<span><span class="co">## [1,]     0.3063565</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##      plaquepercent</span></span>
+<span><span class="co">## [1,]    -0.3063565</span></span></code></pre>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="va">processedTongue</span>, <span class="fl">1</span>, <span class="st">"age"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##             age</span></span>
+<span><span class="co">## [1,] -0.4538388</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##            age</span></span>
+<span><span class="co">## [1,] 0.4538388</span></span></code></pre>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedTongue</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_tongue</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">plaquepercent</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Plaque%"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">b</span> <span class="op">=</span> <span class="fu">plotFeatures</span><span class="op">(</span><span class="va">processedTongue</span><span class="op">$</span><span class="va">mode2</span>, <span class="va">cp_tongue</span>, <span class="fl">1</span>, flip<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="va">phylum_colors</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">c</span> <span class="op">=</span> <span class="va">processedTongue</span><span class="op">$</span><span class="va">mode3</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">cp_tongue</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, day<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">14</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>, fill <span class="op">=</span> <span class="st">"red"</span>, colour <span class="op">=</span> <span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [days]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span>, text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20tongue%20comp%201-1.png" width="700"></p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20tongue%20comp%201-2.png" width="700"></p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20tongue%20comp%201-3.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="lower-jaw-lingual-microbiome">Lower jaw lingual microbiome<a class="anchor" aria-label="anchor" href="#lower-jaw-lingual-microbiome"></a>
+</h2>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowling</span>, <span class="fl">1</span>, <span class="va">processedLowling</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                          CI</span></span>
+<span><span class="co">## 1  plaquepercent  -4.047703 -0.00897953402999654 – 0.000884127338494313</span></span>
+<span><span class="co">## 2    bomppercent  -2.597078 -0.00567831104112229 – 0.000484155105742315</span></span>
+<span><span class="co">## 3 Area_delta_R30 -10.235675  -0.0164492308704168 – -0.00402211882627686</span></span>
+<span><span class="co">## 4         gender -83.222465    -0.170712996229106 – 0.00426806527981913</span></span>
+<span><span class="co">## 5            age  -2.544554    -0.0103372952848458 – 0.0052481867268659</span></span>
+<span><span class="co">##      P_value    P_adjust</span></span>
+<span><span class="co">## 1 0.10460587 0.130757338</span></span>
+<span><span class="co">## 2 0.09591003 0.130757338</span></span>
+<span><span class="co">## 3 0.00197737 0.009886849</span></span>
+<span><span class="co">## 4 0.06160528 0.130757338</span></span>
+<span><span class="co">## 5 0.51174413 0.511744134</span></span></code></pre>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_lowling</span>, <span class="va">processedLowling</span>, <span class="fl">1</span>, <span class="st">"Area_delta_R30"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##      Area_delta_R30</span></span>
+<span><span class="co">## [1,]     -0.5298343</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##      Area_delta_R30</span></span>
+<span><span class="co">## [1,]      0.5298343</span></span></code></pre>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedLowling</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_lowling</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Area_delta_R30</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"RF%"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">b</span> <span class="op">=</span> <span class="fu">plotFeatures</span><span class="op">(</span><span class="va">processedLowling</span><span class="op">$</span><span class="va">mode2</span>, <span class="va">cp_lowling</span>, <span class="fl">1</span>, flip<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="va">phylum_colors</span><span class="op">[</span><span class="op">-</span><span class="fl">7</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">c</span> <span class="op">=</span> <span class="va">processedLowling</span><span class="op">$</span><span class="va">mode3</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_lowling</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, day<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">14</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>, fill <span class="op">=</span> <span class="st">"red"</span>, colour <span class="op">=</span> <span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [days]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span>, text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20lowling%20comp%201-1.png" width="700"></p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20lowling%20comp%201-2.png" width="700"></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20lowling%20comp%201-3.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="lower-jaw-interproximal-microbiome">Lower jaw interproximal microbiome<a class="anchor" aria-label="anchor" href="#lower-jaw-interproximal-microbiome"></a>
+</h2>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="fl">1</span>, <span class="va">processedLowinter</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term    Estimate                                          CI</span></span>
+<span><span class="co">## 1  plaquepercent  -2.8231325  -0.00885260016583814 – 0.00320633515325942</span></span>
+<span><span class="co">## 2    bomppercent  -3.6808351 -0.00744783286106304 – 8.61626701053834e-05</span></span>
+<span><span class="co">## 3 Area_delta_R30  -0.6104507  -0.00820690677640243 – 0.00698600534263869</span></span>
+<span><span class="co">## 4         gender -24.7799778     -0.131742556135758 – 0.0821826004540417</span></span>
+<span><span class="co">## 5            age  -3.2188894   -0.0127459966584142 – 0.00630821784418125</span></span>
+<span><span class="co">##      P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.34835493 0.8013102</span></span>
+<span><span class="co">## 2 0.05517984 0.2758992</span></span>
+<span><span class="co">## 3 0.87134707 0.8713471</span></span>
+<span><span class="co">## 4 0.64104814 0.8013102</span></span>
+<span><span class="co">## 5 0.49729155 0.8013102</span></span></code></pre>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="fl">2</span>, <span class="va">processedLowinter</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term  Estimate                                           CI</span></span>
+<span><span class="co">## 1  plaquepercent  2.156444    -0.00382845328747255 – 0.0081413416846705</span></span>
+<span><span class="co">## 2    bomppercent -4.091747 -0.00783089859963512 – -0.000352594798941325</span></span>
+<span><span class="co">## 3 Area_delta_R30  7.257480   -0.000282823087328943 – 0.0147977821470906</span></span>
+<span><span class="co">## 4         gender 74.027343        -0.032144561763505 – 0.18019924770268</span></span>
+<span><span class="co">## 5            age  5.422361     -0.0040343211065686 – 0.0148790435409806</span></span>
+<span><span class="co">##      P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.46935734 0.4693573</span></span>
+<span><span class="co">## 2 0.03287750 0.1468343</span></span>
+<span><span class="co">## 3 0.05873372 0.1468343</span></span>
+<span><span class="co">## 4 0.16576694 0.2762782</span></span>
+<span><span class="co">## 5 0.25228070 0.3153509</span></span></code></pre>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="va">processedLowinter</span>, <span class="fl">2</span>, <span class="st">"bomppercent"</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##      bomppercent</span></span>
+<span><span class="co">## [1,]   0.2341633</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##      bomppercent</span></span>
+<span><span class="co">## [1,]  -0.2341633</span></span></code></pre>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedLowinter</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_lowinter</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">bomppercent</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"BOMP%"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">b</span> <span class="op">=</span> <span class="fu">plotFeatures</span><span class="op">(</span><span class="va">processedLowinter</span><span class="op">$</span><span class="va">mode2</span>, <span class="va">cp_lowinter</span>, <span class="fl">2</span>, flip<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="va">phylum_colors</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">c</span> <span class="op">=</span> <span class="va">processedLowinter</span><span class="op">$</span><span class="va">mode3</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">cp_lowinter</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, day<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">14</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>, fill <span class="op">=</span> <span class="st">"red"</span>, colour <span class="op">=</span> <span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [days]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span>, text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20lowinter%20comp%202-1.png" width="700"></p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20lowinter%20comp%202-2.png" width="700"></p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20lowinter%20comp%202-3.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="upper-jaw-lingual-microbiome">Upper jaw lingual microbiome<a class="anchor" aria-label="anchor" href="#upper-jaw-lingual-microbiome"></a>
+</h2>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="fl">1</span>, <span class="va">processedUpling</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                          CI</span></span>
+<span><span class="co">## 1  plaquepercent  3.5957413  -0.00193167844376722 – 0.00912316112826477</span></span>
+<span><span class="co">## 2    bomppercent  2.5813448 -0.000871991211114323 – 0.00603468087307641</span></span>
+<span><span class="co">## 3 Area_delta_R30  7.9435166   0.000979584806484587 – 0.0149074483917542</span></span>
+<span><span class="co">## 4         gender 78.4426156     -0.0196136482063289 – 0.176498879470703</span></span>
+<span><span class="co">## 5            age -0.4196712  -0.00915349714410007 – 0.00831415476076494</span></span>
+<span><span class="co">##      P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.19519152 0.2439894</span></span>
+<span><span class="co">## 2 0.13812418 0.2302070</span></span>
+<span><span class="co">## 3 0.02655809 0.1327905</span></span>
+<span><span class="co">## 4 0.11334141 0.2302070</span></span>
+<span><span class="co">## 5 0.92284676 0.9228468</span></span></code></pre>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="fl">2</span>, <span class="va">processedUpling</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term    Estimate                                          CI</span></span>
+<span><span class="co">## 1  plaquepercent  -2.5436852   -0.0086495593078846 – 0.00356218888854485</span></span>
+<span><span class="co">## 2    bomppercent  -0.1702389   -0.0039849726780106 – 0.00364449492465157</span></span>
+<span><span class="co">## 3 Area_delta_R30  -8.1288343 -0.0158215539877252 – -0.000436114704840301</span></span>
+<span><span class="co">## 4         gender -85.1621897     -0.193480215958621 – 0.0231558365641216</span></span>
+<span><span class="co">## 5            age  -0.6466179   -0.0102944542293067 – 0.00900121851702191</span></span>
+<span><span class="co">##      P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.40344530 0.6724088</span></span>
+<span><span class="co">## 2 0.92832935 0.9283294</span></span>
+<span><span class="co">## 3 0.03895533 0.1947767</span></span>
+<span><span class="co">## 4 0.11945334 0.2986333</span></span>
+<span><span class="co">## 5 0.89255185 0.9283294</span></span></code></pre>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="va">processedUpling</span>, <span class="fl">2</span>, <span class="st">"Area_delta_R30"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##      Area_delta_R30</span></span>
+<span><span class="co">## [1,]     -0.3280193</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##      Area_delta_R30</span></span>
+<span><span class="co">## [1,]      0.3280193</span></span></code></pre>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedUpling</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_upling</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Area_delta_R30</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"RF%"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">b</span> <span class="op">=</span> <span class="fu">plotFeatures</span><span class="op">(</span><span class="va">processedUpling</span><span class="op">$</span><span class="va">mode2</span>, <span class="va">cp_upling</span>, <span class="fl">2</span>, flip<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="va">phylum_colors</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">c</span> <span class="op">=</span> <span class="va">processedUpling</span><span class="op">$</span><span class="va">mode3</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_upling</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, day<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">14</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>, fill <span class="op">=</span> <span class="st">"red"</span>, colour <span class="op">=</span> <span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [days]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span>, text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20upling%20comp%202-1.png" width="700"></p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20upling%20comp%202-2.png" width="700"></p>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20upling%20comp%202-3.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="upper-jaw-interproximal-microbiome">Upper jaw interproximal microbiome<a class="anchor" aria-label="anchor" href="#upper-jaw-interproximal-microbiome"></a>
+</h2>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="fl">1</span>, <span class="va">processedUpinter</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term    Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent   2.1326839 -0.00328755891087678 – 0.00755292666044199</span></span>
+<span><span class="co">## 2    bomppercent   3.7419573 0.000355581649636956 – 0.00712833294888875</span></span>
+<span><span class="co">## 3 Area_delta_R30   6.3702807  -0.000458619993549555 – 0.013199181483497</span></span>
+<span><span class="co">## 4         gender 114.7064044     0.0185514573648732 – 0.210861351396827</span></span>
+<span><span class="co">## 5            age  -0.6618349 -0.00922631147351948 – 0.00790264161581984</span></span>
+<span><span class="co">##      P_value   P_adjust</span></span>
+<span><span class="co">## 1 0.42980563 0.53725704</span></span>
+<span><span class="co">## 2 0.03130954 0.07827386</span></span>
+<span><span class="co">## 3 0.06654502 0.11090837</span></span>
+<span><span class="co">## 4 0.02076356 0.07827386</span></span>
+<span><span class="co">## 5 0.87624079 0.87624079</span></span></code></pre>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="fl">2</span>, <span class="va">processedUpinter</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent -2.4316053 -0.00867251409160288 – 0.00380930341158905</span></span>
+<span><span class="co">## 2    bomppercent  2.7501722 -0.00114892641938689 – 0.00664927091740296</span></span>
+<span><span class="co">## 3 Area_delta_R30 -0.9668053  -0.0088296535710741 – 0.00689604288502859</span></span>
+<span><span class="co">## 4         gender 30.5288503    -0.0801846866985154 – 0.141242387353944</span></span>
+<span><span class="co">## 5            age -7.7000402  -0.0175612435880203 – 0.00216116322441363</span></span>
+<span><span class="co">##     P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.4342843 0.7238072</span></span>
+<span><span class="co">## 2 0.1610410 0.4026024</span></span>
+<span><span class="co">## 3 0.8043410 0.8043410</span></span>
+<span><span class="co">## 4 0.5791848 0.7239810</span></span>
+<span><span class="co">## 5 0.1219174 0.4026024</span></span></code></pre>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="va">processedUpinter</span>, <span class="fl">1</span>, <span class="st">"bomppercent"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##      bomppercent</span></span>
+<span><span class="co">## [1,]  -0.4565796</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##      bomppercent</span></span>
+<span><span class="co">## [1,]   0.4565796</span></span></code></pre>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="va">processedUpinter</span>, <span class="fl">1</span>, <span class="st">"gender"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##          gender</span></span>
+<span><span class="co">## [1,] -0.2166038</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##         gender</span></span>
+<span><span class="co">## [1,] 0.2166038</span></span></code></pre>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedUpinter</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_upinter</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">bomppercent</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"BOMP%"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">b</span> <span class="op">=</span> <span class="fu">plotFeatures</span><span class="op">(</span><span class="va">processedUpinter</span><span class="op">$</span><span class="va">mode2</span>, <span class="va">cp_upinter</span>, <span class="fl">1</span>, flip<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="va">phylum_colors</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">c</span> <span class="op">=</span> <span class="va">processedUpinter</span><span class="op">$</span><span class="va">mode3</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">cp_upinter</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span>, day<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">14</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>, fill <span class="op">=</span> <span class="st">"red"</span>, colour <span class="op">=</span> <span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [days]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span>, text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20upinter%20comp%201-1.png" width="700"></p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20upinter%20comp%201-2.png" width="700"></p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20upinter%20comp%201-3.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="salivary-microbiome">Salivary microbiome<a class="anchor" aria-label="anchor" href="#salivary-microbiome"></a>
+</h2>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">1</span>, <span class="va">processedSaliva</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent   2.410738 -0.00355831149506644 – 0.00837978682976563</span></span>
+<span><span class="co">## 2    bomppercent  -2.504120 -0.00623337039896853 – 0.00122513045951894</span></span>
+<span><span class="co">## 3 Area_delta_R30  -5.519053  -0.0130393880948642 – 0.00200128290288186</span></span>
+<span><span class="co">## 4         gender -86.946657    -0.192837413136006 – 0.0189440987425446</span></span>
+<span><span class="co">## 5            age  -7.035609  -0.0164672494454233 – 0.00239603161672677</span></span>
+<span><span class="co">##     P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.4178187 0.4178187</span></span>
+<span><span class="co">## 2 0.1815319 0.2269149</span></span>
+<span><span class="co">## 3 0.1452174 0.2269149</span></span>
+<span><span class="co">## 4 0.1044564 0.2269149</span></span>
+<span><span class="co">## 5 0.1389100 0.2269149</span></span></code></pre>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">2</span>, <span class="va">processedSaliva</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent   4.868327 -0.000666119508513777 – 0.0104027729980185</span></span>
+<span><span class="co">## 2    bomppercent   1.049513 -0.00240821269203614 – 0.00450723916772543</span></span>
+<span><span class="co">## 3 Area_delta_R30   5.576203  -0.00139658153889448 – 0.0125489871748319</span></span>
+<span><span class="co">## 4         gender  59.330741    -0.0388501724466451 – 0.157511653873589</span></span>
+<span><span class="co">## 5            age -11.908698 -0.0206536259300458 – -0.00316376911062791</span></span>
+<span><span class="co">##      P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.08280442 0.1890952</span></span>
+<span><span class="co">## 2 0.54175458 0.5417546</span></span>
+<span><span class="co">## 3 0.11345712 0.1890952</span></span>
+<span><span class="co">## 4 0.22808875 0.2851109</span></span>
+<span><span class="co">## 5 0.00903208 0.0451604</span></span></code></pre>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="va">processedSaliva</span>, <span class="fl">2</span>, <span class="st">"age"</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
+<pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
+<span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "Positive loadings:"</span></span>
+<span><span class="co">##            age</span></span>
+<span><span class="co">## [1,] 0.3592963</span></span>
+<span><span class="co">## [1] "Negative loadings:"</span></span>
+<span><span class="co">##             age</span></span>
+<span><span class="co">## [1,] -0.3592963</span></span></code></pre>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedSaliva</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_saliva</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">age</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Age"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_cor.html" class="external-link">stat_cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">b</span> <span class="op">=</span> <span class="fu">plotFeatures</span><span class="op">(</span><span class="va">processedSaliva</span><span class="op">$</span><span class="va">mode2</span>, <span class="va">cp_saliva</span>, <span class="fl">2</span>, flip<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="va">phylum_colors</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">c</span> <span class="op">=</span> <span class="va">processedSaliva</span><span class="op">$</span><span class="va">mode3</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">cp_saliva</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span>, day<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">14</span>,<span class="fl">0</span>,<span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">9</span>,<span class="fl">14</span>,<span class="fl">21</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>,y<span class="op">=</span><span class="va">Component_1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">14</span>, ymin <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, ymax <span class="op">=</span> <span class="cn">Inf</span>, fill <span class="op">=</span> <span class="st">"red"</span>, colour <span class="op">=</span> <span class="st">"black"</span>, alpha<span class="op">=</span><span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [days]"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span>, text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">a</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20saliva%20comp%202-1.png" width="700"></p>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20saliva%20comp%202-2.png" width="700"></p>
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
+<p><img src="TIFN2_files/figure-html/plot%20cp%20saliva%20comp%202-3.png" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="salivary-metabolomics">Salivary metabolomics<a class="anchor" aria-label="anchor" href="#salivary-metabolomics"></a>
+</h2>
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_metabolomics</span>, <span class="fl">1</span>, <span class="va">processedMetabolomics</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
+<span><span class="co">## 1  plaquepercent   4.340779  -0.00177252492396623 – 0.0104540835526603</span></span>
+<span><span class="co">## 2    bomppercent   1.782998 -0.00195667074036764 – 0.00552266679650121</span></span>
+<span><span class="co">## 3 Area_delta_R30   3.973073  -0.00357131688284603 – 0.0115174629081315</span></span>
+<span><span class="co">## 4         gender -35.447349    -0.141829531868009 – 0.0709348329387957</span></span>
+<span><span class="co">## 5            age  -7.356789  -0.0168151275419762 – 0.00210155014536747</span></span>
+<span><span class="co">##     P_value  P_adjust</span></span>
+<span><span class="co">## 1 0.1581698 0.3954244</span></span>
+<span><span class="co">## 2 0.3394212 0.4242765</span></span>
+<span><span class="co">## 3 0.2920535 0.4242765</span></span>
+<span><span class="co">## 4 0.5028867 0.5028867</span></span>
+<span><span class="co">## 5 0.1232062 0.3954244</span></span></code></pre>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
