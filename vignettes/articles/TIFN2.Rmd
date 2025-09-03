@@ -14,6 +14,7 @@ library(NPLStoolbox)
 library(CMTFtoolbox)
 library(ggplot2)
 library(ggpubr)
+library(scales)
 ```
 
 ```{r Import red fluorescence data}
