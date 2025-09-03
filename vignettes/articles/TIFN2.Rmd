@@ -456,6 +456,6 @@ c
 
 # Salivary metabolomics
 
-```{r saliva test subject mode}
+```{r metabolomics test subject mode}
 testMetadata(cp_metabolomics, 1, processedMetabolomics)
 ```
