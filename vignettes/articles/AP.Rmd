@@ -106,7 +106,7 @@ CP was applied to capture the dominant source of variation within the longitudin
 # cp_cytokines_case = parafac4microbiome::parafac(processedCytokines_case$data, nfac=3, nstart=100)
 cp_cytokines_case = readRDS("./AP/cp_cytokines_case.RDS")
 
-cp_cytokines$varExp
+cp_cytokines_case$varExp
 ```
 
 Therefore, a three-component CP model was selected, explaining 36.6% of the variation. MLR analysis revealed that the first CP component captured variation associated with subject gender, while the second component was not interpretable, and the third component captured variation associated with a mixture of age and pain perception.
