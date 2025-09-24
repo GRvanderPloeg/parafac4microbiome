@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>AP • parafac4microbiome</title>
+<title>AP: pain perception in apical periodontitis • parafac4microbiome</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="AP">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="AP: pain perception in apical periodontitis">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -38,13 +38,13 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/AP.html">AP</a></li>
+<li><a class="dropdown-item" href="../articles/AP.html">AP: pain perception in apical periodontitis</a></li>
     <li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
-    <li><a class="dropdown-item" href="../articles/GOHTRANS.html">GOHTRANS</a></li>
+    <li><a class="dropdown-item" href="../articles/GOHTRANS.html">GOHTRANS: gender-affirming hormone therapy</a></li>
     <li><a class="dropdown-item" href="../articles/Introduction.html">Introduction</a></li>
-    <li><a class="dropdown-item" href="../articles/MAINHEALTH.html">MAINHEALTH</a></li>
+    <li><a class="dropdown-item" href="../articles/MAINHEALTH.html">MAINHEALTH: intergenerational obesity transmission</a></li>
     <li><a class="dropdown-item" href="../articles/Shao2019.html">Shao2019</a></li>
-    <li><a class="dropdown-item" href="../articles/TIFN2.html">TIFN2</a></li>
+    <li><a class="dropdown-item" href="../articles/TIFN2.html">TIFN2: Red fluorescent plaque development in gingivitis</a></li>
     <li><a class="dropdown-item" href="../articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
   </ul>
 </li>
@@ -67,9 +67,9 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>AP</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>AP: pain perception in apical periodontitis</h1>
             
-            <h4 data-toc-skip class="date">2025-05-19</h4>
+            <h4 data-toc-skip class="date">2025-08-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/vignettes/articles/AP.Rmd" class="external-link"><code>vignettes/articles/AP.Rmd</code></a></small>
       <div class="d-none name"><code>AP.Rmd</code></div>
@@ -77,6 +77,12 @@
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>This article presents the CP results of the AP dataset discussed in
+Chapter 7 of my dissertation.</p>
+</div>
 <div class="section level2">
 <h2 id="preamble">Preamble<a class="anchor" aria-label="anchor" href="#preamble"></a>
 </h2>
@@ -143,29 +149,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">cytokines_meta_data</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SubjectID"</span>, <span class="st">"Visit"</span>, <span class="st">"Gender"</span>, <span class="st">"Age"</span>, <span class="st">"Pain_noPain"</span>, <span class="st">"case_control"</span><span class="op">)</span></span>
 <span><span class="va">ageInfo</span> <span class="op">=</span> <span class="va">cytokines_meta_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SubjectID</span>, <span class="va">Age</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Full cohort</span></span>
-<span><span class="va">processedCytokines_full</span> <span class="op">=</span> <span class="fu">CMTFtoolbox</span><span class="fu">::</span><span class="va"><a href="https://grvanderploeg.com/CMTFtoolbox/reference/Georgiou2025.html" class="external-link">Georgiou2025</a></span><span class="op">$</span><span class="va">Inflammatory_mediators</span></span>
-<span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span> <span class="op">+</span> <span class="fl">0.005</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Remove outlier subjects: A11-8</span></span>
-<span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="op">-</span><span class="fl">25</span>,,<span class="op">]</span></span>
-<span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">mode1</span> <span class="op">=</span> <span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">mode1</span><span class="op">[</span><span class="op">-</span><span class="fl">25</span>,<span class="op">]</span></span>
-<span></span>
-<span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayCenter.html">multiwayCenter</a></span><span class="op">(</span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayScale.html">multiwayScale</a></span><span class="op">(</span><span class="va">processedCytokines_full</span><span class="op">$</span><span class="va">data</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Control only subcohort</span></span>
-<span><span class="va">processedCytokines_control</span> <span class="op">=</span> <span class="fu">CMTFtoolbox</span><span class="fu">::</span><span class="va"><a href="https://grvanderploeg.com/CMTFtoolbox/reference/Georgiou2025.html" class="external-link">Georgiou2025</a></span><span class="op">$</span><span class="va">Inflammatory_mediators</span></span>
-<span></span>
-<span><span class="va">mask</span> <span class="op">=</span> <span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">mode1</span><span class="op">$</span><span class="va">case_control</span> <span class="op">==</span> <span class="st">"control"</span></span>
-<span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span><span class="op">[</span><span class="va">mask</span>,,<span class="op">]</span></span>
-<span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">mode1</span> <span class="op">=</span> <span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">mode1</span><span class="op">[</span><span class="va">mask</span>,<span class="op">]</span></span>
-<span></span>
-<span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span> <span class="op">+</span> <span class="fl">0.005</span><span class="op">)</span></span>
-<span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayCenter.html">multiwayCenter</a></span><span class="op">(</span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayScale.html">multiwayScale</a></span><span class="op">(</span><span class="va">processedCytokines_control</span><span class="op">$</span><span class="va">data</span>, <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Case only subcohort</span></span>
+<code class="sourceCode R"><span><span class="co"># Case only subcohort</span></span>
 <span><span class="va">processedCytokines_case</span> <span class="op">=</span> <span class="fu">CMTFtoolbox</span><span class="fu">::</span><span class="va"><a href="https://grvanderploeg.com/CMTFtoolbox/reference/Georgiou2025.html" class="external-link">Georgiou2025</a></span><span class="op">$</span><span class="va">Inflammatory_mediators</span></span>
 <span></span>
 <span><span class="va">mask</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span><span class="op">$</span><span class="va">case_control</span> <span class="op">==</span> <span class="st">"case"</span></span>
@@ -180,65 +164,44 @@
 <span><span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayCenter.html">multiwayCenter</a></span><span class="op">(</span><span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">data</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayScale.html">multiwayScale</a></span><span class="op">(</span><span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">data</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># assessment_cytokines_full = parafac4microbiome::assessModelQuality(processedCytokines_full$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_cytokines_full$plots$overview # def 2</span></span>
-<span><span class="co">#</span></span>
-<span><span class="co"># assessment_cytokines_control = parafac4microbiome::assessModelQuality(processedCytokines_control$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_cytokines_control$plots$overview # def 1</span></span>
-<span><span class="co">#</span></span>
-<span><span class="co"># assessment_cytokines_case = parafac4microbiome::assessModelQuality(processedCytokines_case$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_cytokines_case$plots$overview # 2-4</span></span>
-<span><span class="co">#</span></span>
-<span><span class="co"># saveRDS(assessment_cytokines_full, "./CP_assessment_cytokines_full.RDS")</span></span>
-<span><span class="co"># saveRDS(assessment_cytokines_control, "./CP_assessment_cytokines_control.RDS")</span></span>
-<span><span class="co"># saveRDS(assessment_cytokines_case, "./CP_assessment_cytokines_case.RDS")</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_cytokines_full = readRDS("./CP_assessment_cytokines_full.RDS")</span></span>
-<span><span class="co"># assessment_cytokines_full$plots$overview</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_cytokines_control = readRDS("./CP_assessment_cytokines_control.RDS")</span></span>
-<span><span class="co"># assessment_cytokines_control$plots$overview</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_cytokines_case = readRDS("./CP_assessment_cytokines_case.RDS")</span></span>
-<span><span class="co"># assessment_cytokines_case$plots$overview</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># a = assessment_cytokines_full$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># b = assessment_cytokines_control$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># c = assessment_cytokines_case$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># ggarrange(a,b,c, nrow=1, ncol=3)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">colourCols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">legendTitles</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">xLabels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Subject index"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time index"</span><span class="op">)</span></span>
+<span><span class="va">legendColNums</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">arrangeModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">continuousModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="inflammatory-mediators">Inflammatory mediators<a class="anchor" aria-label="anchor" href="#inflammatory-mediators"></a>
+</h2>
+<p>CP was applied to capture the dominant source of variation within the
+longitudinally measured inflammatory mediator data block. The model
+selection procedure indicates that CORCONDIA scores were inconclusive
+and loadings were unstable using four CP components. The commented code
+below performs the procedure, and is not rerun here due to computational
+limitations.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># colourCols = c("", "", "")</span></span>
-<span><span class="co"># legendTitles = c("", "", "")</span></span>
-<span><span class="co"># xLabels = c("Subject index", "Feature index", "Time index")</span></span>
-<span><span class="co"># legendColNums = c(2,5,0)</span></span>
-<span><span class="co"># arrangeModes = c(FALSE, FALSE, FALSE)</span></span>
-<span><span class="co"># continuousModes = c(FALSE,FALSE,TRUE)</span></span>
-<span><span class="co"># </span></span>
+<code class="sourceCode R"><span><span class="co"># assessment_cytokines_case = parafac4microbiome::assessModelQuality(processedCytokines_case$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_cytokines_case$plots$overview</span></span>
+<span><span class="co"># assessment_cytokines_case$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
 <span><span class="co"># stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines_case, maxNumComponents=5, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
 <span><span class="co"># stability_cytokines$modelPlots[[2]]</span></span>
 <span><span class="co"># stability_cytokines$modelPlots[[3]]</span></span>
 <span><span class="co"># stability_cytokines$modelPlots[[4]]</span></span>
 <span><span class="co"># stability_cytokines$modelPlots[[5]]</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># cp_cytokines_full = parafac4microbiome::parafac(processedCytokines_full$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_cytokines_control = parafac4microbiome::parafac(processedCytokines_control$data, nfac=1, nstart=100)</span></span>
-<span><span class="co"># cp_cytokines_case = parafac4microbiome::parafac(processedCytokines_case$data, nfac=3, nstart=100)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># saveRDS(cp_cytokines_full, "./cp_cytokines_full.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_cytokines_control, "./cp_cytokines_control.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_cytokines_case, "./cp_cytokines_case.RDS")</span></span>
+<code class="sourceCode R"><span><span class="co"># cp_cytokines_case = parafac4microbiome::parafac(processedCytokines_case$data, nfac=3, nstart=100)</span></span>
+<span><span class="va">cp_cytokines_case</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./AP/cp_cytokines_case.RDS"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cp_cytokines_full</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./AP/cp_cytokines_full.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_cytokines_control</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./AP/cp_cytokines_control.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_cytokines_case</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./AP/cp_cytokines_case.RDS"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="inflammatory-mediators">Inflammatory mediators<a class="anchor" aria-label="anchor" href="#inflammatory-mediators"></a>
-</h2>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<span><span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 36.56742</span></span></code></pre>
+<p>Therefore, a three-component CP model was selected, explaining 36.6%
+of the variation. MLR analysis revealed that the first CP component
+captured variation associated with subject gender, while the second
+component was not interpretable, and the third component captured
+variation associated with a mixture of age and pain perception.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_cytokines_case</span>, <span class="fl">1</span>, <span class="va">processedCytokines_case</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
 <span><span class="co">## 1         Gender 164.949044     0.0072276098315647 – 0.322670478266166</span></span>
@@ -248,7 +211,7 @@
 <span><span class="co">## 1 0.04120853 0.1236256</span></span>
 <span><span class="co">## 2 0.45964329 0.4596433</span></span>
 <span><span class="co">## 3 0.24705950 0.3705893</span></span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_cytokines_case</span>, <span class="fl">2</span>, <span class="va">processedCytokines_case</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                        CI   P_value</span></span>
 <span><span class="co">## 1         Gender -10.645881    -0.188082738359188 – 0.166790975410106 0.9018900</span></span>
@@ -258,7 +221,7 @@
 <span><span class="co">## 1  0.90189</span></span>
 <span><span class="co">## 2  0.90189</span></span>
 <span><span class="co">## 3  0.90189</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_cytokines_case</span>, <span class="fl">3</span>, <span class="va">processedCytokines_case</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term    Estimate                                         CI</span></span>
 <span><span class="co">## 1         Gender   97.432563    -0.0307466851714757 – 0.225611811849372</span></span>
@@ -268,7 +231,7 @@
 <span><span class="co">## 1 0.1288756411 0.128875641</span></span>
 <span><span class="co">## 2 0.0005117721 0.001535316</span></span>
 <span><span class="co">## 3 0.0324479469 0.048671920</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check sign</span></span>
 <span><span class="va">topIndices</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, Comp <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">bottomIndices</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, Comp <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -277,16 +240,16 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Positive loadings:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Positive loadings:"</span></span></code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">Xhat</span><span class="op">[</span>,<span class="va">topIndices</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span><span class="op">$</span><span class="va">Gender</span><span class="op">)</span><span class="op">)</span>, use<span class="op">=</span><span class="st">"pairwise.complete.obs"</span><span class="op">)</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] -0.4193432</span></span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Negative loadings:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Negative loadings:"</span></span></code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">Xhat</span><span class="op">[</span>,<span class="va">bottomIndices</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span>,<span class="fl">2</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span><span class="op">$</span><span class="va">Gender</span><span class="op">)</span><span class="op">)</span>, use<span class="op">=</span><span class="st">"pairwise.complete.obs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.4193432</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span><span class="va">a</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Comp1 <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -315,18 +278,18 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>,axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">x</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">x</span>, which will replace the existing scale.</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span> <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>value<span class="op">=</span><span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">value</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>timepoint<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">6</span>,<span class="op">-</span><span class="fl">3</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">6</span>,<span class="fl">13</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">timepoint</span>,y<span class="op">=</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [weeks]"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="AP_files/figure-html/case-only%20cp%20component%201-1.png" width="700"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="AP_files/figure-html/case-only%20cp%20component%201-2.png" width="700"></p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="AP_files/figure-html/case-only%20cp%20component%201-3.png" width="700"></p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check sign</span></span>
 <span><span class="va">topIndices</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, Comp <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">bottomIndices</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>index<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span>, Comp <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html" class="external-link">desc</a></span><span class="op">(</span><span class="va">Comp</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -335,20 +298,20 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Positive loadings:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Positive loadings:"</span></span></code></pre>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">Xhat</span><span class="op">[</span>,<span class="va">topIndices</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,<span class="fl">2</span><span class="op">]</span>, <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ageInfo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Age</span><span class="op">)</span>, use<span class="op">=</span><span class="st">"pairwise.complete.obs"</span><span class="op">)</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(SubjectID)`</span></span></code></pre>
 <pre><code><span><span class="co">##            Age</span></span>
 <span><span class="co">## [1,] 0.5797891</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="st">"Negative loadings:"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Negative loadings:"</span></span></code></pre>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">Xhat</span><span class="op">[</span>,<span class="va">bottomIndices</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span>,<span class="fl">2</span><span class="op">]</span>, <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ageInfo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Age</span><span class="op">)</span>, use<span class="op">=</span><span class="st">"pairwise.complete.obs"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(SubjectID)`</span></span></code></pre>
 <pre><code><span><span class="co">##             Age</span></span>
 <span><span class="co">## [1,] -0.5797891</span></span></code></pre>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Plot</span></span>
 <span><span class="va">a</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ageInfo</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -360,7 +323,7 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(SubjectID)`</span></span></code></pre>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">temp</span> <span class="op">=</span> <span class="va">processedCytokines_case</span><span class="op">$</span><span class="va">mode2</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -377,15 +340,15 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span>,axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Scale for <span style="color: #00BB00;">x</span> is already present.</span></span>
 <span><span class="co">## Adding another scale for <span style="color: #00BB00;">x</span>, which will replace the existing scale.</span></span></code></pre>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span> <span class="op">=</span> <span class="va">cp_cytokines_case</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">3</span><span class="op">]</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>value<span class="op">=</span><span class="op">-</span><span class="fl">1</span><span class="op">*</span><span class="va">value</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>timepoint<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">6</span>,<span class="op">-</span><span class="fl">3</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">6</span>,<span class="fl">13</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">timepoint</span>,y<span class="op">=</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Time point [weeks]"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Loading"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>text<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="AP_files/figure-html/case-only%20cp%20component%203-1.png" width="700"></p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="AP_files/figure-html/case-only%20cp%20component%203-2.png" width="700"></p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="AP_files/figure-html/case-only%20cp%20component%203-3.png" width="700"></p>
 </div>

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>GOHTRANS • parafac4microbiome</title>
+<title>GOHTRANS: gender-affirming hormone therapy • parafac4microbiome</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="GOHTRANS">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="GOHTRANS: gender-affirming hormone therapy">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -38,13 +38,13 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/AP.html">AP</a></li>
+<li><a class="dropdown-item" href="../articles/AP.html">AP: pain perception in apical periodontitis</a></li>
     <li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
-    <li><a class="dropdown-item" href="../articles/GOHTRANS.html">GOHTRANS</a></li>
+    <li><a class="dropdown-item" href="../articles/GOHTRANS.html">GOHTRANS: gender-affirming hormone therapy</a></li>
     <li><a class="dropdown-item" href="../articles/Introduction.html">Introduction</a></li>
-    <li><a class="dropdown-item" href="../articles/MAINHEALTH.html">MAINHEALTH</a></li>
+    <li><a class="dropdown-item" href="../articles/MAINHEALTH.html">MAINHEALTH: intergenerational obesity transmission</a></li>
     <li><a class="dropdown-item" href="../articles/Shao2019.html">Shao2019</a></li>
-    <li><a class="dropdown-item" href="../articles/TIFN2.html">TIFN2</a></li>
+    <li><a class="dropdown-item" href="../articles/TIFN2.html">TIFN2: Red fluorescent plaque development in gingivitis</a></li>
     <li><a class="dropdown-item" href="../articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
   </ul>
 </li>
@@ -67,9 +67,9 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>GOHTRANS</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>GOHTRANS: gender-affirming hormone therapy</h1>
             
-            <h4 data-toc-skip class="date">2025-05-19</h4>
+            <h4 data-toc-skip class="date">2025-08-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/vignettes/articles/GOHTRANS.Rmd" class="external-link"><code>vignettes/articles/GOHTRANS.Rmd</code></a></small>
       <div class="d-none name"><code>GOHTRANS.Rmd</code></div>
@@ -77,6 +77,12 @@
 
     
     
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>This article presents the CP results of the GOHTRANS dataset
+discussed in Chapter 6 of my dissertation.</p>
+</div>
 <div class="section level2">
 <h2 id="preamble">Preamble<a class="anchor" aria-label="anchor" href="#preamble"></a>
 </h2>
@@ -204,10 +210,6 @@
 <span>  </span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">summary_table</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="model-selection">Model selection<a class="anchor" aria-label="anchor" href="#model-selection"></a>
-</h2>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">processedTongue</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">NPLStoolbox</span><span class="fu">::</span><span class="va"><a href="http://grvanderploeg.com/NPLStoolbox/reference/Cornejo2025.html" class="external-link">Cornejo2025</a></span><span class="op">$</span><span class="va">Tongue_microbiome</span>, sparsityThreshold <span class="op">=</span> <span class="fl">0.5</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"GenderID"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">processedSaliva</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">NPLStoolbox</span><span class="fu">::</span><span class="va"><a href="http://grvanderploeg.com/NPLStoolbox/reference/Cornejo2025.html" class="external-link">Cornejo2025</a></span><span class="op">$</span><span class="va">Salivary_microbiome</span>, sparsityThreshold <span class="op">=</span> <span class="fl">0.5</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"GenderID"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
@@ -225,76 +227,40 @@
 <span><span class="va">processedBiochemistry</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayCenter.html">multiwayCenter</a></span><span class="op">(</span><span class="va">processedBiochemistry</span><span class="op">$</span><span class="va">data</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">processedBiochemistry</span><span class="op">$</span><span class="va">data</span> <span class="op">=</span> <span class="fu"><a href="../reference/multiwayScale.html">multiwayScale</a></span><span class="op">(</span><span class="va">processedBiochemistry</span><span class="op">$</span><span class="va">data</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_tongue$plots$overview # 1 or 2?</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_saliva$plots$overview # def 2</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_cytokines = parafac4microbiome::assessModelQuality(processedCytokines$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_cytokines$plots$overview # def 2</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_biochemistry = parafac4microbiome::assessModelQuality(processedBiochemistry$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_biochemistry$plots$overview # 2 or 3?</span></span>
-<span><span class="co">#</span></span>
-<span><span class="co"># saveRDS(assessment_tongue, "./CP_assessment_tongue.RDS")</span></span>
-<span><span class="co"># saveRDS(assessment_saliva, "./CP_assessment_saliva.RDS")</span></span>
-<span><span class="co"># saveRDS(assessment_cytokines, "./CP_assessment_cytokines.RDS")</span></span>
-<span><span class="co"># saveRDS(assessment_biochemistry, "./CP_assessment_biochemistry.RDS")</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># assessment_tongue = readRDS("./CP_assessment_tongue.RDS")</span></span>
-<span><span class="co"># assessment_saliva = readRDS("./CP_assessment_saliva.RDS")</span></span>
-<span><span class="co"># assessment_cytokines = readRDS("./CP_assessment_cytokines.RDS")</span></span>
-<span><span class="co"># assessment_biochemistry = readRDS("./CP_assessment_biochemistry.RDS")</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># a = assessment_tongue$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># b = assessment_saliva$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># c = assessment_cytokines$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># d = assessment_biochemistry$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># ggarrange(a,b,c,d)</span></span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># colourCols = c("", "", "")</span></span>
-<span><span class="co"># legendTitles = c("", "", "")</span></span>
-<span><span class="co"># xLabels = c("Subject index", "Feature index", "Time index")</span></span>
-<span><span class="co"># legendColNums = c(2,5,0)</span></span>
-<span><span class="co"># arrangeModes = c(FALSE, FALSE, FALSE)</span></span>
-<span><span class="co"># continuousModes = c(FALSE,FALSE,TRUE)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_tongue$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_tongue$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_cytokines$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_cytokines$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_biochemistry = parafac4microbiome::assessModelStability(processedBiochemistry, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_biochemistry$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_biochemistry$modelPlots[[3]]</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_cytokines = parafac4microbiome::parafac(processedCytokines$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_biochemistry = parafac4microbiome::parafac(processedBiochemistry$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># saveRDS(cp_tongue, "./cp_tongue.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_saliva, "./cp_saliva.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_cytokines, "./cp_cytokines.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_biochemistry, "./cp_biochemistry.RDS")</span></span>
-<span></span>
-<span><span class="va">cp_tongue</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_tongue.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_saliva</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_saliva.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_cytokines</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_cytokines.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_biochemistry</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_biochemistry.RDS"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">colourCols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">legendTitles</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">xLabels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Subject index"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time index"</span><span class="op">)</span></span>
+<span><span class="va">legendColNums</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">arrangeModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">continuousModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="tongue-microbiome">Tongue microbiome<a class="anchor" aria-label="anchor" href="#tongue-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+tongue microbiome data block. The model selection procedure revealed
+that CORCONDIA values were too low at three components. The commented
+code below performs the procedure, and is not rerun here due to
+computational limitations.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_tongue$plots$overview # 1 or 2?</span></span>
+<span><span class="co"># a = assessment_tongue$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_tongue$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_tongue$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_tongue</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_tongue.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_tongue</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 23.00316</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 23.0% of
+the variation. However, MLR analysis revealed that both components were
+uninterpretable.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">1</span>, <span class="va">processedTongue</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term    Estimate                                         CI    P_value</span></span>
@@ -309,7 +275,7 @@
 <span><span class="co">## 3 0.8316892</span></span>
 <span><span class="co">## 4 0.9303539</span></span>
 <span><span class="co">## 5 0.8316892</span></span></code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">2</span>, <span class="va">processedTongue</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term  Estimate                                         CI   P_value</span></span>
@@ -328,7 +294,30 @@
 <div class="section level2">
 <h2 id="salivary-microbiome">Salivary microbiome<a class="anchor" aria-label="anchor" href="#salivary-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+salivary microbiome data block. The model selection procedure revealed
+that CORCONDIA values were too low at three components. The commented
+code below performs the procedure, and is not rerun here due to
+computational limitations.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_saliva$plots$overview # def 2</span></span>
+<span><span class="co"># b = assessment_saliva$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_saliva</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_saliva.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_saliva</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 18.86278</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 18.9% of
+the variation. However, MLR analysis revealed that both components were
+uninterpretable.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">1</span>, <span class="va">processedSaliva</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term    Estimate                                         CI   P_value</span></span>
@@ -343,7 +332,7 @@
 <span><span class="co">## 3 0.8931035</span></span>
 <span><span class="co">## 4 0.8931035</span></span>
 <span><span class="co">## 5 0.8931035</span></span></code></pre>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">2</span>, <span class="va">processedSaliva</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term    Estimate                                        CI    P_value</span></span>
@@ -362,7 +351,30 @@
 <div class="section level2">
 <h2 id="salivary-cytokines">Salivary cytokines<a class="anchor" aria-label="anchor" href="#salivary-cytokines"></a>
 </h2>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+salivary cytokine data block. The model selection procedure revealed
+that CORCONDIA values were too low at three components. The commented
+code below performs the procedure, and is not rerun here due to
+computational limitations.</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_cytokines = parafac4microbiome::assessModelQuality(processedCytokines$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_cytokines$plots$overview # def 2</span></span>
+<span><span class="co"># c = assessment_cytokines$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span><span class="co">#</span></span>
+<span><span class="co"># stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_cytokines$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_cytokines$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_cytokines = parafac4microbiome::parafac(processedCytokines$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_cytokines</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_cytokines.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_cytokines</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 55.68743</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 55.7% of
+the variation. However, MLR analysis revealed that both components were
+uninterpretable.</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_cytokines</span>, <span class="fl">1</span>, <span class="va">processedCytokines</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term     Estimate                                        CI   P_value</span></span>
@@ -377,7 +389,7 @@
 <span><span class="co">## 3 0.9907222</span></span>
 <span><span class="co">## 4 0.9907222</span></span>
 <span><span class="co">## 5 0.5614609</span></span></code></pre>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_cytokines</span>, <span class="fl">2</span>, <span class="va">processedCytokines</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term   Estimate                                        CI   P_value</span></span>
@@ -396,7 +408,30 @@
 <div class="section level2">
 <h2 id="salivary-biochemistry">Salivary biochemistry<a class="anchor" aria-label="anchor" href="#salivary-biochemistry"></a>
 </h2>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+salivary biochemistry data block. The model selection procedure revealed
+that CORCONDIA values were inconclusive and loadings were unstable at
+three components. The commented code below performs the procedure, and
+is not rerun here due to computational limitations.</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_biochemistry = parafac4microbiome::assessModelQuality(processedBiochemistry$data, numRepetitions=10, numCores=10)</span></span>
+<span><span class="co"># assessment_biochemistry$plots$overview # 2 or 3?</span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># d = assessment_biochemistry$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_biochemistry = parafac4microbiome::assessModelStability(processedBiochemistry, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_biochemistry$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_biochemistry$modelPlots[[3]]</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_biochemistry = parafac4microbiome::parafac(processedBiochemistry$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_biochemistry</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./GOHTRANS/cp_biochemistry.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_biochemistry</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 35.60952</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 35.6% of
+the variation. However, MLR analysis revealed that both components were
+uninterpretable.</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_biochemistry</span>, <span class="fl">1</span>, <span class="va">processedBiochemistry</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term  Estimate                                         CI    P_value</span></span>
@@ -411,7 +446,7 @@
 <span><span class="co">## 3 0.3214366</span></span>
 <span><span class="co">## 4 0.5034437</span></span>
 <span><span class="co">## 5 0.3366647</span></span></code></pre>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_biochemistry</span>, <span class="fl">2</span>, <span class="va">processedBiochemistry</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, GenderID)`</span></span></code></pre>
 <pre><code><span><span class="co">##       Term   Estimate                                        CI   P_value</span></span>
