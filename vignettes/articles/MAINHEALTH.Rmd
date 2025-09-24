@@ -1,8 +1,12 @@
 ---
-title: "MAINHEALTH"
+title: "MAINHEALTH: intergenerational obesity transmission"
 output: html_document
-date: "2025-05-09"
+date: "2025-08-31"
 ---
+
+# Introduction
+
+This article presents the CP results of the MAINHEALTH dataset discussed in Chapter 5 of my dissertation.
 
 # Preamble
 
@@ -52,15 +56,6 @@ testMetadata = function(model, comp, metadata){
 ```
 
 ```{r define colours}
-
-# Old approach
-# Needed colours: BMI groups (3) and phyla levels (6)
-# colours = hue_pal()(9)
-# #show_col(colours)
-# BMI_cols = colours[c(1,4,7)]
-# phylum_cols = colours[-c(1,4,7)]
-
-# Rasmus's suggestion
 colours = RColorBrewer:: brewer.pal(8, "Dark2")
 BMI_cols = c("darkgreen","darkgoldenrod","darkred") #colours[1:3]
 WHZ_cols = c("darkgreen", "darkgoldenrod", "dodgerblue4")
@@ -73,77 +68,38 @@ processedMilk = parafac4microbiome::processDataCube(NPLStoolbox::Jakobsen2025$mi
 processedMilkMetab = parafac4microbiome::processDataCube(NPLStoolbox::Jakobsen2025$milkMetabolomics, CLR=FALSE, centerMode=1, scaleMode=2)
 ```
 
-# Model selection
-```{r CP assess num components}
-# assessment_faeces = parafac4microbiome::assessModelQuality(processedFaeces$data, numRepetitions = 10, numCores = 10)
-# assessment_milk = parafac4microbiome::assessModelQuality(processedMilk$data, numRepetitions = 10, numCores = 10)
-# assessment_milkMetab = parafac4microbiome::assessModelQuality(processedMilkMetab$data, numRepetitions = 10, numCores = 10)
-# 
-# saveRDS(assessment_faeces, "./MAINHEALTH/assessment_faeces.RDS")
-# saveRDS(assessment_milk, "./MAINHEALTH/assessment_milk.RDS")
-# saveRDS(assessment_milkMetab, "./MAINHEALTH/assessment_milkMetab.RDS")
-# 
-# assessment_faeces = readRDS("./assessment_faeces.RDS")
-# assessment_milk = readRDS("./assessment_milk.RDS")
-# assessment_milkMetab = readRDS("./assessment_milkMetab.RDS")
-# 
-# assessment_faeces$plots$overview # 2 or 3 components
-# assessment_faeces$plots$TCC[[3]] # 3 components seems safe
-# 
-# assessment_milk$plots$overview # likely 3 components
-# assessment_milk$plots$TCC[[3]] # 3 components seems safe
-# 
-# assessment_milkMetab$plots$overview # 2 or 3 components, likely 3
-# assessment_milkMetab$plots$TCC[[3]] # 3 components seems safe
-# 
-# a = assessment_faeces$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# b = assessment_milk$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# c = assessment_milkMetab$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# ggarrange(a,b,c)
+```{r plotting variables}
+colourCols = c("", "", "")
+legendTitles = c("BMI group", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(3,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
 ```
 
-```{r CP stability num components}
-# colourCols = c("", "", "")
-# legendTitles = c("BMI group", "Phylum", "")
-# xLabels = c("Subject index", "Feature index", "Time index")
-# legendColNums = c(3,5,0)
-# arrangeModes = c(TRUE, TRUE, FALSE)
-# continuousModes = c(FALSE,FALSE,TRUE)
-# 
+# Faecal microbiome
+
+CP was applied to capture the dominant source of variation in the infant faecal microbiome data block. The model selection procedure revealed that CORCONDIA was inconclusive and loadings were somewhat unstable at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r faecal model selection}
+# assessment_faeces = parafac4microbiome::assessModelQuality(processedFaeces$data, numRepetitions = 10, numCores = 10)
+# assessment_faeces$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
 # stability_faeces = parafac4microbiome::assessModelStability(processedFaeces, maxNumComponents=3, numFolds=20, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
 # stability_faeces$modelPlots[[2]]
 # stability_faeces$modelPlots[[3]]
 # 
-# stability_milk = parafac4microbiome::assessModelStability(processedMilk, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_milk$modelPlots[[2]]
-# stability_milk$modelPlots[[3]]
-# 
-# stability_milkMetab = parafac4microbiome::assessModelStability(processedMilkMetab, maxNumComponents=4, numFolds=10, colourCols=c("", "", ""), legendTitles=c("BMI group", "Class", ""), xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_milkMetab$modelPlots[[3]]
-# stability_milkMetab$modelPlots[[4]]
 
-# 
-# stability_faeces$modelPlots[[3]] # 3 components seems ok
-# stability_milk$modelPlots[[3]] # 3 components very unstable
-# stability_milk$modelPlots[[2]] # 2 components still a bit unstable
-# stability_milkMetab$modelPlots[[3]] # 3 components ok
 ```
 
-```{r make cp models}
+```{r faecal load model}
 # cp_faeces = parafac4microbiome::parafac(processedFaeces$data, nfac=3, nstart = 100)
-# cp_milk = parafac4microbiome::parafac(processedMilk$data, nfac=2, nstart = 100)
-# cp_milkMetab = parafac4microbiome::parafac(processedMilkMetab$data, nfac=3, nstart = 100)
-# 
-# saveRDS(cp_faeces, "./MAINHEALTH/cp_faeces.RDS")
-# saveRDS(cp_milk, "./MAINHEALTH/cp_milk.RDS")
-# saveRDS(cp_milkMetab, "./MAINHEALTH/cp_milkMetab.RDS")
-
 cp_faeces = readRDS("./MAINHEALTH/cp_faeces.RDS")
-cp_milk = readRDS("./MAINHEALTH/cp_milk.RDS")
-cp_milkMetab = readRDS("./MAINHEALTH/cp_milkMetab.RDS")
+
+cp_faeces$varExp
 ```
 
-# Faecal microbiome
+Therefore, a two-component CP model was selected, explaining 15.2% of the variation. However, MLR analysis revealed that neither component could be interpreted.
 
 ```{r faecal cp subject mode metadata test}
 testMetadata(cp_faeces, 1, processedFaeces)
@@ -151,6 +107,28 @@ testMetadata(cp_faeces, 2, processedFaeces)
 ```
 
 # HM microbiome
+
+CP was applied to capture the dominant source of variation in the HM microbiome data block. The model selection procedure revealed that CORCONDIA was inconclusive and loadings were unstable at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r hm microbiome model selection}
+# assessment_milk = parafac4microbiome::assessModelQuality(processedMilk$data, numRepetitions = 10, numCores = 10)
+# assessment_milk$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_milk = parafac4microbiome::assessModelStability(processedMilk, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_milk$modelPlots[[2]]
+# stability_milk$modelPlots[[3]]
+# 
+
+```
+
+```{r hm microbiome load model}
+# cp_milk = parafac4microbiome::parafac(processedMilk$data, nfac=2, nstart = 100)
+cp_milk = readRDS("./MAINHEALTH/cp_milk.RDS")
+
+cp_milk$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 13.2% of the variation. However, MLR analysis revealed that the first CP component was uninterpretable, while the second captured variation only weakly associated with maternal ppBMI.
 
 ```{r hm microbiome cp subject mode metadata test}
 testMetadata(cp_milk, 1, processedMilk)
@@ -217,6 +195,27 @@ c
 ```
 
 # HM metabolome
+
+CP was applied to capture the dominant source of variation in the HM metabolomics data block. The model selection procedure revealed that CORCONDIA values were too low at four components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r hm metabolome model selection}
+# assessment_milkMetab = parafac4microbiome::assessModelQuality(processedMilkMetab$data, numRepetitions = 10, numCores = 10)
+# 
+# assessment_milkMetab$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_milkMetab = parafac4microbiome::assessModelStability(processedMilkMetab, maxNumComponents=4, numFolds=10, colourCols=c("", "", ""), legendTitles=c("BMI group", "Class", ""), xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_milkMetab$modelPlots[[3]]
+# stability_milkMetab$modelPlots[[4]]
+```
+
+```{r hm metabolome load model}
+# cp_milkMetab = parafac4microbiome::parafac(processedMilkMetab$data, nfac=3, nstart = 100)
+cp_milkMetab = readRDS("./MAINHEALTH/cp_milkMetab.RDS")
+
+cp_milkMetab$varExp
+```
+
+Therefore, a three-component CP model was selected, explaining 21.6% of the variation. MLR analysis revealed that the first and third components were uninterpretable, while the second component captured variation exclusively and strongly associated with maternal secretor status.
 
 ```{r hm metabolome cp subject mode metadata test}
 testMetadata(cp_milkMetab, 1, processedMilkMetab)

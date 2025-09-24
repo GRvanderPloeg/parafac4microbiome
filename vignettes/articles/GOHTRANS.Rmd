@@ -1,8 +1,12 @@
 ---
-title: "GOHTRANS"
+title: "GOHTRANS: gender-affirming hormone therapy"
 output: html_document
-date: "2025-05-19"
+date: "2025-08-31"
 ---
+
+# Introduction
+
+This article presents the CP results of the GOHTRANS dataset discussed in Chapter 6 of my dissertation.
 
 # Preamble
 
@@ -104,8 +108,6 @@ testMetadata = function(model, comp, metadata){
 }
 ```
 
-# Model selection
-
 ```{r processing}
 processedTongue = processDataCube(NPLStoolbox::Cornejo2025$Tongue_microbiome, sparsityThreshold = 0.5, considerGroups=TRUE, groupVariable="GenderID", CLR=TRUE, centerMode=1, scaleMode=2)
 processedSaliva = processDataCube(NPLStoolbox::Cornejo2025$Salivary_microbiome, sparsityThreshold = 0.5, considerGroups=TRUE, groupVariable="GenderID", CLR=TRUE, centerMode=1, scaleMode=2)
@@ -124,79 +126,39 @@ processedBiochemistry$data = multiwayCenter(processedBiochemistry$data, 1)
 processedBiochemistry$data = multiwayScale(processedBiochemistry$data, 2)
 ```
 
-```{r cp assess num components}
-# assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
-# assessment_tongue$plots$overview # 1 or 2?
-# 
-# assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
-# assessment_saliva$plots$overview # def 2
-# 
-# assessment_cytokines = parafac4microbiome::assessModelQuality(processedCytokines$data, numRepetitions=10, numCores=10)
-# assessment_cytokines$plots$overview # def 2
-# 
-# assessment_biochemistry = parafac4microbiome::assessModelQuality(processedBiochemistry$data, numRepetitions=10, numCores=10)
-# assessment_biochemistry$plots$overview # 2 or 3?
-#
-# saveRDS(assessment_tongue, "./CP_assessment_tongue.RDS")
-# saveRDS(assessment_saliva, "./CP_assessment_saliva.RDS")
-# saveRDS(assessment_cytokines, "./CP_assessment_cytokines.RDS")
-# saveRDS(assessment_biochemistry, "./CP_assessment_biochemistry.RDS")
-# 
-# assessment_tongue = readRDS("./CP_assessment_tongue.RDS")
-# assessment_saliva = readRDS("./CP_assessment_saliva.RDS")
-# assessment_cytokines = readRDS("./CP_assessment_cytokines.RDS")
-# assessment_biochemistry = readRDS("./CP_assessment_biochemistry.RDS")
-# 
-# a = assessment_tongue$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# b = assessment_saliva$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# c = assessment_cytokines$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# d = assessment_biochemistry$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# ggarrange(a,b,c,d)
+```{r plotting variables}
+colourCols = c("", "", "")
+legendTitles = c("", "", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(2,5,0)
+arrangeModes = c(FALSE, FALSE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
 ```
 
-```{r cp stability num components}
-# colourCols = c("", "", "")
-# legendTitles = c("", "", "")
-# xLabels = c("Subject index", "Feature index", "Time index")
-# legendColNums = c(2,5,0)
-# arrangeModes = c(FALSE, FALSE, FALSE)
-# continuousModes = c(FALSE,FALSE,TRUE)
+# Tongue microbiome
+
+CP was applied to capture the dominant source of variation in the tongue microbiome data block. The model selection procedure revealed that CORCONDIA values were too low at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r tongue model selection}
+# assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
+# assessment_tongue$plots$overview # 1 or 2?
+# a = assessment_tongue$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
 # 
 # stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
 # stability_tongue$modelPlots[[2]]
 # stability_tongue$modelPlots[[3]]
 # 
-# stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_saliva$modelPlots[[2]]
-# stability_saliva$modelPlots[[2]]
-# 
-# stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_cytokines$modelPlots[[2]]
-# stability_cytokines$modelPlots[[3]]
-# 
-# stability_biochemistry = parafac4microbiome::assessModelStability(processedBiochemistry, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_biochemistry$modelPlots[[2]]
-# stability_biochemistry$modelPlots[[3]]
+
 ```
 
-```{r make cp models}
+```{r tongue load model}
 # cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
-# cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
-# cp_cytokines = parafac4microbiome::parafac(processedCytokines$data, nfac=2, nstart=100)
-# cp_biochemistry = parafac4microbiome::parafac(processedBiochemistry$data, nfac=2, nstart=100)
-# 
-# saveRDS(cp_tongue, "./cp_tongue.RDS")
-# saveRDS(cp_saliva, "./cp_saliva.RDS")
-# saveRDS(cp_cytokines, "./cp_cytokines.RDS")
-# saveRDS(cp_biochemistry, "./cp_biochemistry.RDS")
-
 cp_tongue = readRDS("./GOHTRANS/cp_tongue.RDS")
-cp_saliva = readRDS("./GOHTRANS/cp_saliva.RDS")
-cp_cytokines = readRDS("./GOHTRANS/cp_cytokines.RDS")
-cp_biochemistry = readRDS("./GOHTRANS/cp_biochemistry.RDS")
+
+cp_tongue$varExp
 ```
 
-# Tongue microbiome
+Therefore, a two-component CP model was selected, explaining 23.0% of the variation. However, MLR analysis revealed that both components were uninterpretable.
 
 ```{r tongue test subject mode}
 testMetadata(cp_tongue, 1, processedTongue)
@@ -205,6 +167,29 @@ testMetadata(cp_tongue, 2, processedTongue)
 
 # Salivary microbiome
 
+CP was applied to capture the dominant source of variation in the salivary microbiome data block. The model selection procedure revealed that CORCONDIA values were too low at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r saliva model selection}
+# assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
+# assessment_saliva$plots$overview # def 2
+# b = assessment_saliva$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+# 
+# stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_saliva$modelPlots[[2]]
+# stability_saliva$modelPlots[[2]]
+# 
+
+```
+
+```{r saliva load model}
+# cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
+cp_saliva = readRDS("./GOHTRANS/cp_saliva.RDS")
+
+cp_saliva$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 18.9% of the variation. However, MLR analysis revealed that both components were uninterpretable.
+
 ```{r saliva test subject mode}
 testMetadata(cp_saliva, 1, processedSaliva)
 testMetadata(cp_saliva, 2, processedSaliva)
@@ -212,12 +197,57 @@ testMetadata(cp_saliva, 2, processedSaliva)
 
 # Salivary cytokines
 
+CP was applied to capture the dominant source of variation in the salivary cytokine data block. The model selection procedure revealed that CORCONDIA values were too low at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r cytokines model selection}
+# assessment_cytokines = parafac4microbiome::assessModelQuality(processedCytokines$data, numRepetitions=10, numCores=10)
+# assessment_cytokines$plots$overview # def 2
+# c = assessment_cytokines$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+#
+# stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_cytokines$modelPlots[[2]]
+# stability_cytokines$modelPlots[[3]]
+# 
+
+```
+
+```{r cytokines load model}
+# cp_cytokines = parafac4microbiome::parafac(processedCytokines$data, nfac=2, nstart=100)
+cp_cytokines = readRDS("./GOHTRANS/cp_cytokines.RDS")
+
+cp_cytokines$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 55.7% of the variation. However, MLR analysis revealed that both components were uninterpretable.
+
 ```{r cytokines test subject mode}
 testMetadata(cp_cytokines, 1, processedCytokines)
 testMetadata(cp_cytokines, 2, processedCytokines)
 ```
 
 # Salivary biochemistry
+
+CP was applied to capture the dominant source of variation in the salivary biochemistry data block. The model selection procedure revealed that CORCONDIA values were inconclusive and loadings were unstable at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r biochemistry model selection}
+# assessment_biochemistry = parafac4microbiome::assessModelQuality(processedBiochemistry$data, numRepetitions=10, numCores=10)
+# assessment_biochemistry$plots$overview # 2 or 3?
+# 
+# d = assessment_biochemistry$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_biochemistry = parafac4microbiome::assessModelStability(processedBiochemistry, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_biochemistry$modelPlots[[2]]
+# stability_biochemistry$modelPlots[[3]]
+```
+
+```{r biochemistry load model}
+# cp_biochemistry = parafac4microbiome::parafac(processedBiochemistry$data, nfac=2, nstart=100)
+cp_biochemistry = readRDS("./GOHTRANS/cp_biochemistry.RDS")
+
+cp_biochemistry$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 35.6% of the variation. However, MLR analysis revealed that both components were uninterpretable.
 
 ```{r biochemistry test subject mode}
 testMetadata(cp_biochemistry, 1, processedBiochemistry)

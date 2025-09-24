@@ -1,8 +1,12 @@
 ---
-title: "AP"
+title: "AP: pain perception in apical periodontitis"
 output: html_document
-date: "2025-05-19"
+date: "2025-08-31"
 ---
+
+# Introduction
+
+This article presents the CP results of the AP dataset discussed in Chapter 7 of my dissertation.
 
 # Preamble
 
@@ -57,28 +61,6 @@ ageInfo = cytokines_meta_data %>% select(SubjectID, Age) %>% unique()
 ```
 
 ```{r processing}
-# Full cohort
-processedCytokines_full = CMTFtoolbox::Georgiou2025$Inflammatory_mediators
-processedCytokines_full$data = log(processedCytokines_full$data + 0.005)
-
-# Remove outlier subjects: A11-8
-processedCytokines_full$data = processedCytokines_full$data[-25,,]
-processedCytokines_full$mode1 = processedCytokines_full$mode1[-25,]
-
-processedCytokines_full$data = multiwayCenter(processedCytokines_full$data, 1)
-processedCytokines_full$data = multiwayScale(processedCytokines_full$data, 2)
-
-# Control only subcohort
-processedCytokines_control = CMTFtoolbox::Georgiou2025$Inflammatory_mediators
-
-mask = processedCytokines_control$mode1$case_control == "control"
-processedCytokines_control$data = processedCytokines_control$data[mask,,]
-processedCytokines_control$mode1 = processedCytokines_control$mode1[mask,]
-
-processedCytokines_control$data = log(processedCytokines_control$data + 0.005)
-processedCytokines_control$data = multiwayCenter(processedCytokines_control$data, 1)
-processedCytokines_control$data = multiwayScale(processedCytokines_control$data, 2)
-
 # Case only subcohort
 processedCytokines_case = CMTFtoolbox::Georgiou2025$Inflammatory_mediators
 
@@ -95,46 +77,24 @@ processedCytokines_case$data = multiwayCenter(processedCytokines_case$data, 1)
 processedCytokines_case$data = multiwayScale(processedCytokines_case$data, 2)
 ```
 
-```{r cp assess num components}
-# assessment_cytokines_full = parafac4microbiome::assessModelQuality(processedCytokines_full$data, numRepetitions=10, numCores=10)
-# assessment_cytokines_full$plots$overview # def 2
-#
-# assessment_cytokines_control = parafac4microbiome::assessModelQuality(processedCytokines_control$data, numRepetitions=10, numCores=10)
-# assessment_cytokines_control$plots$overview # def 1
-#
-# assessment_cytokines_case = parafac4microbiome::assessModelQuality(processedCytokines_case$data, numRepetitions=10, numCores=10)
-# assessment_cytokines_case$plots$overview # 2-4
-#
-# saveRDS(assessment_cytokines_full, "./CP_assessment_cytokines_full.RDS")
-# saveRDS(assessment_cytokines_control, "./CP_assessment_cytokines_control.RDS")
-# saveRDS(assessment_cytokines_case, "./CP_assessment_cytokines_case.RDS")
-# 
-# assessment_cytokines_full = readRDS("./CP_assessment_cytokines_full.RDS")
-# assessment_cytokines_full$plots$overview
-# 
-# assessment_cytokines_control = readRDS("./CP_assessment_cytokines_control.RDS")
-# assessment_cytokines_control$plots$overview
-# 
-# assessment_cytokines_case = readRDS("./CP_assessment_cytokines_case.RDS")
-# assessment_cytokines_case$plots$overview
-# 
-# a = assessment_cytokines_full$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# 
-# b = assessment_cytokines_control$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# 
-# c = assessment_cytokines_case$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# 
-# ggarrange(a,b,c, nrow=1, ncol=3)
+```{r plotting variables}
+colourCols = c("", "", "")
+legendTitles = c("", "", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(2,5,0)
+arrangeModes = c(FALSE, FALSE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
 ```
 
-```{r cp stability num components}
-# colourCols = c("", "", "")
-# legendTitles = c("", "", "")
-# xLabels = c("Subject index", "Feature index", "Time index")
-# legendColNums = c(2,5,0)
-# arrangeModes = c(FALSE, FALSE, FALSE)
-# continuousModes = c(FALSE,FALSE,TRUE)
-# 
+# Inflammatory mediators
+
+CP was applied to capture the dominant source of variation within the longitudinally measured inflammatory mediator data block. The model selection procedure indicates that CORCONDIA scores were inconclusive and loadings were unstable using four CP components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r cp model selection}
+# assessment_cytokines_case = parafac4microbiome::assessModelQuality(processedCytokines_case$data, numRepetitions=10, numCores=10)
+# assessment_cytokines_case$plots$overview
+# assessment_cytokines_case$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
 # stability_cytokines = parafac4microbiome::assessModelStability(processedCytokines_case, maxNumComponents=5, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
 # stability_cytokines$modelPlots[[2]]
 # stability_cytokines$modelPlots[[3]]
@@ -142,21 +102,14 @@ processedCytokines_case$data = multiwayScale(processedCytokines_case$data, 2)
 # stability_cytokines$modelPlots[[5]]
 ```
 
-```{r make cp models}
-# cp_cytokines_full = parafac4microbiome::parafac(processedCytokines_full$data, nfac=2, nstart=100)
-# cp_cytokines_control = parafac4microbiome::parafac(processedCytokines_control$data, nfac=1, nstart=100)
+```{r cp load model}
 # cp_cytokines_case = parafac4microbiome::parafac(processedCytokines_case$data, nfac=3, nstart=100)
-# 
-# saveRDS(cp_cytokines_full, "./cp_cytokines_full.RDS")
-# saveRDS(cp_cytokines_control, "./cp_cytokines_control.RDS")
-# saveRDS(cp_cytokines_case, "./cp_cytokines_case.RDS")
-
-cp_cytokines_full = readRDS("./AP/cp_cytokines_full.RDS")
-cp_cytokines_control = readRDS("./AP/cp_cytokines_control.RDS")
 cp_cytokines_case = readRDS("./AP/cp_cytokines_case.RDS")
+
+cp_cytokines$varExp
 ```
 
-# Inflammatory mediators
+Therefore, a three-component CP model was selected, explaining 36.6% of the variation. MLR analysis revealed that the first CP component captured variation associated with subject gender, while the second component was not interpretable, and the third component captured variation associated with a mixture of age and pain perception.
 
 ```{r cp subject metadata test}
 testMetadata(cp_cytokines_case, 1, processedCytokines_case)

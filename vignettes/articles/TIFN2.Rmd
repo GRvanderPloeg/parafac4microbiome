@@ -1,8 +1,12 @@
 ---
-title: "TIFN2"
+title: "TIFN2: Red fluorescent plaque development in gingivitis"
 output: html_document
-date: "2025-04-16"
+date: "2025-08-31"
 ---
+
+# Introduction
+
+This article presents the CP results of the TIFN2 dataset discussed in Chapter 4 of my dissertation.
 
 # Preamble
 
