@@ -213,10 +213,6 @@
 <span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phylum_colors</span> <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/pal_hue.html" class="external-link">hue_pal</a></span><span class="op">(</span><span class="op">)</span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="processing">Processing<a class="anchor" aria-label="anchor" href="#processing"></a>
-</h2>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">processedTongue</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">tongue</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">processedLowling</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">lower_jaw_lingual</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
@@ -225,91 +221,41 @@
 <span><span class="va">processedUpinter</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">upper_jaw_interproximal</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">processedSaliva</span> <span class="op">=</span> <span class="fu"><a href="../reference/processDataCube.html">processDataCube</a></span><span class="op">(</span><span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">saliva</span>, sparsityThreshold<span class="op">=</span><span class="fl">0.50</span>, considerGroups<span class="op">=</span><span class="cn">TRUE</span>, groupVariable<span class="op">=</span><span class="st">"RFgroup"</span>, CLR<span class="op">=</span><span class="cn">TRUE</span>, centerMode<span class="op">=</span><span class="fl">1</span>, scaleMode<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">processedMetabolomics</span> <span class="op">=</span> <span class="fu">parafac4microbiome</span><span class="fu">::</span><span class="va"><a href="../reference/vanderPloeg2024.html">vanderPloeg2024</a></span><span class="op">$</span><span class="va">metabolomics</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="model-selection">Model selection<a class="anchor" aria-label="anchor" href="#model-selection"></a>
-</h2>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># a = assessment_tongue$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># b = assessment_lowling$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># c = assessment_lowinter$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># d = assessment_upling$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># e = assessment_upinter$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># f = assessment_saliva$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># g = assessment_metab$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
-<span><span class="co"># ggarrange(a,b,c,d,e,f,g, nrow=4, ncol=2)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># colourCols = c("", "", "")</span></span>
-<span><span class="co"># legendTitles = c("RF group", "Phylum", "")</span></span>
-<span><span class="co"># xLabels = c("Subject index", "Feature index", "Time index")</span></span>
-<span><span class="co"># legendColNums = c(3,5,0)</span></span>
-<span><span class="co"># arrangeModes = c(TRUE, TRUE, FALSE)</span></span>
-<span><span class="co"># continuousModes = c(FALSE,FALSE,TRUE)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_tongue$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_tongue$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_lowling = parafac4microbiome::assessModelStability(processedLowling, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_lowling$modelPlots[[1]]</span></span>
-<span><span class="co"># stability_lowling$modelPlots[[2]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_lowinter = parafac4microbiome::assessModelStability(processedLowinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_lowinter$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_lowinter$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_upling = parafac4microbiome::assessModelStability(processedUpling, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_upling$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_upling$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_upinter = parafac4microbiome::assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_upinter$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_upinter$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
-<span><span class="co"># stability_saliva$modelPlots[[3]]</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># stability_metab = parafac4microbiome::assessModelStability(processedMetabolomics, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
-<span><span class="co"># stability_metab$modelPlots[[1]]</span></span>
-<span><span class="co"># stability_metab$modelPlots[[2]]</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)</span></span>
-<span><span class="co"># cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)</span></span>
-<span><span class="co"># cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)</span></span>
-<span></span>
-<span><span class="co"># saveRDS(cp_tongue, "./cp_tongue.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_lowling, "./cp_lowling.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_lowinter, "./cp_lowinter.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_upling, "./cp_upling.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_upinter, "./cp_upinter.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_saliva, "./cp_saliva.RDS")</span></span>
-<span><span class="co"># saveRDS(cp_metabolomics, "./cp_metabolomics.RDS")</span></span>
-<span></span>
-<span><span class="va">cp_tongue</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_tongue.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_lowling</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_lowling.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_lowinter</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_lowinter.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_upling</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_upling.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_upinter</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_upinter.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_saliva</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_saliva.RDS"</span><span class="op">)</span></span>
-<span><span class="va">cp_metabolomics</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_metabolomics.RDS"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">colourCols</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">legendTitles</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RF group"</span>, <span class="st">"Phylum"</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="va">xLabels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Subject index"</span>, <span class="st">"Feature index"</span>, <span class="st">"Time index"</span><span class="op">)</span></span>
+<span><span class="va">legendColNums</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">arrangeModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">continuousModes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="tongue-microbiome">Tongue microbiome<a class="anchor" aria-label="anchor" href="#tongue-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+tongue microbiome data block. The model selection procedure revealed
+that CORCONDIA scores were inconclusive and loadings were unstable at
+three components. The commented code below performs the procedure, and
+is not rerun here due to computational limitations.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_tongue$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_tongue$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_tongue$modelPlots[[3]]</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)</span></span>
+<span></span>
+<span><span class="va">cp_tongue</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_tongue.RDS"</span><span class="op">)</span></span>
+<span><span class="va">cp_tongue</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 31.37847</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 31.4% of
+the variation. However, MLR analysis revealed that the first component
+captured variation associated with a mixture of plaque% and subject age,
+while the second component was not interpretable.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">1</span>, <span class="va">processedTongue</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term  Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent -7.085726 -0.0125436561188763 – -0.00162779504204587</span></span>
@@ -323,7 +269,7 @@
 <span><span class="co">## 3 0.460540316 0.60418594</span></span>
 <span><span class="co">## 4 0.817174114 0.81717411</span></span>
 <span><span class="co">## 5 0.002572981 0.01286491</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="fl">2</span>, <span class="va">processedTongue</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent  -0.877180 -0.00719453415388883 – 0.00544017410099945</span></span>
@@ -337,7 +283,7 @@
 <span><span class="co">## 3 0.2074012 0.7428669</span></span>
 <span><span class="co">## 4 0.4507719 0.7512864</span></span>
 <span><span class="co">## 5 0.6505852 0.7796915</span></span></code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="va">processedTongue</span>, <span class="fl">1</span>, <span class="st">"plaquepercent"</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -347,7 +293,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##      plaquepercent</span></span>
 <span><span class="co">## [1,]    -0.3063565</span></span></code></pre>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_tongue</span>, <span class="va">processedTongue</span>, <span class="fl">1</span>, <span class="st">"age"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -357,7 +303,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##            age</span></span>
 <span><span class="co">## [1,] 0.4538388</span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedTongue</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_tongue</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -383,17 +329,39 @@
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20tongue%20comp%201-1.png" width="700"></p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20tongue%20comp%201-2.png" width="700"></p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20tongue%20comp%201-3.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="lower-jaw-lingual-microbiome">Lower jaw lingual microbiome<a class="anchor" aria-label="anchor" href="#lower-jaw-lingual-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+lower jaw lingual microbiome data block. The model selection procedure
+revealed CORCONDIA scores were too low at two components. The commented
+code below performs the procedure, and is not rerun here due to
+computational limitations.</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_lowling$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_lowling = parafac4microbiome::assessModelStability(processedLowling, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_lowling$modelPlots[[1]]</span></span>
+<span><span class="co"># stability_lowling$modelPlots[[2]]</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)</span></span>
+<span><span class="va">cp_lowling</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_lowling.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_lowling</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 10.55114</span></span></code></pre>
+<p>Therefore, a one-component CP model was selected, explaining 10.6% of
+the variation. Surprisingly, MLR analysis revealed that the CP component
+captured variation exclusively associated with RF%.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowling</span>, <span class="fl">1</span>, <span class="va">processedLowling</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                          CI</span></span>
 <span><span class="co">## 1  plaquepercent  -4.047703 -0.00897953402999654 – 0.000884127338494313</span></span>
@@ -407,7 +375,7 @@
 <span><span class="co">## 3 0.00197737 0.009886849</span></span>
 <span><span class="co">## 4 0.06160528 0.130757338</span></span>
 <span><span class="co">## 5 0.51174413 0.511744134</span></span></code></pre>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_lowling</span>, <span class="va">processedLowling</span>, <span class="fl">1</span>, <span class="st">"Area_delta_R30"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -417,7 +385,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##      Area_delta_R30</span></span>
 <span><span class="co">## [1,]      0.5298343</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedLowling</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_lowling</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -443,17 +411,57 @@
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20lowling%20comp%201-1.png" width="700"></p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20lowling%20comp%201-2.png" width="700"></p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20lowling%20comp%201-3.png" width="700"></p>
+<p>Positively loaded microbiota including Fusobacterium canifelinum /
+nucleatum, Aggregatibacter segnis, Capnocytophaga leadbetteri,
+Campylobacter concisus, Fusobacterium hwasookii / nucleatum /
+periodonticum, Cardiobacterium hominis, Porphyromonas pasteri,
+Corynebacterium matruchotii, Capnocytophaga granulosa, and Fusobacterium
+nucleatum were enriched in high responders and depleted in low
+responders. Conversely, negatively loaded microbiota including
+Campylobacter concisus, Rothia dentocariosa, Veillonella atypica /
+dispar, Atopobium parvulum, Prevotella melaninogenica, Veillonella
+dispar / parvula, Veillonella parvula / rogosae / tobetsuensis,
+Actinomyces naeslundii / oris / viscosus, Prevotella nanceiensis, and
+Kingella oralis were enriched in low responders and depleted in high
+responders. The time mode loadings of the component indicate that the
+inter-subject differences due to RF% were constant throughout the time
+series.</p>
 </div>
 <div class="section level2">
 <h2 id="lower-jaw-interproximal-microbiome">Lower jaw interproximal microbiome<a class="anchor" aria-label="anchor" href="#lower-jaw-interproximal-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+lower jaw interproximal microbiome data block. The model selection
+procedure revealed that CORCONDIA scores were too low at three
+components. The commented code below performs the procedure, and is not
+rerun here due to computational limitations.</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_lowinter$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># </span></span>
+<span><span class="co"># stability_lowinter = parafac4microbiome::assessModelStability(processedLowinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_lowinter$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_lowinter$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_lowinter</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_lowinter.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_lowinter</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 10.32969</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 10.3% of
+the variation. However, MLR analysis revealed that the first CP
+component captured uninterpretable variation, while the second component
+captured variation exclusively associated with BOMP%.</p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="fl">1</span>, <span class="va">processedLowinter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term    Estimate                                          CI</span></span>
 <span><span class="co">## 1  plaquepercent  -2.8231325  -0.00885260016583814 – 0.00320633515325942</span></span>
@@ -467,7 +475,7 @@
 <span><span class="co">## 3 0.87134707 0.8713471</span></span>
 <span><span class="co">## 4 0.64104814 0.8013102</span></span>
 <span><span class="co">## 5 0.49729155 0.8013102</span></span></code></pre>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="fl">2</span>, <span class="va">processedLowinter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term  Estimate                                           CI</span></span>
 <span><span class="co">## 1  plaquepercent  2.156444    -0.00382845328747255 – 0.0081413416846705</span></span>
@@ -481,7 +489,7 @@
 <span><span class="co">## 3 0.05873372 0.1468343</span></span>
 <span><span class="co">## 4 0.16576694 0.2762782</span></span>
 <span><span class="co">## 5 0.25228070 0.3153509</span></span></code></pre>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_lowinter</span>, <span class="va">processedLowinter</span>, <span class="fl">2</span>, <span class="st">"bomppercent"</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -491,7 +499,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##      bomppercent</span></span>
 <span><span class="co">## [1,]  -0.2341633</span></span></code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedLowinter</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_lowinter</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -517,17 +525,41 @@
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20lowinter%20comp%202-1.png" width="700"></p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20lowinter%20comp%202-2.png" width="700"></p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20lowinter%20comp%202-3.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="upper-jaw-lingual-microbiome">Upper jaw lingual microbiome<a class="anchor" aria-label="anchor" href="#upper-jaw-lingual-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+upper jaw lingual microbiome data block. The model selection procedure
+revealed that CORCONDIA scores were too low at three components. The
+commented code below performs the procedure, and is not rerun here due
+to computational limitations.</p>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_upling$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_upling = parafac4microbiome::assessModelStability(processedUpling, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_upling$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_upling$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_upling</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_upling.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_upling</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 19.19163</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 19.2% of
+the variation. However, MLR analysis revealed that the first CP
+component captured uninterpretable variation, while the second component
+captured variation exclusively but weakly associated with RF%.</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="fl">1</span>, <span class="va">processedUpling</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                          CI</span></span>
 <span><span class="co">## 1  plaquepercent  3.5957413  -0.00193167844376722 – 0.00912316112826477</span></span>
@@ -541,7 +573,7 @@
 <span><span class="co">## 3 0.02655809 0.1327905</span></span>
 <span><span class="co">## 4 0.11334141 0.2302070</span></span>
 <span><span class="co">## 5 0.92284676 0.9228468</span></span></code></pre>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="fl">2</span>, <span class="va">processedUpling</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term    Estimate                                          CI</span></span>
 <span><span class="co">## 1  plaquepercent  -2.5436852   -0.0086495593078846 – 0.00356218888854485</span></span>
@@ -555,7 +587,7 @@
 <span><span class="co">## 3 0.03895533 0.1947767</span></span>
 <span><span class="co">## 4 0.11945334 0.2986333</span></span>
 <span><span class="co">## 5 0.89255185 0.9283294</span></span></code></pre>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_upling</span>, <span class="va">processedUpling</span>, <span class="fl">2</span>, <span class="st">"Area_delta_R30"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -565,7 +597,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##      Area_delta_R30</span></span>
 <span><span class="co">## [1,]      0.3280193</span></span></code></pre>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedUpling</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_upling</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -591,17 +623,41 @@
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20upling%20comp%202-1.png" width="700"></p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20upling%20comp%202-2.png" width="700"></p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20upling%20comp%202-3.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="upper-jaw-interproximal-microbiome">Upper jaw interproximal microbiome<a class="anchor" aria-label="anchor" href="#upper-jaw-interproximal-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+upper jaw interproximal microbiome data block. The model selection
+procedure revealed that CORCONDIA scores were inconclusive and loadings
+were unstable at three components. The commented code below performs the
+procedure, and is not rerun here due to computational limitations.</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_upinter$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_upinter = parafac4microbiome::assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_upinter$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_upinter$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_upinter</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_upinter.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_upinter</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 16.10052</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 16.1% of
+the variation. However, MLR analysis revealed that the first CP
+component captured variation associated with a mixture of BOMP% and
+subject gender, while the second component was not interpretable.</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="fl">1</span>, <span class="va">processedUpinter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term    Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent   2.1326839 -0.00328755891087678 – 0.00755292666044199</span></span>
@@ -615,7 +671,7 @@
 <span><span class="co">## 3 0.06654502 0.11090837</span></span>
 <span><span class="co">## 4 0.02076356 0.07827386</span></span>
 <span><span class="co">## 5 0.87624079 0.87624079</span></span></code></pre>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="fl">2</span>, <span class="va">processedUpinter</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent -2.4316053 -0.00867251409160288 – 0.00380930341158905</span></span>
@@ -629,7 +685,7 @@
 <span><span class="co">## 3 0.8043410 0.8043410</span></span>
 <span><span class="co">## 4 0.5791848 0.7239810</span></span>
 <span><span class="co">## 5 0.1219174 0.4026024</span></span></code></pre>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="va">processedUpinter</span>, <span class="fl">1</span>, <span class="st">"bomppercent"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -639,7 +695,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##      bomppercent</span></span>
 <span><span class="co">## [1,]   0.4565796</span></span></code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_upinter</span>, <span class="va">processedUpinter</span>, <span class="fl">1</span>, <span class="st">"gender"</span><span class="op">)</span> <span class="co"># flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -649,7 +705,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##         gender</span></span>
 <span><span class="co">## [1,] 0.2166038</span></span></code></pre>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedUpinter</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_upinter</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -675,17 +731,41 @@
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20upinter%20comp%201-1.png" width="700"></p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20upinter%20comp%201-2.png" width="700"></p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20upinter%20comp%201-3.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="salivary-microbiome">Salivary microbiome<a class="anchor" aria-label="anchor" href="#salivary-microbiome"></a>
 </h2>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+salivary microbiome data block. The model selection procedure revealed
+that CORCONDIA scores were too low at three components. The commented
+code below performs the procedure, and is not rerun here due to
+computational limitations.</p>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_saliva$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_saliva$modelPlots[[2]]</span></span>
+<span><span class="co"># stability_saliva$modelPlots[[3]]</span></span>
+<span><span class="co"># </span></span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)</span></span>
+<span><span class="va">cp_saliva</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_saliva.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_saliva</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 17.33499</span></span></code></pre>
+<p>Therefore, a two-component CP model was selected, explaining 17.3% of
+the variation. However, MLR analysis revealed that the first CP
+component captured uninterpretable variation, while the second component
+captured variation exclusively associated with subject age.</p>
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">1</span>, <span class="va">processedSaliva</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent   2.410738 -0.00355831149506644 – 0.00837978682976563</span></span>
@@ -699,7 +779,7 @@
 <span><span class="co">## 3 0.1452174 0.2269149</span></span>
 <span><span class="co">## 4 0.1044564 0.2269149</span></span>
 <span><span class="co">## 5 0.1389100 0.2269149</span></span></code></pre>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="fl">2</span>, <span class="va">processedSaliva</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent   4.868327 -0.000666119508513777 – 0.0104027729980185</span></span>
@@ -713,7 +793,7 @@
 <span><span class="co">## 3 0.11345712 0.1890952</span></span>
 <span><span class="co">## 4 0.22808875 0.2851109</span></span>
 <span><span class="co">## 5 0.00903208 0.0451604</span></span></code></pre>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testFeatures</span><span class="op">(</span><span class="va">cp_saliva</span>, <span class="va">processedSaliva</span>, <span class="fl">2</span>, <span class="st">"age"</span><span class="op">)</span> <span class="co"># no flip</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(subject, RFgroup)`</span></span>
 <span><span class="co">## Joining with `by = join_by(subject, age, gender)`</span></span></code></pre>
@@ -723,7 +803,7 @@
 <span><span class="co">## [1] "Negative loadings:"</span></span>
 <span><span class="co">##             age</span></span>
 <span><span class="co">## [1,] -0.3592963</span></span></code></pre>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="va">processedSaliva</span><span class="op">$</span><span class="va">mode1</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Component_1 <span class="op">=</span> <span class="va">cp_saliva</span><span class="op">$</span><span class="va">Fac</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rf_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">subject</span>,<span class="va">day</span>,<span class="va">Area_delta_R30</span>,<span class="va">plaquepercent</span>,<span class="va">bomppercent</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">day</span><span class="op">==</span><span class="fl">14</span><span class="op">)</span>, by<span class="op">=</span><span class="st">"subject"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -749,17 +829,39 @@
 <span></span>
 <span><span class="va">a</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20saliva%20comp%202-1.png" width="700"></p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20saliva%20comp%202-2.png" width="700"></p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c</span></span></code></pre></div>
 <p><img src="TIFN2_files/figure-html/plot%20cp%20saliva%20comp%202-3.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="salivary-metabolomics">Salivary metabolomics<a class="anchor" aria-label="anchor" href="#salivary-metabolomics"></a>
 </h2>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<p>CP was applied to capture the dominant source of variation in the
+salivary metabolomics data block. The model selection procedure revealed
+that CORCONDIA scores were too low at two components. The commented code
+below performs the procedure, and is not rerun here due to computational
+limitations.</p>
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)</span></span>
+<span></span>
+<span><span class="co"># assessment_metab$metrics$CORCONDIA %&gt;% as_tibble() %&gt;% mutate(index=1:nrow(.)) %&gt;% pivot_longer(-index) %&gt;% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))</span></span>
+<span></span>
+<span><span class="co"># stability_metab = parafac4microbiome::assessModelStability(processedMetabolomics, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())</span></span>
+<span><span class="co"># stability_metab$modelPlots[[1]]</span></span>
+<span><span class="co"># stability_metab$modelPlots[[2]]</span></span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)</span></span>
+<span><span class="va">cp_metabolomics</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"./TIFN2/cp_metabolomics.RDS"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cp_metabolomics</span><span class="op">$</span><span class="va">varExp</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 15.44305</span></span></code></pre>
+<p>Therefore, a one-component CP model was selected, explaining 15.4% of
+the variation. However, MLR analysis revealed that the CP component
+captured uninterpretable variation.</p>
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">testMetadata</span><span class="op">(</span><span class="va">cp_metabolomics</span>, <span class="fl">1</span>, <span class="va">processedMetabolomics</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##             Term   Estimate                                         CI</span></span>
 <span><span class="co">## 1  plaquepercent   4.340779  -0.00177252492396623 – 0.0104540835526603</span></span>
