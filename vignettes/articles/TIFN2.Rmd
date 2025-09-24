@@ -131,8 +131,6 @@ plotFeatures = function(mode2, model, componentNum, flip=FALSE){
 phylum_colors = hue_pal()(7)
 ```
 
-# Processing
-
 ```{r processing}
 processedTongue = processDataCube(parafac4microbiome::vanderPloeg2024$tongue, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
 processedLowling = processDataCube(parafac4microbiome::vanderPloeg2024$lower_jaw_lingual, sparsityThreshold=0.50, considerGroups=TRUE, groupVariable="RFgroup", CLR=TRUE, centerMode=1, scaleMode=2)
@@ -143,96 +141,43 @@ processedSaliva = processDataCube(parafac4microbiome::vanderPloeg2024$saliva, sp
 processedMetabolomics = parafac4microbiome::vanderPloeg2024$metabolomics
 ```
 
-# Model selection
-
-```{r cp assess num components}
-# assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
-# assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)
-# assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)
-# assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)
-# assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)
-# assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
-# assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)
-# 
-# a = assessment_tongue$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# b = assessment_lowling$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# c = assessment_lowinter$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# d = assessment_upling$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# e = assessment_upinter$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# f = assessment_saliva$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# g = assessment_metab$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
-# ggarrange(a,b,c,d,e,f,g, nrow=4, ncol=2)
-```
-
-```{r cp stability num components}
-# colourCols = c("", "", "")
-# legendTitles = c("RF group", "Phylum", "")
-# xLabels = c("Subject index", "Feature index", "Time index")
-# legendColNums = c(3,5,0)
-# arrangeModes = c(TRUE, TRUE, FALSE)
-# continuousModes = c(FALSE,FALSE,TRUE)
-# 
-# stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_tongue$modelPlots[[2]]
-# stability_tongue$modelPlots[[3]]
-# 
-# stability_lowling = parafac4microbiome::assessModelStability(processedLowling, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_lowling$modelPlots[[1]]
-# stability_lowling$modelPlots[[2]]
-# 
-# stability_lowinter = parafac4microbiome::assessModelStability(processedLowinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_lowinter$modelPlots[[2]]
-# stability_lowinter$modelPlots[[3]]
-# 
-# stability_upling = parafac4microbiome::assessModelStability(processedUpling, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_upling$modelPlots[[2]]
-# stability_upling$modelPlots[[3]]
-# 
-# stability_upinter = parafac4microbiome::assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_upinter$modelPlots[[2]]
-# stability_upinter$modelPlots[[3]]
-# 
-# stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_saliva$modelPlots[[2]]
-# stability_saliva$modelPlots[[3]]
-# 
-# stability_metab = parafac4microbiome::assessModelStability(processedMetabolomics, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
-# stability_metab$modelPlots[[1]]
-# stability_metab$modelPlots[[2]]
-```
-
-```{r make cp models}
-# cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
-# cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)
-# cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)
-# cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)
-# cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)
-# cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
-# cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)
-
-# saveRDS(cp_tongue, "./cp_tongue.RDS")
-# saveRDS(cp_lowling, "./cp_lowling.RDS")
-# saveRDS(cp_lowinter, "./cp_lowinter.RDS")
-# saveRDS(cp_upling, "./cp_upling.RDS")
-# saveRDS(cp_upinter, "./cp_upinter.RDS")
-# saveRDS(cp_saliva, "./cp_saliva.RDS")
-# saveRDS(cp_metabolomics, "./cp_metabolomics.RDS")
-
-cp_tongue = readRDS("./TIFN2/cp_tongue.RDS")
-cp_lowling = readRDS("./TIFN2/cp_lowling.RDS")
-cp_lowinter = readRDS("./TIFN2/cp_lowinter.RDS")
-cp_upling = readRDS("./TIFN2/cp_upling.RDS")
-cp_upinter = readRDS("./TIFN2/cp_upinter.RDS")
-cp_saliva = readRDS("./TIFN2/cp_saliva.RDS")
-cp_metabolomics = readRDS("./TIFN2/cp_metabolomics.RDS")
+```{r plotting variables}
+colourCols = c("", "", "")
+legendTitles = c("RF group", "Phylum", "")
+xLabels = c("Subject index", "Feature index", "Time index")
+legendColNums = c(3,5,0)
+arrangeModes = c(TRUE, TRUE, FALSE)
+continuousModes = c(FALSE,FALSE,TRUE)
 ```
 
 # Tongue microbiome
+
+CP was applied to capture the dominant source of variation in the tongue microbiome data block. The model selection procedure revealed that CORCONDIA scores were inconclusive and loadings were unstable at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r tongue model selection}
+# assessment_tongue = parafac4microbiome::assessModelQuality(processedTongue$data, numRepetitions=10, numCores=10)
+
+# assessment_tongue$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_tongue = parafac4microbiome::assessModelStability(processedTongue, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_tongue$modelPlots[[2]]
+# stability_tongue$modelPlots[[3]]
+```
+
+```{r tongue load model}
+# cp_tongue = parafac4microbiome::parafac(processedTongue$data, nfac=2, nstart=100)
+
+cp_tongue = readRDS("./TIFN2/cp_tongue.RDS")
+cp_tongue$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 31.4% of the variation. However, MLR analysis revealed that the first component captured variation associated with a mixture of plaque%  and subject age, while the second component was not interpretable.
 
 ```{r tongue test subject mode}
 testMetadata(cp_tongue, 1, processedTongue)
 testMetadata(cp_tongue, 2, processedTongue)
 ```
+
 ```{r plot cp tongue comp 1}
 testFeatures(cp_tongue, processedTongue, 1, "plaquepercent") # no flip
 testFeatures(cp_tongue, processedTongue, 1, "age") # flip
@@ -266,6 +211,28 @@ c
 ```
 
 # Lower jaw lingual microbiome
+
+CP was applied to capture the dominant source of variation in the lower jaw lingual microbiome data block. The model selection procedure revealed CORCONDIA scores were too low at two components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r lowling model selection}
+# assessment_lowling = parafac4microbiome::assessModelQuality(processedLowling$data, numRepetitions=10, numCores=10)
+
+# assessment_lowling$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_lowling = parafac4microbiome::assessModelStability(processedLowling, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_lowling$modelPlots[[1]]
+# stability_lowling$modelPlots[[2]]
+
+```
+
+```{r lowling load model}
+# cp_lowling = parafac4microbiome::parafac(processedLowling$data, nfac=1, nstart=100)
+cp_lowling = readRDS("./TIFN2/cp_lowling.RDS")
+
+cp_lowling$varExp
+```
+
+Therefore, a one-component CP model was selected, explaining 10.6% of the variation. Surprisingly, MLR analysis revealed that the CP component captured variation exclusively associated with RF%.
 
 ```{r lowling test subject mode}
 testMetadata(cp_lowling, 1, processedLowling)
@@ -302,7 +269,33 @@ b
 c
 ```
 
+Positively loaded microbiota including Fusobacterium canifelinum / nucleatum, Aggregatibacter segnis, Capnocytophaga leadbetteri, Campylobacter concisus, Fusobacterium hwasookii / nucleatum / periodonticum, Cardiobacterium hominis, Porphyromonas pasteri, Corynebacterium matruchotii, Capnocytophaga granulosa, and Fusobacterium nucleatum were enriched in high responders and depleted in low responders. Conversely, negatively loaded microbiota including Campylobacter concisus, Rothia dentocariosa, Veillonella atypica / dispar, Atopobium parvulum, Prevotella melaninogenica, Veillonella dispar / parvula, Veillonella parvula / rogosae / tobetsuensis, Actinomyces naeslundii / oris / viscosus, Prevotella nanceiensis, and Kingella oralis were enriched in low responders and depleted in high responders. The time mode loadings of the component indicate that the inter-subject differences due to RF% were constant throughout the time series.
+
 # Lower jaw interproximal microbiome
+
+CP was applied to capture the dominant source of variation in the lower jaw interproximal microbiome data block. The model selection procedure revealed that CORCONDIA scores were too low at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r lowinter model selection}
+# assessment_lowinter = parafac4microbiome::assessModelQuality(processedLowinter$data, numRepetitions=10, numCores=10)
+
+# assessment_lowinter$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# 
+# stability_lowinter = parafac4microbiome::assessModelStability(processedLowinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_lowinter$modelPlots[[2]]
+# stability_lowinter$modelPlots[[3]]
+# 
+
+```
+
+```{r lowinter load model}
+# cp_lowinter = parafac4microbiome::parafac(processedLowinter$data, nfac=2, nstart=100)
+cp_lowinter = readRDS("./TIFN2/cp_lowinter.RDS")
+
+cp_lowinter$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 10.3% of the variation. However, MLR analysis revealed that the first CP component captured uninterpretable variation, while the second component captured variation exclusively associated with BOMP%.
 
 ```{r lowinter test subject mode}
 testMetadata(cp_lowinter, 1, processedLowinter)
@@ -342,6 +335,29 @@ c
 
 # Upper jaw lingual microbiome
 
+CP was applied to capture the dominant source of variation in the upper jaw lingual microbiome data block. The model selection procedure revealed that CORCONDIA scores were too low at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r upling model selection}
+# assessment_upling = parafac4microbiome::assessModelQuality(processedUpling$data, numRepetitions=10, numCores=10)
+
+# assessment_upling$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_upling = parafac4microbiome::assessModelStability(processedUpling, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_upling$modelPlots[[2]]
+# stability_upling$modelPlots[[3]]
+# 
+
+```
+
+```{r upling load model}
+# cp_upling = parafac4microbiome::parafac(processedUpling$data, nfac=2, nstart=100)
+cp_upling = readRDS("./TIFN2/cp_upling.RDS")
+
+cp_upling$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 19.2% of the variation. However, MLR analysis revealed that the first CP component captured uninterpretable variation, while the second component captured variation exclusively but weakly associated with RF%.
+
 ```{r upling test subject mode}
 testMetadata(cp_upling, 1, processedUpling)
 testMetadata(cp_upling, 2, processedUpling)
@@ -379,6 +395,29 @@ c
 ```
 
 # Upper jaw interproximal microbiome
+
+CP was applied to capture the dominant source of variation in the upper jaw interproximal microbiome data block. The model selection procedure revealed that CORCONDIA scores were inconclusive and loadings were unstable at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r upinter model selection}
+# assessment_upinter = parafac4microbiome::assessModelQuality(processedUpinter$data, numRepetitions=10, numCores=10)
+
+# assessment_upinter$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_upinter = parafac4microbiome::assessModelStability(processedUpinter, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_upinter$modelPlots[[2]]
+# stability_upinter$modelPlots[[3]]
+# 
+
+```
+
+```{r upinter load model}
+# cp_upinter = parafac4microbiome::parafac(processedUpinter$data, nfac=2, nstart=100)
+cp_upinter = readRDS("./TIFN2/cp_upinter.RDS")
+
+cp_upinter$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 16.1% of the variation. However, MLR analysis revealed that the first CP component captured variation associated with a mixture of BOMP% and subject gender, while the second component was not interpretable.
 
 ```{r upinter test subject mode}
 testMetadata(cp_upinter, 1, processedUpinter)
@@ -419,6 +458,29 @@ c
 
 # Salivary microbiome
 
+CP was applied to capture the dominant source of variation in the salivary microbiome data block. The model selection procedure revealed that CORCONDIA scores were too low at three components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r saliva model selection}
+# assessment_saliva = parafac4microbiome::assessModelQuality(processedSaliva$data, numRepetitions=10, numCores=10)
+
+# assessment_saliva$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_saliva = parafac4microbiome::assessModelStability(processedSaliva, maxNumComponents=3, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_saliva$modelPlots[[2]]
+# stability_saliva$modelPlots[[3]]
+# 
+
+```
+
+```{r saliva load model}
+# cp_saliva = parafac4microbiome::parafac(processedSaliva$data, nfac=2, nstart=100)
+cp_saliva = readRDS("./TIFN2/cp_saliva.RDS")
+
+cp_saliva$varExp
+```
+
+Therefore, a two-component CP model was selected, explaining 17.3% of the variation. However, MLR analysis revealed that the first CP component captured uninterpretable variation, while the second component captured variation exclusively associated with subject age.
+
 ```{r saliva test subject mode}
 testMetadata(cp_saliva, 1, processedSaliva)
 testMetadata(cp_saliva, 2, processedSaliva)
@@ -456,6 +518,27 @@ c
 ```
 
 # Salivary metabolomics
+
+CP was applied to capture the dominant source of variation in the salivary metabolomics data block. The model selection procedure revealed that CORCONDIA scores were too low at two components. The commented code below performs the procedure, and is not rerun here due to computational limitations.
+
+```{r metabolomics model selection}
+# assessment_metab = parafac4microbiome::assessModelQuality(processedMetabolomics$data, numRepetitions=10, numCores=10)
+
+# assessment_metab$metrics$CORCONDIA %>% as_tibble() %>% mutate(index=1:nrow(.)) %>% pivot_longer(-index) %>% ggplot(aes(x=as.factor(name),y=value)) + geom_boxplot() + xlab("Number of components") + ylab("CORCONDIA") + theme(text=element_text(size=16))
+
+# stability_metab = parafac4microbiome::assessModelStability(processedMetabolomics, maxNumComponents=2, numFolds=10, colourCols=colourCols, legendTitles=legendTitles, xLabels = xLabels, legendColNums=legendColNums, arrangeModes=arrangeModes, numCores=parallel::detectCores())
+# stability_metab$modelPlots[[1]]
+# stability_metab$modelPlots[[2]]
+```
+
+```{r metabolomics load model}
+# cp_metabolomics = parafac4microbiome::parafac(processedMetabolomics$data, nfac=1, nstart=100)
+cp_metabolomics = readRDS("./TIFN2/cp_metabolomics.RDS")
+
+cp_metabolomics$varExp
+```
+
+Therefore, a one-component CP model was selected, explaining 15.4% of the variation. However, MLR analysis revealed that the CP component captured uninterpretable variation.
 
 ```{r metabolomics test subject mode}
 testMetadata(cp_metabolomics, 1, processedMetabolomics)
