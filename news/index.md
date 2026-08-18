@@ -1,8 +1,10 @@
 # Changelog
 
-## parafac4microbiome (development version)
+## parafac4microbiome 1.3.3
 
-- Temp
+- Updated maintainer email.
+- Temporary removal of some articles pending re-release of
+  `CMTFtoolbox`.
 
 ## parafac4microbiome 1.3.2
 
