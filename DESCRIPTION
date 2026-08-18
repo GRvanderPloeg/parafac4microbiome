@@ -53,8 +53,6 @@ Suggests:
     SummarizedExperiment (>= 1.38.1),
     testthat (>= 3.0.0),
     withr,
-    NPLStoolbox,
-    CMTFtoolbox,
     readr,
     stringr,
     scales,
