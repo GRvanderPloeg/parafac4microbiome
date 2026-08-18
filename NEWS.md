@@ -1,4 +1,4 @@
-# parafac4microbiome (development version)
+# parafac4microbiome 1.3.3
 
 * Temp
 
