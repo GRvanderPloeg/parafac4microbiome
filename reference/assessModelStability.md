@@ -1,0 +1,117 @@
+# Bootstrapping procedure to determine PARAFAC model stability for a given number of components.
+
+Bootstrapping procedure to determine PARAFAC model stability for a given
+number of components.
+
+## Usage
+
+``` r
+assessModelStability(
+  dataset,
+  minNumComponents = 1,
+  maxNumComponents = 5,
+  numFolds = dim(dataset$data)[1],
+  considerGroups = FALSE,
+  groupVariable = "",
+  colourCols = NULL,
+  legendTitles = NULL,
+  xLabels = NULL,
+  legendColNums = NULL,
+  arrangeModes = NULL,
+  maxit = 500,
+  ctol = 1e-04,
+  numCores = 1
+)
+```
+
+## Arguments
+
+- dataset:
+
+  See
+  [Fujita2023](https://grvanderploeg.github.io/parafac4microbiome/reference/Fujita2023.md),
+  [Shao2019](https://grvanderploeg.github.io/parafac4microbiome/reference/Shao2019.md)
+  or
+  [vanderPloeg2024](https://grvanderploeg.github.io/parafac4microbiome/reference/vanderPloeg2024.md).
+
+- minNumComponents:
+
+  Minimum number of components (default 1).
+
+- maxNumComponents:
+
+  Maximum number of components (default 5).
+
+- numFolds:
+
+  Number of bootstrapped models to create.
+
+- considerGroups:
+
+  Consider subject groups in calculating sparsity (default FALSE)
+
+- groupVariable:
+
+  Column name in dataset\$mode1 that should be used to consider groups
+  (default "")
+
+- colourCols:
+
+  Vector of strings stating which column names should be factorized for
+  colours per mode.
+
+- legendTitles:
+
+  Vector of strings stating the legend title per mode.
+
+- xLabels:
+
+  Vector of strings stating the x-axis labels per mode.
+
+- legendColNums:
+
+  Vector of integers stating the desired number of columns for the
+  legends per mode.
+
+- arrangeModes:
+
+  Vector of boolean values per mode, stating if the loadings should be
+  arranged according to colourCols (TRUE) or not (FALSE).
+
+- maxit:
+
+  Maximum number of iterations allowed without convergence (default
+  500).
+
+- ctol:
+
+  Relative change in loss tolerated to call the algorithm converged in
+  the ALS case (default 1e-4).
+
+- numCores:
+
+  Number of cores to use. If set larger than 1, it will run the job in
+  parallel (default 1)
+
+## Value
+
+A list containing the following:
+
+- models: All stabilized sign-flipped bootstrapped PARAFAC models.
+
+- modelPlots: A list of plots of the median model with error bars for
+  each number of components.
+
+- FMSplot: A bar plot showing the Factor Match Scores per number of
+  components (see Li et al., 2024).
+
+- FMS: FMS values that the FMS plot is based on.
+
+## Examples
+
+``` r
+processedFujita = processDataCube(Fujita2023, sparsityThreshold=0.99, centerMode=1, scaleMode=2)
+modelStability = assessModelStability(processedFujita,
+                                      minNumComponents=1,
+                                      maxNumComponents=2)
+```

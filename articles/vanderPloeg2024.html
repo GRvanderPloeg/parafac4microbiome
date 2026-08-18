@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="vanderPloeg2024">
 </head>
@@ -38,13 +38,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/AP.html">AP: pain perception in apical periodontitis</a></li>
-    <li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
-    <li><a class="dropdown-item" href="../articles/GOHTRANS.html">GOHTRANS: gender-affirming hormone therapy</a></li>
+<li><a class="dropdown-item" href="../articles/Fujita2023.html">Fujita2023</a></li>
     <li><a class="dropdown-item" href="../articles/Introduction.html">Introduction</a></li>
-    <li><a class="dropdown-item" href="../articles/MAINHEALTH.html">MAINHEALTH: intergenerational obesity transmission</a></li>
     <li><a class="dropdown-item" href="../articles/Shao2019.html">Shao2019</a></li>
-    <li><a class="dropdown-item" href="../articles/TIFN2.html">TIFN2: Red fluorescent plaque development in gingivitis</a></li>
     <li><a class="dropdown-item" href="../articles/vanderPloeg2024.html">vanderPloeg2024</a></li>
   </ul>
 </li>
@@ -170,7 +166,7 @@ sum-of-squared error, the CORCONDIA and the variance explained for 1-3
 components.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">qualityAssessment</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">overview</span></span></code></pre></div>
-<p><img src="vanderPloeg2024_files/figure-html/overview%20plot-1.png" width="1152">
+<p><img src="vanderPloeg2024_files/figure-html/overview%20plot-1.png" class="r-plt" alt="" width="1152">
 This seems a clear-cut case for a two-component model, as the
 three-component models have a CORCONDIA near zero. The maximum amount of
 variation we can describe is ~20%. We skip the stability assessment
@@ -194,7 +190,7 @@ explained for two components.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">finalModel</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedPloeg</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>, <span class="va">continuousModes</span>,</span>
 <span>  overallTitle <span class="op">=</span> <span class="st">"vanderPloeg2024 PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vanderPloeg2024_files/figure-html/model%20plot-1.png" width="1152"></p>
+<p><img src="vanderPloeg2024_files/figure-html/model%20plot-1.png" class="r-plt" alt="" width="1152"></p>
 <p>You will observe that the loadings for some modes in some components
 are all negative. This is due to sign flipping: two modes having
 negative loadings cancel out but describe the same thing as two positive
@@ -207,7 +203,7 @@ variation they describe.</p>
 <span><span class="fu"><a href="../reference/plotPARAFACmodel.html">plotPARAFACmodel</a></span><span class="op">(</span><span class="va">finalModel</span><span class="op">$</span><span class="va">Fac</span>, <span class="va">processedPloeg</span>, <span class="fl">2</span>, <span class="va">colourCols</span>, <span class="va">legendTitles</span>, <span class="va">xLabels</span>, <span class="va">legendColNums</span>, <span class="va">arrangeModes</span>,</span>
 <span>  continuousModes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">FALSE</span>,<span class="cn">FALSE</span>,<span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  overallTitle <span class="op">=</span> <span class="st">"Ploeg PARAFAC model"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vanderPloeg2024_files/figure-html/flip%20loadings-1.png" width="1152"></p>
+<p><img src="vanderPloeg2024_files/figure-html/flip%20loadings-1.png" class="r-plt" alt="" width="1152"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -220,7 +216,7 @@ variation they describe.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

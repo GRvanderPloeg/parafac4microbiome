@@ -1,0 +1,68 @@
+# Parallel Factor Analysis
+
+Parallel Factor Analysis
+
+## Usage
+
+``` r
+parafac(
+  Tensor,
+  nfac,
+  nstart = 1,
+  maxit = 500,
+  ctol = 1e-04,
+  initialization = "random",
+  output = "best",
+  sortComponents = FALSE
+)
+```
+
+## Arguments
+
+- Tensor:
+
+  3-way matrix of numeric data
+
+- nfac:
+
+  Number of factors (components) to fit.
+
+- nstart:
+
+  Number of models to randomly initialize (default 1).
+
+- maxit:
+
+  Maximum number of iterations allowed without convergence (default
+  500).
+
+- ctol:
+
+  Relative change in loss tolerated to call the algorithm converged in
+  the ALS case (default 1e-4).
+
+- initialization:
+
+  "Random" for randomly initialized input vectors or "nvec" for
+  svd-based best guess.
+
+- output:
+
+  String ("best"/"all") Return only the best model of the nstart models
+  ("best") or return all of them in a list object ("all").
+
+- sortComponents:
+
+  Boolean to sort the components based on their variance explained
+  (default FALSE)
+
+## Value
+
+List object of the PARAFAC model or models.
+
+## Examples
+
+``` r
+X = array(rnorm(108*100*10), c(108,100,10))
+model = parafac(X, 2)
+```
