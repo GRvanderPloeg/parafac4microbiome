@@ -1,5 +1,7 @@
 # Changelog
 
+## parafac4microbiome (development version)
+
 ## parafac4microbiome 1.3.3
 
 CRAN release: 2026-08-21
