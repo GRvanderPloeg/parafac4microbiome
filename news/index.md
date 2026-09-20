@@ -2,6 +2,8 @@
 
 ## parafac4microbiome 1.3.3
 
+CRAN release: 2026-08-21
+
 - Updated maintainer email.
 - Temporary removal of some articles pending re-release of
   `CMTFtoolbox`.

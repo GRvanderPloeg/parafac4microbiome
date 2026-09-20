@@ -18,7 +18,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/GRvanderPloeg/parafac4microbiome/blob/master/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/GRvanderPloeg/parafac4microbiome/blob/v1.3.3/DESCRIPTION)
 
 van der Ploeg G (2026). *parafac4microbiome: Parallel Factor Analysis
 Modelling of Longitudinal Microbiome Data*. R package version 1.3.3,
